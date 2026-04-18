@@ -268,31 +268,106 @@
 </section>
 
 <!-- ================================================
-     WAREHOUSES
+     CANADA MAP
      ================================================ -->
-<div class="warehouses-strip">
-  <div class="warehouse-block">
-    <div class="wh-flag">🇨🇦</div>
-    <div class="wh-city">Vancouver</div>
-    <div class="wh-province">British Columbia</div>
-    <p class="wh-desc">Serving Western Canada's thriving specialty roaster community with fast access and competitive freight from the Pacific coast.</p>
-    <div class="wh-bar"></div>
+<section class="map-section" id="map">
+  <div class="container">
+    <div class="map-header">
+      <span class="eyebrow">Warehouse Network</span>
+      <h2 style="font-family:var(--font-serif);font-weight:300;color:var(--ink);margin-bottom:10px">Where We Are</h2>
+      <p style="font-size:0.88rem;color:var(--muted);line-height:1.9;max-width:460px">Three strategically located warehouses across Canada, keeping delivery times short and freight costs low for roasters coast to coast.</p>
+    </div>
+
+    <div class="canada-map-wrap">
+      <svg class="canada-map" viewBox="0 0 960 560" xmlns="http://www.w3.org/2000/svg" aria-label="Map of Canada showing Root 86 warehouse locations">
+
+        <!-- Northern territories -->
+        <path class="province" d="M 90,30 L 155,28 L 155,190 L 90,195 Z"/>
+        <path class="province" d="M 155,28 L 480,18 L 475,175 L 380,180 L 270,185 L 175,190 L 155,190 Z"/>
+        <path class="province" d="M 480,18 L 660,22 L 720,60 L 750,130 L 700,175 L 610,165 L 530,155 L 475,175 Z"/>
+        <!-- Nunavut islands suggestion -->
+        <ellipse class="province" cx="780" cy="55" rx="30" ry="18"/>
+        <ellipse class="province" cx="840" cy="80" rx="22" ry="14"/>
+        <ellipse class="province" cx="820" cy="32" rx="18" ry="11"/>
+
+        <!-- British Columbia -->
+        <path class="province province-active" d="M 90,195 L 155,190 L 175,190 L 185,460 L 90,465 L 80,440 L 75,390 L 80,340 L 74,290 L 80,240 Z"/>
+        <!-- Vancouver Island (small shape off BC coast) -->
+        <path class="province province-active" d="M 62,365 L 75,345 L 80,380 L 72,410 L 60,400 Z"/>
+
+        <!-- Alberta -->
+        <path class="province" d="M 175,190 L 270,185 L 278,460 L 185,460 Z"/>
+
+        <!-- Saskatchewan -->
+        <path class="province" d="M 270,185 L 380,180 L 388,458 L 278,460 Z"/>
+
+        <!-- Manitoba -->
+        <path class="province" d="M 380,180 L 475,175 L 478,390 L 490,460 L 388,458 Z"/>
+
+        <!-- Ontario -->
+        <path class="province" d="M 475,175 L 545,162 L 575,195 L 582,255 L 560,310 L 572,375 L 548,435 L 520,458 L 490,460 L 478,390 Z"/>
+
+        <!-- Quebec (active - has Lévis warehouse) -->
+        <path class="province province-active" d="M 530,60 L 660,22 L 720,60 L 750,130 L 700,175 L 720,250 L 710,340 L 690,410 L 655,448 L 610,462 L 565,462 L 548,435 L 572,375 L 560,310 L 582,255 L 575,195 L 545,162 L 530,60 Z"/>
+
+        <!-- New Brunswick + Nova Scotia + PEI (simplified together) -->
+        <path class="province" d="M 710,340 L 750,310 L 790,330 L 820,375 L 800,430 L 770,448 L 740,445 L 710,420 L 690,410 Z"/>
+
+        <!-- Newfoundland (island) -->
+        <path class="province" d="M 840,230 L 870,210 L 900,250 L 890,300 L 855,295 Z"/>
+
+        <!-- ── PIN: Vancouver, BC ── -->
+        <g class="map-pin-group" data-city="Vancouver" data-province="British Columbia" data-desc="Serving Western Canada's thriving specialty roaster community with fast access and competitive freight from the Pacific coast." tabindex="0" role="button" aria-label="Vancouver warehouse">
+          <circle class="map-pin-ring" cx="130" cy="440" r="10"/>
+          <circle class="map-pin-dot" cx="130" cy="440" r="6"/>
+          <text class="map-pin-label" x="142" y="444">Vancouver</text>
+        </g>
+
+        <!-- ── PIN: Parksville, BC (Vancouver Island) ── -->
+        <g class="map-pin-group" data-city="Parksville" data-province="British Columbia" data-desc="Our Vancouver Island home base and sample courier address, supporting Vancouver Island's growing community of independent roasters." tabindex="0" role="button" aria-label="Parksville warehouse">
+          <circle class="map-pin-ring" cx="68" cy="385" r="10" style="animation-delay:0.8s"/>
+          <circle class="map-pin-dot" cx="68" cy="385" r="6"/>
+          <text class="map-pin-label" x="80" y="389">Parksville</text>
+        </g>
+
+        <!-- ── PIN: Lévis, QC ── -->
+        <g class="map-pin-group" data-city="Lévis" data-province="Quebec" data-desc="Our Eastern hub, strategically positioned to serve Quebec and Atlantic roasters with efficient delivery across the French-speaking market." tabindex="0" role="button" aria-label="Lévis warehouse">
+          <circle class="map-pin-ring" cx="672" cy="432" r="10" style="animation-delay:1.6s"/>
+          <circle class="map-pin-dot" cx="672" cy="432" r="6"/>
+          <text class="map-pin-label" x="684" y="436">Lévis</text>
+        </g>
+
+      </svg>
+
+      <!-- Tooltip -->
+      <div class="map-tooltip" id="map-tooltip">
+        <div class="map-tooltip-city" id="map-tt-city"></div>
+        <div class="map-tooltip-province" id="map-tt-province"></div>
+        <div class="map-tooltip-desc" id="map-tt-desc"></div>
+      </div>
+    </div>
+
+    <!-- Location cards -->
+    <div class="map-locations">
+      <div class="map-loc-card">
+        <div class="map-loc-name">Vancouver</div>
+        <div class="map-loc-prov">British Columbia</div>
+        <p class="map-loc-desc">Serving Western Canada's thriving specialty roaster community with fast access and competitive freight from the Pacific coast.</p>
+      </div>
+      <div class="map-loc-card">
+        <div class="map-loc-name">Lévis</div>
+        <div class="map-loc-prov">Quebec</div>
+        <p class="map-loc-desc">Our Eastern hub, strategically positioned to serve Quebec and Atlantic roasters with efficient delivery across the French-speaking market.</p>
+      </div>
+      <div class="map-loc-card">
+        <div class="map-loc-name">Parksville</div>
+        <div class="map-loc-prov">British Columbia</div>
+        <p class="map-loc-desc">Our Vancouver Island home base and sample courier address, supporting Vancouver Island's growing community of independent roasters.</p>
+      </div>
+    </div>
+
   </div>
-  <div class="warehouse-block">
-    <div class="wh-flag">🇨🇦</div>
-    <div class="wh-city">Levis</div>
-    <div class="wh-province">Quebec</div>
-    <p class="wh-desc">Our Eastern hub, strategically positioned to serve Quebec and Atlantic roasters with efficient delivery across the French-speaking market.</p>
-    <div class="wh-bar"></div>
-  </div>
-  <div class="warehouse-block">
-    <div class="wh-flag">🇨🇦</div>
-    <div class="wh-city">Parksville</div>
-    <div class="wh-province">British Columbia</div>
-    <p class="wh-desc">Our Vancouver Island home base and sample courier address, supporting Vancouver Island's growing community of independent roasters.</p>
-    <div class="wh-bar"></div>
-  </div>
-</div>
+</section>
 
 <!-- ================================================
      CONTACT
@@ -425,7 +500,7 @@
   </div>
   <div class="qp-body">
 
-    <div class="qp-section-label">Selected Coffees</div>
+    <div class="qp-section-label">Selected Coffees <span id="qp-bag-total" style="font-weight:500;color:var(--red)"></span></div>
     <div id="quote-items-wrap">
       <!-- items rendered by JS -->
     </div>

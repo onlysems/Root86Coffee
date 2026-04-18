@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Find a Roaster | Root 86 Coffee</title>
+  <meta name="description" content="Looking for a roaster who uses Root 86 green coffee? Browse Canada's micro-roaster community at Canada Roasters." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    body { cursor: auto; overflow-x: hidden; }
+    button, a, input { cursor: auto; }
+    .roasters-page {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .rp-left {
+      background: var(--red-deep);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 72px;
+      overflow: hidden;
+    }
+    .rp-left::before {
+      content: 'R86';
+      position: absolute; right: -30px; bottom: -30px;
+      font-family: var(--font-serif); font-size: 18rem;
+      font-weight: 300; color: rgba(200,16,46,0.07);
+      line-height: 1; pointer-events: none; user-select: none;
+    }
+    .rp-brand {
+      font-family: var(--font-serif); font-size: 1rem;
+      letter-spacing: 0.25em; color: rgba(255,255,255,0.35);
+      text-transform: uppercase; margin-bottom: 52px;
+    }
+    .rp-brand a { color: rgba(255,255,255,0.35); transition: color 0.2s; }
+    .rp-brand a:hover { color: var(--white); }
+    .rp-eyebrow {
+      font-size: 0.64rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: rgba(200,16,46,0.7); margin-bottom: 18px; display: block;
+    }
+    .rp-heading {
+      font-family: var(--font-serif); font-size: clamp(36px, 4vw, 58px);
+      font-weight: 300; color: var(--white); line-height: 1.05;
+      margin-bottom: 24px;
+    }
+    .rp-heading em { font-style: italic; color: var(--red); }
+    .rp-sub {
+      font-size: 0.88rem; color: rgba(255,255,255,0.45);
+      line-height: 1.9; max-width: 380px;
+    }
+
+    .rp-right {
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 72px;
+    }
+    .rp-card-label {
+      font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--red); margin-bottom: 22px;
+    }
+    .rp-card-name {
+      font-family: var(--font-serif); font-size: clamp(28px, 3vw, 44px);
+      font-weight: 300; color: var(--ink); line-height: 1.1; margin-bottom: 18px;
+    }
+    .rp-card-desc {
+      font-size: 0.85rem; color: var(--muted);
+      line-height: 1.9; margin-bottom: 40px; max-width: 400px;
+    }
+    .rp-cta {
+      display: inline-flex; align-items: center; gap: 14px;
+      background: var(--red); color: var(--white);
+      padding: 16px 34px; font-family: var(--font-sans);
+      font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+      font-weight: 500; transition: background 0.3s; width: fit-content;
+      text-decoration: none;
+    }
+    .rp-cta:hover { background: var(--red-dark); }
+    .rp-cta-arrow { font-size: 1rem; transition: transform 0.2s; }
+    .rp-cta:hover .rp-cta-arrow { transform: translateX(4px); }
+    .rp-note {
+      margin-top: 20px; font-size: 0.72rem; color: var(--muted); line-height: 1.6;
+    }
+    .rp-divider {
+      width: 40px; height: 2px; background: var(--red); margin-bottom: 28px;
+    }
+    .rp-back {
+      margin-top: 52px; font-size: 0.7rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--muted);
+      border-bottom: 1px solid rgba(26,0,5,0.12);
+      padding-bottom: 3px; width: fit-content;
+      transition: color 0.2s, border-color 0.2s;
+      text-decoration: none; display: inline-block;
+    }
+    .rp-back:hover { color: var(--red); border-color: var(--red); }
+
+    @media (max-width: 768px) {
+      .roasters-page { grid-template-columns: 1fr; }
+      .rp-left { padding: 60px 32px; min-height: 40vh; }
+      .rp-right { padding: 52px 32px; }
+      .rp-left::before { font-size: 10rem; }
+    }
+  </style>
+</head>
+<body>
+<div class="roasters-page">
+
+  <!-- Left: Root 86 branding -->
+  <div class="rp-left">
+    <div class="rp-brand">
+      <a href="index.html">Root 86 Coffee</a>
+    </div>
+    <span class="rp-eyebrow">The Community</span>
+    <h1 class="rp-heading">
+      Canada's<br>roaster<br><em>community</em>
+    </h1>
+    <p class="rp-sub">
+      Root 86 supplies exceptional green coffee to micro-roasters across Canada. Find the roasters turning our lots into something extraordinary.
+    </p>
+  </div>
+
+  <!-- Right: Canada Roasters redirect -->
+  <div class="rp-right">
+    <div class="rp-card-label">Our Partner Directory</div>
+    <div class="rp-divider"></div>
+    <div class="rp-card-name">Canada Roasters</div>
+    <p class="rp-card-desc">
+      Canada Roasters is the definitive directory of Canadian specialty coffee roasters. Browse by province, discover independent craft roasteries, and find the perfect cup near you.
+    </p>
+    <a href="https://www.canadaroasters.com/" target="_blank" rel="noopener noreferrer" class="rp-cta">
+      Visit Canada Roasters
+      <span class="rp-cta-arrow">&#8594;</span>
+    </a>
+    <p class="rp-note">
+      You are leaving root86coffee.com and will be taken to canadaroasters.com, an independent directory of Canadian craft coffee roasters.
+    </p>
+    <a href="index.html" class="rp-back">&#8592; Back to Root 86 Coffee</a>
+  </div>
+
+</div>
+</body>
+</html>

@@ -102,6 +102,8 @@ nav {
   display: flex; align-items: center;
   padding: 22px 52px;
   transition: background var(--transition-slow), padding var(--transition), box-shadow var(--transition);
+  /* needed so nav-links can be absolutely centred */
+  isolation: isolate;
 }
 nav.scrolled {
   background: rgba(255,255,255,0.96);
@@ -119,7 +121,11 @@ nav.scrolled {
 nav.scrolled .nav-logo { color: var(--red); }
 nav.scrolled .nav-logo-sub { color: var(--muted); }
 
-.nav-links { display: flex; gap: 28px; flex: 1; justify-content: center; }
+.nav-links {
+  display: flex; gap: 28px;
+  position: absolute; left: 50%; transform: translateX(-50%);
+  white-space: nowrap;
+}
 .nav-link {
   font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
   color: rgba(255,255,255,0.75); transition: color var(--transition);
@@ -134,7 +140,7 @@ nav.scrolled .nav-logo-sub { color: var(--muted); }
 nav.scrolled .nav-link { color: rgba(26,0,5,0.55); }
 nav.scrolled .nav-link:hover { color: var(--red); }
 
-.nav-right { display: flex; align-items: center; gap: 12px; }
+.nav-right { display: flex; align-items: center; gap: 12px; margin-left: auto; }
 .nav-cta {
   font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
   background: var(--white); color: var(--red); padding: 9px 20px;
@@ -730,3 +736,133 @@ footer { background: var(--red-deep); padding: 52px 0 32px; border-top: 3px soli
 #mobile-menu.open { display: flex; }
 #mobile-menu .nav-link { color: rgba(255,255,255,0.7); font-size: 1rem; }
 #mobile-menu .nav-link:hover { color: var(--white); }
+
+/* ================================================
+   QUOTE QUANTITY CONTROLS
+   ================================================ */
+.qi-qty {
+  display: flex; align-items: center; gap: 0; flex-shrink: 0;
+  border: 1px solid rgba(26,0,5,0.12); margin-right: 8px;
+}
+.qi-qty-btn {
+  width: 28px; height: 28px; background: none;
+  color: var(--muted); font-size: 1rem; font-weight: 400;
+  display: flex; align-items: center; justify-content: center;
+  transition: background var(--transition), color var(--transition);
+  font-family: var(--font-sans); line-height: 1;
+}
+.qi-qty-btn:hover { background: var(--red); color: var(--white); }
+.qi-qty-num {
+  min-width: 28px; text-align: center;
+  font-size: 0.78rem; font-weight: 500; color: var(--ink);
+  border-left: 1px solid rgba(26,0,5,0.12);
+  border-right: 1px solid rgba(26,0,5,0.12);
+  padding: 0 4px; line-height: 28px;
+}
+.qi-bags {
+  font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); margin-top: 2px;
+}
+.quote-item { align-items: center; }
+.qi-controls { display: flex; align-items: center; gap: 0; flex-shrink: 0; }
+
+/* ================================================
+   CANADA MAP SECTION
+   ================================================ */
+.map-section { background: var(--off-white); padding: 100px 0; overflow: hidden; }
+.map-section .container { max-width: 1280px; }
+.map-header { margin-bottom: 52px; }
+
+.canada-map-wrap {
+  position: relative; width: 100%;
+}
+.canada-map {
+  width: 100%; height: auto; display: block;
+  max-height: 520px;
+}
+
+/* Province paths */
+.province {
+  fill: rgba(200,16,46,0.05);
+  stroke: rgba(200,16,46,0.18);
+  stroke-width: 1;
+  transition: fill var(--transition);
+}
+.province:hover { fill: rgba(200,16,46,0.1); }
+.province-active {
+  fill: rgba(200,16,46,0.1);
+  stroke: rgba(200,16,46,0.3);
+}
+
+/* Map pins */
+@keyframes pin-pulse {
+  0%,100% { r: 10; opacity: 0.25; }
+  50% { r: 18; opacity: 0; }
+}
+.map-pin-ring {
+  fill: none; stroke: var(--red); stroke-width: 1.5;
+  animation: pin-pulse 2.4s ease-out infinite;
+  transform-box: fill-box; transform-origin: center;
+}
+.map-pin-dot {
+  fill: var(--red); cursor: none;
+  transition: r 0.2s ease;
+}
+.map-pin-group:hover .map-pin-dot { r: 9; }
+.map-pin-label {
+  font-family: 'Jost', sans-serif; font-size: 9px;
+  font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+  fill: var(--red); pointer-events: none;
+}
+
+/* Map tooltip */
+.map-tooltip {
+  position: absolute; z-index: 10;
+  background: var(--white); border: 1px solid rgba(200,16,46,0.15);
+  border-left: 3px solid var(--red);
+  padding: 18px 22px; min-width: 200px;
+  box-shadow: 0 12px 40px rgba(26,0,5,0.13);
+  pointer-events: none; opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  transform: translateY(6px);
+}
+.map-tooltip.visible { opacity: 1; transform: translateY(0); }
+.map-tooltip-city {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.25rem;
+  font-weight: 300; color: var(--ink); margin-bottom: 2px;
+}
+.map-tooltip-province {
+  font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--red); margin-bottom: 10px;
+}
+.map-tooltip-desc { font-size: 0.77rem; color: var(--muted); line-height: 1.7; }
+
+/* Map location cards below map */
+.map-locations {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 2px;
+  margin-top: 32px;
+}
+.map-loc-card {
+  background: var(--white); padding: 28px 32px;
+  border-top: 3px solid transparent;
+  border: 1px solid rgba(26,0,5,0.07);
+  transition: border-top-color var(--transition), transform var(--transition);
+  cursor: default;
+}
+.map-loc-card:hover, .map-loc-card.active {
+  border-top-color: var(--red); transform: translateY(-3px);
+}
+.map-loc-name {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.3rem;
+  font-weight: 300; color: var(--ink); margin-bottom: 3px;
+}
+.map-loc-prov {
+  font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--red); margin-bottom: 12px;
+}
+.map-loc-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.8; }
+
+@media (max-width: 768px) {
+  .map-locations { grid-template-columns: 1fr; }
+  .map-tooltip { display: none; }
+}

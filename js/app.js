@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderQuoteItems();
   bindEvents();
   animateNumbers();
+  initMap();
 });
 
 // ================================================
@@ -263,7 +264,7 @@ function toggleQuote(id) {
   if (!coffee) return;
   const idx = state.quote.findIndex(q => q.id === id);
   if (idx === -1) {
-    state.quote.push(coffee);
+    state.quote.push({ ...coffee, qty: 1 });
     showToast(coffee.name.split(' ').slice(0,3).join(' ') + ' added to quote');
   } else {
     state.quote.splice(idx, 1);
@@ -275,9 +276,23 @@ function toggleQuote(id) {
   updateNavCount();
 }
 
+function updateQty(id, delta) {
+  const item = state.quote.find(q => q.id === id);
+  if (!item) return;
+  item.qty = Math.max(1, (item.qty || 1) + delta);
+  renderQuoteItems();
+  updateFloatBtn();
+  updateNavCount();
+}
+
 function renderQuoteItems() {
   const wrap = $('#quote-items-wrap');
+  const totalEl = $('#qp-bag-total');
   if (!wrap) return;
+
+  const totalBags = state.quote.reduce((s, q) => s + (q.qty || 1), 0);
+  if (totalEl) totalEl.textContent = totalBags > 0 ? `(${totalBags} bag${totalBags !== 1 ? 's' : ''})` : '';
+
   if (state.quote.length === 0) {
     wrap.innerHTML = `
       <div class="quote-empty-state">
@@ -287,28 +302,42 @@ function renderQuoteItems() {
       </div>`;
     return;
   }
+
   wrap.innerHTML = `<div class="quote-items">${state.quote.map(c => `
     <div class="quote-item">
       <div class="qi-info">
         <div class="qi-name">${c.name}</div>
-        <div class="qi-detail">${c.origin} · ${c.process} · ${c.bagWeight} lbs</div>
+        <div class="qi-detail">${c.origin} · ${c.process} · ${c.bagWeight} lbs/bag</div>
+        <div class="qi-bags">${(c.qty || 1)} bag${(c.qty||1)!==1?'s':''} · ${(c.qty||1)*c.bagWeight} lbs total</div>
       </div>
-      <button class="qi-remove" data-id="${c.id}" title="Remove">x</button>
+      <div class="qi-controls">
+        <div class="qi-qty">
+          <button class="qi-qty-btn qi-minus" data-id="${c.id}">-</button>
+          <span class="qi-qty-num">${c.qty || 1}</span>
+          <button class="qi-qty-btn qi-plus" data-id="${c.id}">+</button>
+        </div>
+        <button class="qi-remove" data-id="${c.id}" title="Remove">x</button>
+      </div>
     </div>`).join('')}</div>`;
 
   $$('.qi-remove', wrap).forEach(btn =>
     btn.addEventListener('click', () => toggleQuote(parseInt(btn.dataset.id))));
+  $$('.qi-minus', wrap).forEach(btn =>
+    btn.addEventListener('click', () => updateQty(parseInt(btn.dataset.id), -1)));
+  $$('.qi-plus', wrap).forEach(btn =>
+    btn.addEventListener('click', () => updateQty(parseInt(btn.dataset.id), 1)));
 }
 
 function updateFloatBtn() {
-  const count = state.quote.length;
+  const count = state.quote.reduce((s, q) => s + (q.qty || 1), 0);
   const el = $('#qf-count');
   if (el) { el.textContent = count; el.classList.toggle('visible', count > 0); }
 }
 
 function updateNavCount() {
+  const count = state.quote.reduce((s, q) => s + (q.qty || 1), 0);
   const el = $('#nav-quote-count');
-  if (el) { el.textContent = state.quote.length; el.classList.toggle('visible', state.quote.length > 0); }
+  if (el) { el.textContent = count; el.classList.toggle('visible', count > 0); }
 }
 
 // ================================================
@@ -382,7 +411,7 @@ async function handleSubmit(e) {
   const btn = $('#form-submit');
   btn.disabled = true; btn.textContent = 'Sending...';
 
-  const coffeeList = state.quote.map(c => `- ${c.name} (${c.bagWeight} lbs, ${c.process})`).join('\n');
+  const coffeeList = state.quote.map(c => `- ${c.name} x${c.qty||1} bag${(c.qty||1)!==1?'s':''} (${c.bagWeight} lbs each = ${(c.qty||1)*c.bagWeight} lbs, ${c.process})`).join('\n');
 
   const data = {
     company:     $('#field-company').value,
@@ -473,6 +502,66 @@ function animateNumbers() {
       if (cur >= target) clearInterval(timer);
     }, 35);
   });
+}
+
+// ================================================
+// CANADA MAP
+// ================================================
+function initMap() {
+  const tooltip  = $('#map-tooltip');
+  const ttCity   = $('#map-tt-city');
+  const ttProv   = $('#map-tt-province');
+  const ttDesc   = $('#map-tt-desc');
+  const mapWrap  = $('.canada-map-wrap');
+  if (!tooltip || !mapWrap) return;
+
+  $$('.map-pin-group').forEach(pin => {
+    pin.addEventListener('mouseenter', e => {
+      ttCity.textContent  = pin.dataset.city;
+      ttProv.textContent  = pin.dataset.province;
+      ttDesc.textContent  = pin.dataset.desc;
+      positionTooltip(e, pin);
+      tooltip.classList.add('visible');
+    });
+    pin.addEventListener('mousemove', e => positionTooltip(e, pin));
+    pin.addEventListener('mouseleave', () => tooltip.classList.remove('visible'));
+    // keyboard/touch
+    pin.addEventListener('focus', e => {
+      ttCity.textContent  = pin.dataset.city;
+      ttProv.textContent  = pin.dataset.province;
+      ttDesc.textContent  = pin.dataset.desc;
+      positionTooltip(e, pin);
+      tooltip.classList.add('visible');
+    });
+    pin.addEventListener('blur', () => tooltip.classList.remove('visible'));
+  });
+
+  function positionTooltip(e, pin) {
+    const rect = mapWrap.getBoundingClientRect();
+    const svgEl = mapWrap.querySelector('.canada-map');
+    const svgRect = svgEl.getBoundingClientRect();
+
+    // Get the cx/cy of the dot inside this pin group
+    const dot = pin.querySelector('.map-pin-dot');
+    const cx = parseFloat(dot.getAttribute('cx'));
+    const cy = parseFloat(dot.getAttribute('cy'));
+
+    // Scale SVG coords to rendered pixel coords
+    const scaleX = svgRect.width  / 960;
+    const scaleY = svgRect.height / 560;
+    const px = (svgRect.left - rect.left) + cx * scaleX;
+    const py = (svgRect.top  - rect.top)  + cy * scaleY;
+
+    // Place tooltip above the pin, horizontally clamped
+    let left = px - 100;
+    let top  = py - 115;
+    if (left < 4) left = 4;
+    if (left + 220 > rect.width - 4) left = rect.width - 224;
+    if (top < 4) top = py + 24;
+
+    tooltip.style.left = left + 'px';
+    tooltip.style.top  = top  + 'px';
+  }
 }
 
 // ================================================

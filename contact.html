@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact | Root 86 Coffee</title>
+  <meta name="description" content="Get in touch with Root 86 Coffee. Green coffee specialists proudly supplying Canada's micro-roasters from three warehouse locations." />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <style>
+    body { cursor: auto; overflow-x: hidden; }
+    button, a, input, select, textarea { cursor: auto; }
+
+    /* ── Contact page layout ── */
+    .cp-nav-spacer { height: 82px; }
+
+    .cp-hero {
+      background: var(--red-deep);
+      padding: 80px 0 72px;
+      position: relative; overflow: hidden;
+    }
+    .cp-hero::after {
+      content: 'CONTACT';
+      position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
+      font-family: var(--font-serif); font-size: clamp(80px,12vw,160px);
+      font-weight: 300; color: rgba(200,16,46,0.06);
+      white-space: nowrap; pointer-events: none; user-select: none;
+    }
+    .cp-hero-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 52px; position: relative; z-index: 1;
+    }
+    .cp-hero-eyebrow {
+      font-size: 0.64rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: rgba(200,16,46,0.65); margin-bottom: 16px; display: block;
+    }
+    .cp-hero-heading {
+      font-family: var(--font-serif); font-size: clamp(36px,5vw,68px);
+      font-weight: 300; color: var(--white); line-height: 1.0; margin-bottom: 18px;
+    }
+    .cp-hero-heading em { font-style: italic; color: var(--red); }
+    .cp-hero-sub {
+      font-size: 0.87rem; color: rgba(255,255,255,0.42);
+      line-height: 1.9; max-width: 420px;
+    }
+
+    /* ── Main contact grid ── */
+    .cp-body {
+      max-width: 1280px; margin: 0 auto; padding: 80px 52px;
+      display: grid; grid-template-columns: 1fr 1.4fr; gap: 80px; align-items: start;
+    }
+
+    /* Left column: info */
+    .cp-info-section { display: flex; flex-direction: column; gap: 0; }
+    .cp-info-block {
+      padding: 28px 0; border-bottom: 1px solid rgba(26,0,5,0.08);
+    }
+    .cp-info-block:first-child { border-top: 1px solid rgba(26,0,5,0.08); }
+    .cp-info-label {
+      font-size: 0.58rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--red); margin-bottom: 8px;
+    }
+    .cp-info-value {
+      font-family: var(--font-serif); font-size: 1.2rem;
+      color: var(--ink); font-weight: 300; line-height: 1.4;
+    }
+    .cp-info-value a { color: var(--ink); transition: color 0.2s; }
+    .cp-info-value a:hover { color: var(--red); }
+    .cp-info-sub { font-size: 0.78rem; color: var(--muted); line-height: 1.75; margin-top: 3px; }
+
+    .cp-warehouses { margin-top: 40px; }
+    .cp-wh-label {
+      font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--red); margin-bottom: 16px;
+    }
+    .cp-wh-list { display: flex; flex-direction: column; gap: 10px; }
+    .cp-wh-item {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.82rem; color: var(--muted);
+    }
+    .cp-wh-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--red); flex-shrink: 0;
+    }
+
+    /* Right column: form */
+    .cp-form-wrap {}
+    .cp-form-heading {
+      font-family: var(--font-serif); font-size: 1.6rem;
+      font-weight: 300; color: var(--ink); margin-bottom: 8px;
+    }
+    .cp-form-sub {
+      font-size: 0.82rem; color: var(--muted); margin-bottom: 36px; line-height: 1.7;
+    }
+
+    .cp-form { display: flex; flex-direction: column; gap: 16px; }
+    .cp-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .cp-field { display: flex; flex-direction: column; gap: 6px; }
+    .cp-label {
+      font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted);
+    }
+    .cp-label .req { color: var(--red); }
+    .cp-input {
+      border: 1px solid rgba(26,0,5,0.14); padding: 11px 14px;
+      font-family: var(--font-sans); font-size: 0.84rem; color: var(--ink);
+      outline: none; background: var(--white); transition: border-color 0.3s; width: 100%;
+    }
+    .cp-input:focus { border-color: var(--red); }
+    .cp-input::placeholder { color: var(--muted); opacity: 0.55; }
+    textarea.cp-input { resize: vertical; min-height: 100px; }
+
+    .cp-submit {
+      width: 100%; background: var(--red); color: var(--white);
+      padding: 15px; font-family: var(--font-sans); font-size: 0.72rem;
+      letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500;
+      transition: background 0.3s; border: none; margin-top: 4px;
+      cursor: pointer;
+    }
+    .cp-submit:hover:not(:disabled) { background: var(--red-dark); }
+    .cp-submit:disabled { background: rgba(26,0,5,0.12); color: var(--muted); cursor: default; }
+
+    .cp-success {
+      background: rgba(40,120,40,0.07); border: 1px solid rgba(40,120,40,0.2);
+      padding: 24px; text-align: center; margin-top: 16px; display: none;
+    }
+    .cp-success p { font-size: 0.88rem; color: #2d7a2d; line-height: 1.7; }
+    .cp-note {
+      font-size: 0.7rem; color: var(--muted); text-align: center;
+      margin-top: 12px; line-height: 1.5;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .cp-body { grid-template-columns: 1fr; gap: 52px; }
+      .cp-hero-inner, .cp-body { padding-left: 32px; padding-right: 32px; }
+    }
+    @media (max-width: 560px) {
+      .cp-row { grid-template-columns: 1fr; }
+      .cp-hero-inner, .cp-body { padding-left: 24px; padding-right: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Nav (same as main site, scrolled state by default) -->
+<nav id="main-nav" class="scrolled">
+  <a href="index.html" class="nav-logo" style="color:var(--red)">
+    ROOT 86
+    <span class="nav-logo-sub" style="color:var(--muted)">Canadian Green Coffee</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#finder" class="nav-link" style="color:rgba(26,0,5,0.55)">Find Coffee</a></li>
+    <li><a href="index.html#why" class="nav-link" style="color:rgba(26,0,5,0.55)">About</a></li>
+    <li><a href="contact.html" class="nav-link" style="color:var(--red)">Contact</a></li>
+    <li><a href="tel:18559080086" class="nav-link" style="color:rgba(26,0,5,0.55)">1-855-908-0086</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="index.html#finder" class="nav-cta" style="background:var(--red);color:var(--white)">Explore Catalogue</a>
+  </div>
+</nav>
+
+<!-- Spacer for fixed nav -->
+<div class="cp-nav-spacer"></div>
+
+<!-- Hero -->
+<div class="cp-hero">
+  <div class="cp-hero-inner">
+    <span class="cp-hero-eyebrow">Get in Touch</span>
+    <h1 class="cp-hero-heading">Let's talk<br><em>coffee.</em></h1>
+    <p class="cp-hero-sub">Whether you're building a quote, asking about a specific lot, or just getting started with green coffee, we're here.</p>
+  </div>
+</div>
+
+<!-- Body -->
+<div class="cp-body">
+
+  <!-- Left: contact info -->
+  <div class="cp-info-section">
+    <div class="cp-info-block">
+      <div class="cp-info-label">Phone</div>
+      <div class="cp-info-value"><a href="tel:18559080086">1-855-908-0086</a></div>
+    </div>
+    <div class="cp-info-block">
+      <div class="cp-info-label">Email</div>
+      <div class="cp-info-value" style="font-size:1rem"><a href="mailto:root86coffee@gmail.com">root86coffee@gmail.com</a></div>
+    </div>
+    <div class="cp-info-block">
+      <div class="cp-info-label">Mailing Address</div>
+      <div class="cp-info-value" style="font-size:1rem">PO Box 60008</div>
+      <div class="cp-info-sub">Nanaimo, BC V9S 0A5</div>
+    </div>
+    <div class="cp-info-block">
+      <div class="cp-info-label">Sample Courier Address</div>
+      <div class="cp-info-sub">1006 Herring Gull Way<br>Parksville, BC V9O 1R2</div>
+    </div>
+
+    <div class="cp-warehouses">
+      <div class="cp-wh-label">Canadian Warehouses</div>
+      <div class="cp-wh-list">
+        <div class="cp-wh-item"><span class="cp-wh-dot"></span>Vancouver, British Columbia</div>
+        <div class="cp-wh-item"><span class="cp-wh-dot"></span>Lévis, Quebec</div>
+        <div class="cp-wh-item"><span class="cp-wh-dot"></span>Parksville, British Columbia</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: contact form -->
+  <div class="cp-form-wrap">
+    <div class="cp-form-heading">Send us a message</div>
+    <p class="cp-form-sub">We respond to all enquiries within one business day.</p>
+
+    <form class="cp-form" id="cp-contact-form">
+      <div class="cp-row">
+        <div class="cp-field">
+          <label class="cp-label">Name <span class="req">*</span></label>
+          <input class="cp-input" id="cp-name" required placeholder="Your name" />
+        </div>
+        <div class="cp-field">
+          <label class="cp-label">Company</label>
+          <input class="cp-input" id="cp-company" placeholder="Your roastery" />
+        </div>
+      </div>
+      <div class="cp-row">
+        <div class="cp-field">
+          <label class="cp-label">Email <span class="req">*</span></label>
+          <input class="cp-input" type="email" id="cp-email" required placeholder="you@roastery.com" />
+        </div>
+        <div class="cp-field">
+          <label class="cp-label">Phone</label>
+          <input class="cp-input" type="tel" id="cp-phone" placeholder="+1 (555) 000-0000" />
+        </div>
+      </div>
+      <div class="cp-field">
+        <label class="cp-label">Message <span class="req">*</span></label>
+        <textarea class="cp-input" id="cp-message" required placeholder="How can we help? Ask about specific origins, samples, shipping, or anything else..."></textarea>
+      </div>
+      <button class="cp-submit" type="submit" id="cp-submit">Send Message</button>
+      <p class="cp-note">We respond within one business day. For urgent enquiries call 1-855-908-0086.</p>
+    </form>
+
+    <div class="cp-success" id="cp-success">
+      <p>Message sent. We'll be in touch within one business day.<br><br>
+      In the meantime, feel free to <a href="index.html#finder" style="color:#2d7a2d">browse the catalogue</a> or call <a href="tel:18559080086" style="color:#2d7a2d">1-855-908-0086</a>.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand-name">ROOT 86</div>
+        <p class="footer-tagline">Canadian green coffee specialists, proudly supporting Canada's growing micro-roaster community with exceptional lots from around the world.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Navigate</div>
+        <div class="footer-links-list">
+          <a href="index.html#finder">Find Coffee</a>
+          <a href="index.html#why">About Us</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Warehouses</div>
+        <div class="footer-links-list">
+          <span style="color:rgba(255,255,255,0.38);font-size:0.8rem">Vancouver, BC</span>
+          <span style="color:rgba(255,255,255,0.38);font-size:0.8rem">Levis, QC</span>
+          <span style="color:rgba(255,255,255,0.38);font-size:0.8rem">Parksville, BC</span>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Contact</div>
+        <div class="footer-contact-item"><a href="tel:18559080086">1-855-908-0086</a></div>
+        <div class="footer-contact-item"><a href="mailto:root86coffee@gmail.com">root86coffee@gmail.com</a></div>
+        <div class="footer-contact-item">PO Box 60008, Nanaimo, BC</div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">2025 Root 86 Coffee. All rights reserved. Proudly Canadian.</span>
+      <span class="footer-note">Vancouver · Levis · Parksville</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/coffees.js"></script>
+<script>
+  // Simple mailto fallback for contact form
+  document.getElementById('cp-contact-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('cp-submit');
+    btn.disabled = true; btn.textContent = 'Sending...';
+
+    const name    = document.getElementById('cp-name').value;
+    const company = document.getElementById('cp-company').value;
+    const email   = document.getElementById('cp-email').value;
+    const phone   = document.getElementById('cp-phone').value;
+    const message = document.getElementById('cp-message').value;
+
+    const subject = encodeURIComponent('Website Enquiry - ' + name + (company ? ' (' + company + ')' : ''));
+    const body    = encodeURIComponent(
+      'Name: ' + name + '\n' +
+      'Company: ' + (company || 'N/A') + '\n' +
+      'Email: ' + email + '\n' +
+      'Phone: ' + (phone || 'N/A') + '\n\n' +
+      'Message:\n' + message
+    );
+
+    window.location.href = 'mailto:root86coffee@gmail.com?subject=' + subject + '&body=' + body;
+
+    setTimeout(() => {
+      document.getElementById('cp-contact-form').style.display = 'none';
+      document.getElementById('cp-success').style.display = 'block';
+    }, 800);
+  });
+</script>
+
+</body>
+</html>
