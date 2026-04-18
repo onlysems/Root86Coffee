@@ -77,11 +77,13 @@
       padding: 16px 34px; font-family: var(--font-sans);
       font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
       font-weight: 500; transition: background 0.3s; width: fit-content;
-      text-decoration: none;
+      text-decoration: none; cursor: pointer !important;
     }
     .rp-cta:hover { background: var(--red-dark); }
     .rp-cta-arrow { font-size: 1rem; transition: transform 0.2s; }
     .rp-cta:hover .rp-cta-arrow { transform: translateX(4px); }
+    * { cursor: auto !important; }
+    a[href], button { cursor: pointer !important; }
     .rp-note {
       margin-top: 20px; font-size: 0.72rem; color: var(--muted); line-height: 1.6;
     }
