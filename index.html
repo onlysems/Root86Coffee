@@ -3,161 +3,163 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Root 86 Coffee — Green Coffee Specialists for Canadian Micro-Roasters</title>
-  <meta name="description" content="Canada's premier green coffee importer. 30+ origins, ethical sourcing, three warehouse locations. Build your quote online." />
+  <title>ROOT 86 COFFEE — Green Coffee Supplier to Canadian Micro-Roasters</title>
+  <meta name="description" content="Canada's premier green coffee importer. 30+ origins, ethical sourcing, three warehouse locations across Canada. Build your quote online." />
   <meta property="og:title" content="Root 86 Coffee" />
   <meta property="og:description" content="Green coffee specialists proudly supplying Canada's micro-roasters." />
-  <meta property="og:type" content="website" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☕</text></svg>" />
   <link rel="stylesheet" href="css/styles.css" />
-  <!-- EmailJS (optional - configure in coffees.js SITE_SETTINGS) -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body>
 
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor">
+  <div class="cursor-dot" id="cursor-dot"></div>
+  <div class="cursor-ring" id="cursor-ring"></div>
+</div>
+
 <!-- ================================================
      NAVIGATION
      ================================================ -->
-<nav class="nav" id="main-nav">
-  <div class="container nav-inner">
-    <a href="#" class="nav-logo">
-      <span class="nav-logo-root">ROOT 86</span>
-      <span class="nav-logo-sub">Green Coffee</span>
-    </a>
-
-    <div class="nav-links">
-      <a href="#finder" class="nav-link">Find Coffee</a>
-      <a href="#quote-section" class="nav-link">Quote Builder</a>
-      <a href="#about" class="nav-link">About</a>
-      <a href="tel:18559080086" class="nav-link">1-855-908-0086</a>
-      <button class="nav-cta" id="nav-quote-btn">
-        Get a Quote
-        <span class="nav-quote-count" id="nav-quote-count" style="display:none">0</span>
-      </button>
-    </div>
-
-    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu" aria-expanded="false">
-      <span></span><span></span><span></span>
+<nav id="main-nav">
+  <a href="#" class="nav-logo">
+    ROOT 86
+    <span class="nav-logo-sub">Canadian Green Coffee</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#finder" class="nav-link">Find Coffee</a></li>
+    <li><a href="#why" class="nav-link">About</a></li>
+    <li><a href="#contact" class="nav-link">Contact</a></li>
+    <li><a href="tel:18559080086" class="nav-link">1-855-908-0086</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="#finder" class="nav-cta">Explore Catalogue</a>
+    <button class="nav-quote-btn" id="nav-quote-btn">
+      Quote Builder
+      <span class="nav-quote-count" id="nav-quote-count">0</span>
     </button>
   </div>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
-<!-- Mobile menu -->
-<div id="mobile-menu" style="display:none;position:fixed;inset:0;top:70px;background:rgba(12,9,7,0.97);z-index:850;padding:2rem;flex-direction:column;gap:1.5rem;">
-  <a href="#finder" class="nav-link" style="font-size:1.1rem">Find Coffee</a>
-  <a href="#quote-section" class="nav-link" style="font-size:1.1rem">Quote Builder</a>
-  <a href="#about" class="nav-link" style="font-size:1.1rem">About</a>
-  <a href="tel:18559080086" class="nav-link" style="font-size:1.1rem">1-855-908-0086</a>
+<!-- Mobile Menu -->
+<div id="mobile-menu">
+  <a href="#finder" class="nav-link">Find Coffee</a>
+  <a href="#why" class="nav-link">About</a>
+  <a href="#contact" class="nav-link">Contact</a>
+  <a href="tel:18559080086" class="nav-link">1-855-908-0086</a>
+  <button class="btn-red" id="mobile-quote-btn" style="margin-top:1rem;width:fit-content">Quote Builder</button>
 </div>
-<style>#mobile-menu.open{display:flex!important}</style>
 
 <!-- ================================================
      HERO
      ================================================ -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-circles">
-    <div class="hero-circle hero-circle-1"></div>
-    <div class="hero-circle hero-circle-2"></div>
-    <div class="hero-circle hero-circle-3"></div>
-  </div>
-
-  <div class="container hero-content">
-    <p class="hero-eyebrow fade-in">Canada's Green Coffee Specialists</p>
-    <h1 class="hero-title fade-in fade-in-delay-1">
+<section class="hero" id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-bg-text">ROOT 86</div>
+  <div class="hero-content">
+    <p class="hero-tag">Canadian Green Coffee Specialists</p>
+    <h1 class="hero-title">
       The <em>root</em> of<br>every great roast
     </h1>
-    <p class="hero-subtitle fade-in fade-in-delay-2">
-      Sourcing exceptional green coffee from the world's finest origins,
-      delivered to micro-roasters across Canada. Three warehouses. One standard.
+    <p class="hero-subtitle">
+      Sourcing and importing exceptional green coffee from the world's finest origins, delivered directly to micro-roasters across Canada.
     </p>
-    <div class="hero-actions fade-in fade-in-delay-3">
-      <a href="#finder" class="btn-primary">
-        <span>Find Your Coffee</span>
-        <span>↓</span>
-      </a>
-      <a href="#quote-section" class="btn-secondary">
-        <span>Build a Quote</span>
-      </a>
+    <div class="hero-actions">
+      <a href="#finder" class="btn-primary">Find Your Coffee</a>
+      <button class="btn-ghost" id="hero-quote-btn">Build a Quote</button>
     </div>
   </div>
-
-  <div class="hero-stats container">
-    <div>
-      <div class="hero-stat-num" data-target="32" data-suffix="+">0+</div>
-      <div class="hero-stat-label">Origins</div>
-    </div>
-    <div>
-      <div class="hero-stat-num" data-target="3" data-suffix="">0</div>
-      <div class="hero-stat-label">Warehouses</div>
-    </div>
-    <div>
-      <div class="hero-stat-num" data-target="100" data-suffix="%">0%</div>
-      <div class="hero-stat-label">Canadian</div>
-    </div>
-  </div>
-
-  <div class="hero-scroll">
-    <div class="hero-scroll-line"></div>
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
     <span>Scroll</span>
   </div>
 </section>
 
 <!-- ================================================
-     MARQUEE STRIP
+     STAT BAND
      ================================================ -->
-<div class="strip" aria-hidden="true">
-  <div class="strip-inner">
-    <div class="strip-item"><span class="strip-dot"></span>Vancouver, BC</div>
-    <div class="strip-item"><span class="strip-dot"></span>Lévis, QC</div>
-    <div class="strip-item"><span class="strip-dot"></span>Parksville, BC</div>
-    <div class="strip-item"><span class="strip-dot"></span>Ethical Sourcing</div>
-    <div class="strip-item"><span class="strip-dot"></span>Micro-Roaster Specialists</div>
-    <div class="strip-item"><span class="strip-dot"></span>Organic Certified Lots</div>
-    <div class="strip-item"><span class="strip-dot"></span>Women's Producer Lots</div>
-    <div class="strip-item"><span class="strip-dot"></span>Fair Trade</div>
-    <div class="strip-item"><span class="strip-dot"></span>Swiss Water Process Decaf</div>
-    <div class="strip-item"><span class="strip-dot"></span>Vancouver, BC</div>
-    <div class="strip-item"><span class="strip-dot"></span>Lévis, QC</div>
-    <div class="strip-item"><span class="strip-dot"></span>Parksville, BC</div>
-    <div class="strip-item"><span class="strip-dot"></span>Ethical Sourcing</div>
-    <div class="strip-item"><span class="strip-dot"></span>Micro-Roaster Specialists</div>
-    <div class="strip-item"><span class="strip-dot"></span>Organic Certified Lots</div>
-    <div class="strip-item"><span class="strip-dot"></span>Women's Producer Lots</div>
-    <div class="strip-item"><span class="strip-dot"></span>Fair Trade</div>
-    <div class="strip-item"><span class="strip-dot"></span>Swiss Water Process Decaf</div>
+<div class="stat-band">
+  <div class="stat-item">
+    <div class="stat-num" data-target="32" data-suffix="+">0+</div>
+    <div class="stat-label">Origins Available</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num" data-target="3" data-suffix="">0</div>
+    <div class="stat-label">Canadian Warehouses</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">100%</div>
+    <div class="stat-label">Canadian Operated</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">1</div>
+    <div class="stat-label">Standard: Exceptional</div>
+  </div>
+</div>
+
+<!-- ================================================
+     MARQUEE
+     ================================================ -->
+<div class="marquee-section" aria-hidden="true">
+  <div class="marquee-track">
+    <div class="marquee-item"><span class="marquee-dot"></span>Canadian Owned and Operated</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Vancouver, BC</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Levis, QC</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Parksville, BC</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Organic Certified Lots</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Women's Producer Lots</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Fair Trade</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Swiss Water Decaf</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Micro-Roaster Specialists</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Canadian Owned and Operated</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Vancouver, BC</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Levis, QC</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Parksville, BC</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Organic Certified Lots</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Women's Producer Lots</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Fair Trade</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Swiss Water Decaf</div>
+    <div class="marquee-item"><span class="marquee-dot"></span>Micro-Roaster Specialists</div>
   </div>
 </div>
 
 <!-- ================================================
      HOW IT WORKS
      ================================================ -->
-<section class="section-sm">
+<section class="how-section">
   <div class="container">
+    <div style="text-align:center;margin-bottom:64px">
+      <span class="eyebrow" style="color:rgba(200,16,46,0.7)">How It Works</span>
+      <h2 style="color:var(--white);font-family:var(--font-serif);font-weight:300">Simple. Transparent. <em style="font-style:italic;color:var(--red)">Canadian.</em></h2>
+    </div>
     <div class="how-grid">
       <div class="how-card">
         <div class="how-num">01</div>
-        <div class="how-icon">🔍</div>
-        <div class="how-title">Find Your Coffee</div>
-        <div class="how-desc">Filter by origin, process, certifications, or warehouse location to discover the perfect green lot for your roastery.</div>
+        <h3 class="how-title">Browse the Catalogue</h3>
+        <p class="how-body">Filter 30+ green coffee lots by origin, process, certification, or our three Canadian warehouse locations to find exactly what your roastery needs.</p>
+        <span class="how-tag">Find Your Coffee</span>
       </div>
       <div class="how-card">
         <div class="how-num">02</div>
-        <div class="how-icon">📋</div>
-        <div class="how-title">Build Your Quote</div>
-        <div class="how-desc">Add coffees to your custom quote, fill in your shipping details, and send it through in seconds.</div>
+        <h3 class="how-title">Build Your Quote</h3>
+        <p class="how-body">Add coffees to your custom quote with a single click. Fill in your shipping details and send your request in seconds.</p>
+        <span class="how-tag">No Account Required</span>
       </div>
       <div class="how-card">
         <div class="how-num">03</div>
-        <div class="how-icon">🤝</div>
-        <div class="how-title">We Handle the Rest</div>
-        <div class="how-desc">Our team responds with final pricing, availability confirmation, and coordinates delivery from the nearest warehouse.</div>
+        <h3 class="how-title">We Respond Fast</h3>
+        <p class="how-body">Our team gets back to you with pricing and availability confirmation, typically within one business day. No automated runaround.</p>
+        <span class="how-tag">Real People</span>
       </div>
       <div class="how-card">
         <div class="how-num">04</div>
-        <div class="how-icon">🌱</div>
-        <div class="how-title">Roast with Confidence</div>
-        <div class="how-desc">Every lot is quality-controlled and arrives ready to roast. Repeat orders simplified. Relationships built to last.</div>
+        <h3 class="how-title">Roast with Confidence</h3>
+        <p class="how-body">Every lot is quality-controlled and arrives ready to roast. Repeat orders simplified. Long-term relationships built to last.</p>
+        <span class="how-tag">Quality Assured</span>
       </div>
     </div>
   </div>
@@ -166,53 +168,50 @@
 <!-- ================================================
      FIND YOUR COFFEE
      ================================================ -->
-<section class="section finder" id="finder">
+<section class="search-section" id="finder">
   <div class="container">
-    <div class="section-header">
-      <span class="section-eyebrow">Explore the Catalogue</span>
-      <h2 class="section-title">Find Your Coffee</h2>
-      <p class="section-desc">Filter our full catalogue of green lots by origin, process, certifications, and warehouse proximity.</p>
+    <div style="margin-bottom:52px">
+      <span class="eyebrow">Explore the Catalogue</span>
+      <h2 style="font-family:var(--font-serif);font-weight:300;color:var(--ink);margin-bottom:12px">Find Your Coffee</h2>
+      <p style="font-size:0.88rem;color:var(--muted);line-height:1.9;max-width:500px">Filter our full catalogue of Canadian-warehoused green lots by origin, process, certifications, and warehouse proximity.</p>
     </div>
 
-    <!-- Filters -->
-    <div class="filters-bar">
-      <div class="filter-group">
-        <label class="filter-label" for="filter-search">Search</label>
-        <input class="filter-input" type="text" id="filter-search" placeholder="Name, origin, tasting notes…" />
+    <div class="search-controls">
+      <div class="search-field">
+        <label for="filter-search">Search</label>
+        <input class="search-input" type="text" id="filter-search" placeholder="Origin, name, tasting notes..." />
       </div>
-      <div class="filter-group">
-        <label class="filter-label" for="filter-origin">Origin</label>
-        <select class="filter-select" id="filter-origin">
+      <div class="search-field">
+        <label for="filter-origin">Origin</label>
+        <select class="search-select" id="filter-origin">
           <option value="">All Origins</option>
         </select>
       </div>
-      <div class="filter-group">
-        <label class="filter-label" for="filter-process">Process</label>
-        <select class="filter-select" id="filter-process">
+      <div class="search-field">
+        <label for="filter-process">Process</label>
+        <select class="search-select" id="filter-process">
           <option value="">All Processes</option>
         </select>
       </div>
-      <div class="filter-group">
-        <label class="filter-label" for="filter-cert">Certification</label>
-        <select class="filter-select" id="filter-cert">
+      <div class="search-field">
+        <label for="filter-cert">Certification</label>
+        <select class="search-select" id="filter-cert">
           <option value="">All Certifications</option>
         </select>
       </div>
-      <div class="filter-group">
-        <label class="filter-label" for="filter-wh">Warehouse</label>
-        <select class="filter-select" id="filter-wh">
+      <div class="search-field">
+        <label for="filter-wh">Warehouse</label>
+        <select class="search-select" id="filter-wh">
           <option value="">All Warehouses</option>
         </select>
       </div>
-      <button class="filter-reset" id="filter-reset">Reset</button>
+      <button class="btn-reset" id="filter-reset">Reset Filters</button>
     </div>
 
-    <!-- Results info -->
-    <div class="results-info">
-      <p class="results-count" id="results-count">Loading coffees…</p>
+    <div class="search-meta">
+      <p class="result-count" id="results-count">Loading coffees...</p>
     </div>
 
-    <!-- Coffee Grid -->
     <div class="coffee-grid" id="coffee-grid">
       <!-- Populated by JS -->
     </div>
@@ -220,102 +219,48 @@
 </section>
 
 <!-- ================================================
-     QUOTE BUILDER
+     WHY ROOT 86
      ================================================ -->
-<section class="section quote-section" id="quote-section">
+<section class="why-section" id="why">
   <div class="container">
-    <div class="section-header">
-      <span class="section-eyebrow">Request Pricing</span>
-      <h2 class="section-title">Quote Builder</h2>
-      <p class="section-desc">Add coffees from the catalogue above, fill in your details, and we'll respond with pricing and availability.</p>
-    </div>
-
-    <div class="quote-wrapper">
-      <!-- Left: Coffee list -->
-      <div class="quote-list-panel">
-        <div class="quote-panel-header">
-          <span class="quote-panel-title">Selected Coffees</span>
-          <span class="quote-panel-count" id="quote-count">0 items</span>
-        </div>
-        <div class="quote-items" id="quote-items">
-          <!-- Populated by JS -->
-        </div>
+    <div class="why-grid">
+      <div>
+        <p class="why-eyebrow">Who We Are</p>
+        <div class="divider-red"></div>
+        <h2 class="why-title">Canada's green coffee community, <em>rooted</em> in relationships</h2>
+        <p class="why-body">Root 86 Coffee was built for the roasters. The small-batch craftspeople who demand quality at every step. We source, import, and deliver exceptional green coffee to micro-roasters across Canada, handling the complexity of international trade so you can focus on what you do best.</p>
+        <p class="why-body">Proudly Canadian and proudly independent, our three warehouse network means faster delivery and lower freight costs, no matter where in Canada you are roasting.</p>
       </div>
-
-      <!-- Right: Contact form -->
-      <div class="quote-form-panel">
-        <h3 class="quote-form-title">Your Details</h3>
-        <p class="quote-form-desc">Complete your request and we'll be in touch with pricing, typically within one business day.</p>
-
-        <form id="quote-form">
-          <div class="form-group">
-            <label class="form-label" for="field-company">Company Name <span class="req">*</span></label>
-            <input class="form-input" type="text" id="field-company" required placeholder="Your Roastery Name" />
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label" for="field-contact">Contact Name <span class="req">*</span></label>
-              <input class="form-input" type="text" id="field-contact" required placeholder="Full Name" />
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="field-phone">Phone <span class="req">*</span></label>
-              <input class="form-input" type="tel" id="field-phone" required placeholder="+1 (555) 000-0000" />
+      <div>
+        <div class="why-list">
+          <div class="why-item">
+            <div class="why-icon">I</div>
+            <div class="why-text">
+              <h4>Canadian Sourcing Network</h4>
+              <p>Three strategically located warehouses in Vancouver, Levis, and Parksville keep freight costs low and delivery times fast for roasters coast to coast.</p>
             </div>
           </div>
-          <div class="form-group">
-            <label class="form-label" for="field-email">Email Address <span class="req">*</span></label>
-            <input class="form-input" type="email" id="field-email" required placeholder="you@roastery.com" />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="field-address">Shipping Address</label>
-            <input class="form-input" type="text" id="field-address" placeholder="Street, City, Province, Postal Code" />
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label" for="field-residential">Address Type</label>
-              <select class="form-select" id="field-residential">
-                <option value="Commercial">Commercial</option>
-                <option value="Residential">Residential</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="field-payment">Payment Method</label>
-              <select class="form-select" id="field-payment">
-                <option value="EFT / e-Transfer">EFT / e-Transfer</option>
-                <option value="Credit Card (+3%)">Credit Card (+3%)</option>
-                <option value="Cheque">Cheque</option>
-              </select>
+          <div class="why-item">
+            <div class="why-icon">II</div>
+            <div class="why-text">
+              <h4>Origin Transparency</h4>
+              <p>We tell you exactly where your coffee comes from. Region, producer, process, altitude. Every lot is documented so you can tell the full story to your customers.</p>
             </div>
           </div>
-          <div class="form-group">
-            <div class="form-checkboxes">
-              <label class="form-checkbox-label">
-                <input class="form-checkbox" type="checkbox" id="field-pickup" />
-                I'd like to arrange a pickup (no shipping)
-              </label>
-              <label class="form-checkbox-label">
-                <input class="form-checkbox" type="checkbox" id="field-tailgate" />
-                Power tailgate required for delivery
-              </label>
+          <div class="why-item">
+            <div class="why-icon">III</div>
+            <div class="why-text">
+              <h4>Ethical Lots First</h4>
+              <p>From Organic and Fair Trade to Women's Producer cooperatives, we actively source and prioritise certifications that make a measurable difference at origin.</p>
             </div>
           </div>
-          <div class="form-group">
-            <label class="form-label" for="field-notes">Additional Notes</label>
-            <textarea class="form-textarea" id="field-notes" placeholder="Any special requests, sample requests, or questions…"></textarea>
+          <div class="why-item">
+            <div class="why-icon">IV</div>
+            <div class="why-text">
+              <h4>Roaster-First Service</h4>
+              <p>No automated runaround. Real people respond to every quote. Container consolidation, quality control, and sample programs available to all roasteries.</p>
+            </div>
           </div>
-
-          <button class="form-submit" type="submit" id="form-submit">
-            Send Quote Request →
-          </button>
-          <p class="form-note">By submitting, you agree to be contacted by Root 86 Coffee regarding this quote. No spam, ever.</p>
-        </form>
-
-        <!-- Success state -->
-        <div class="form-success" id="form-success">
-          <div class="form-success-icon">✅</div>
-          <h3>Quote Sent!</h3>
-          <p>Thanks! Your quote request has been sent to Root 86 Coffee. We'll be in touch within one business day with pricing and availability.</p>
-          <p style="margin-top:1rem;font-size:0.8rem;color:var(--cream-muted)">Questions? Call us at <a href="tel:18559080086" style="color:var(--gold)">1-855-908-0086</a></p>
         </div>
       </div>
     </div>
@@ -323,180 +268,244 @@
 </section>
 
 <!-- ================================================
-     ABOUT
+     WAREHOUSES
      ================================================ -->
-<section class="section about" id="about">
-  <div class="container">
-    <div class="about-grid">
-      <div class="about-text">
-        <span class="section-eyebrow">Who We Are</span>
-        <h2>Canada's green coffee community, rooted in relationships</h2>
-        <div class="divider"></div>
-        <p>Root 86 Coffee was built for the roasters — the small-batch craftspeople who demand quality at every step. We source, import, and deliver exceptional green coffee to micro-roasters across Canada, handling the complexity of international trade so you can focus on what you do best.</p>
-        <p>Our three warehouse network — in Vancouver, Lévis, and Parksville — means faster delivery and lower freight costs, no matter where in Canada you're roasting.</p>
-        <ul class="about-bullets">
-          <li>Dedicated green coffee brokers with deep origin knowledge</li>
-          <li>Transparent sourcing — know where your coffee comes from</li>
-          <li>Container consolidation for smaller roasteries</li>
-          <li>Quality control services and sample programs</li>
-          <li>Proudly Canadian, proudly supporting micro-roasters</li>
-        </ul>
-      </div>
-      <div class="about-facts">
-        <div class="about-fact">
-          <div class="about-fact-num">32+</div>
-          <div class="about-fact-label">Unique origins in our catalogue</div>
-        </div>
-        <div class="about-fact">
-          <div class="about-fact-num">3</div>
-          <div class="about-fact-label">Warehouse locations coast to coast</div>
-        </div>
-        <div class="about-fact">
-          <div class="about-fact-num">100%</div>
-          <div class="about-fact-label">Dedicated to Canadian micro-roasters</div>
-        </div>
-        <div class="about-fact">
-          <div class="about-fact-num">1</div>
-          <div class="about-fact-label">Standard: exceptional quality</div>
-        </div>
-      </div>
-    </div>
+<div class="warehouses-strip">
+  <div class="warehouse-block">
+    <div class="wh-flag">🇨🇦</div>
+    <div class="wh-city">Vancouver</div>
+    <div class="wh-province">British Columbia</div>
+    <p class="wh-desc">Serving Western Canada's thriving specialty roaster community with fast access and competitive freight from the Pacific coast.</p>
+    <div class="wh-bar"></div>
   </div>
-</section>
+  <div class="warehouse-block">
+    <div class="wh-flag">🇨🇦</div>
+    <div class="wh-city">Levis</div>
+    <div class="wh-province">Quebec</div>
+    <p class="wh-desc">Our Eastern hub, strategically positioned to serve Quebec and Atlantic roasters with efficient delivery across the French-speaking market.</p>
+    <div class="wh-bar"></div>
+  </div>
+  <div class="warehouse-block">
+    <div class="wh-flag">🇨🇦</div>
+    <div class="wh-city">Parksville</div>
+    <div class="wh-province">British Columbia</div>
+    <p class="wh-desc">Our Vancouver Island home base and sample courier address, supporting Vancouver Island's growing community of independent roasters.</p>
+    <div class="wh-bar"></div>
+  </div>
+</div>
+
+<!-- ================================================
+     CONTACT
+     ================================================ -->
+<div class="contact-section" id="contact">
+  <div class="contact-visual">
+    <p class="contact-tagline">Proudly sourcing for Canada's <em>micro-roasters</em> since the roots of our craft coffee culture.</p>
+  </div>
+  <div class="contact-info">
+    <div class="info-block">
+      <span class="info-label">Phone</span>
+      <a href="tel:18559080086" class="info-value">1-855-908-0086</a>
+    </div>
+    <div class="info-divider"></div>
+    <div class="info-block">
+      <span class="info-label">Email</span>
+      <a href="mailto:root86coffee@gmail.com" class="info-value" style="font-size:1rem">root86coffee@gmail.com</a>
+    </div>
+    <div class="info-divider"></div>
+    <div class="info-block">
+      <span class="info-label">Mailing Address</span>
+      <span class="info-value" style="font-size:1rem">PO Box 60008</span>
+      <span class="info-sub">Nanaimo, BC V9S 0A5</span>
+    </div>
+    <div class="info-divider"></div>
+    <div class="info-block">
+      <span class="info-label">Sample Courier Address</span>
+      <span class="info-sub">1006 Herring Gull Way, Parksville, BC V9O 1R2</span>
+    </div>
+    <button class="btn-red" id="contact-quote-btn" style="margin-top:1rem;width:fit-content">Build a Quote</button>
+  </div>
+</div>
 
 <!-- ================================================
      FOOTER
      ================================================ -->
-<footer class="footer">
+<footer>
   <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <div class="nav-logo">
-          <span class="nav-logo-root">ROOT 86</span>
-          <span class="nav-logo-sub">Green Coffee</span>
-        </div>
-        <p>Green coffee specialists, proudly supporting Canada's growing roaster community since the roots of specialty coffee culture took hold across the country.</p>
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand-name">ROOT 86</div>
+        <p class="footer-tagline">Canadian green coffee specialists, proudly supporting Canada's growing micro-roaster community with exceptional lots from around the world.</p>
       </div>
       <div>
-        <div class="footer-heading">Navigate</div>
-        <div class="footer-links">
-          <a href="#finder" class="footer-link">Find Coffee</a>
-          <a href="#quote-section" class="footer-link">Quote Builder</a>
-          <a href="#about" class="footer-link">About Us</a>
-          <a href="admin.html" class="footer-link" style="opacity:0.4;font-size:0.75rem">Admin ↗</a>
+        <div class="footer-col-title">Navigate</div>
+        <div class="footer-links-list">
+          <a href="#finder">Find Coffee</a>
+          <a href="#why">About Us</a>
+          <a href="#contact">Contact</a>
+          <a href="admin.html" style="opacity:0.3;font-size:0.75rem">Admin</a>
         </div>
       </div>
       <div>
-        <div class="footer-heading">Warehouses</div>
-        <div class="footer-links">
-          <span class="footer-link">📦 Vancouver, BC</span>
-          <span class="footer-link">📦 Lévis, QC</span>
-          <span class="footer-link">📦 Parksville, BC</span>
+        <div class="footer-col-title">Warehouses</div>
+        <div class="footer-links-list">
+          <span style="color:rgba(255,255,255,0.38);font-size:0.8rem">Vancouver, BC</span>
+          <span style="color:rgba(255,255,255,0.38);font-size:0.8rem">Levis, QC</span>
+          <span style="color:rgba(255,255,255,0.38);font-size:0.8rem">Parksville, BC</span>
         </div>
       </div>
       <div>
-        <div class="footer-heading">Contact</div>
-        <div class="footer-contact">
-          <div class="footer-contact-item">
-            <span class="footer-contact-icon">📞</span>
-            <a href="tel:18559080086">1-855-908-0086</a>
-          </div>
-          <div class="footer-contact-item">
-            <span class="footer-contact-icon">✉️</span>
-            <a href="mailto:root86coffee@gmail.com">root86coffee@gmail.com</a>
-          </div>
-          <div class="footer-contact-item">
-            <span class="footer-contact-icon">📮</span>
-            <span>PO Box 60008<br>Nanaimo, BC V9S 0A5</span>
-          </div>
-          <div class="footer-contact-item">
-            <span class="footer-contact-icon">🚚</span>
-            <span style="font-size:0.8rem">1006 Herring Gull Way<br>Parksville, BC V9O 1R2</span>
-          </div>
-        </div>
+        <div class="footer-col-title">Contact</div>
+        <div class="footer-contact-item"><a href="tel:18559080086">1-855-908-0086</a></div>
+        <div class="footer-contact-item"><a href="mailto:root86coffee@gmail.com">root86coffee@gmail.com</a></div>
+        <div class="footer-contact-item">PO Box 60008, Nanaimo, BC</div>
       </div>
     </div>
-
     <div class="footer-bottom">
-      <p class="footer-copy">© 2025 Root 86 Coffee. All rights reserved.</p>
-      <div class="footer-warehouses">
-        <span class="footer-warehouse"><span class="footer-warehouse-dot"></span>Vancouver, BC</span>
-        <span class="footer-warehouse"><span class="footer-warehouse-dot"></span>Lévis, QC</span>
-        <span class="footer-warehouse"><span class="footer-warehouse-dot"></span>Parksville, BC</span>
-      </div>
+      <span class="footer-copy">2025 Root 86 Coffee. All rights reserved. Proudly Canadian.</span>
+      <span class="footer-note">Vancouver · Levis · Parksville</span>
     </div>
   </div>
 </footer>
 
 <!-- ================================================
-     COFFEE MODAL
+     MORE INFO MODAL
      ================================================ -->
-<div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-name">
+<div class="modal-overlay" id="modal-overlay">
   <div class="modal">
     <div class="modal-header">
-      <div class="modal-title-area">
-        <div class="modal-flag" id="modal-flag">☕</div>
-        <h2 class="modal-coffee-name" id="modal-name"></h2>
-        <p class="modal-coffee-region" id="modal-region"></p>
+      <div class="modal-header-text">
+        <div class="modal-header-flag" id="modal-flag"></div>
+        <h2 class="modal-header-name" id="modal-name"></h2>
+        <p class="modal-header-region" id="modal-region"></p>
       </div>
-      <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
+      <button class="modal-close" id="modal-close" aria-label="Close">x</button>
     </div>
     <div class="modal-body">
-      <div class="modal-badges" id="modal-badges"></div>
+      <div class="modal-flags" id="modal-badges"></div>
       <div class="modal-grid">
-        <div class="modal-field">
+        <div>
           <div class="modal-field-label">Process</div>
           <div class="modal-field-value" id="modal-process"></div>
         </div>
-        <div class="modal-field">
+        <div>
           <div class="modal-field-label">Grade</div>
           <div class="modal-field-value" id="modal-grade"></div>
         </div>
-        <div class="modal-field">
+        <div>
           <div class="modal-field-label">Variety</div>
           <div class="modal-field-value" id="modal-variety"></div>
         </div>
-        <div class="modal-field">
+        <div>
           <div class="modal-field-label">Altitude</div>
           <div class="modal-field-value" id="modal-altitude"></div>
         </div>
-        <div class="modal-field">
+        <div>
           <div class="modal-field-label">Bag Weight</div>
           <div class="modal-field-value" id="modal-weight"></div>
         </div>
       </div>
-      <div class="modal-tasting">
-        <div class="modal-tasting-title">Tasting Notes</div>
-        <div class="modal-tasting-notes" id="modal-tasting-notes"></div>
-      </div>
+      <div class="modal-tasting-title">Tasting Notes</div>
+      <div class="modal-tasting-notes" id="modal-tasting-notes"></div>
       <p class="modal-desc" id="modal-desc"></p>
-      <div class="modal-field-label" style="margin-bottom:0.5rem">Available From</div>
+      <div class="modal-warehouses-title">Available From</div>
       <div class="modal-warehouses" id="modal-warehouses"></div>
-      <button class="modal-add-btn" id="modal-add-btn">+ Add to Quote</button>
+      <button class="modal-add-btn" id="modal-add-btn">Add to Quote</button>
     </div>
   </div>
 </div>
 
 <!-- ================================================
-     STICKY QUOTE BAR
+     QUOTE PANEL (Sliding)
      ================================================ -->
-<div class="quote-bar" id="quote-bar">
-  <div class="container quote-bar-inner">
-    <div class="quote-bar-info">
-      <div class="quote-bar-count" id="quote-bar-count">0</div>
-      <div class="quote-bar-text" id="quote-bar-text"><strong>0 coffees</strong> in your quote</div>
+<div class="quote-overlay" id="quote-overlay"></div>
+<div class="quote-panel" id="quote-panel">
+  <div class="qp-header">
+    <div class="qp-title">Quote <em>Builder</em></div>
+    <button class="qp-close" id="qp-close">x</button>
+  </div>
+  <div class="qp-body">
+
+    <div class="qp-section-label">Selected Coffees</div>
+    <div id="quote-items-wrap">
+      <!-- items rendered by JS -->
     </div>
-    <div class="quote-bar-actions">
-      <button class="quote-bar-btn quote-bar-btn-secondary" id="quote-bar-clear">Clear All</button>
-      <button class="quote-bar-btn quote-bar-btn-primary" id="quote-bar-go">Go to Quote Builder ↓</button>
+
+    <div class="qp-divider"></div>
+    <div class="qp-section-label">Your Details</div>
+
+    <form id="quote-form">
+      <div class="qf-field">
+        <label class="qf-label">Company Name <span class="req">*</span></label>
+        <input class="qf-input" id="field-company" required placeholder="Your Roastery" />
+      </div>
+      <div class="qf-row">
+        <div class="qf-field">
+          <label class="qf-label">Contact Name <span class="req">*</span></label>
+          <input class="qf-input" id="field-contact" required placeholder="Full Name" />
+        </div>
+        <div class="qf-field">
+          <label class="qf-label">Phone <span class="req">*</span></label>
+          <input class="qf-input" type="tel" id="field-phone" required placeholder="+1 (555) 000-0000" />
+        </div>
+      </div>
+      <div class="qf-field">
+        <label class="qf-label">Email <span class="req">*</span></label>
+        <input class="qf-input" type="email" id="field-email" required placeholder="you@roastery.com" />
+      </div>
+      <div class="qf-field">
+        <label class="qf-label">Shipping Address</label>
+        <input class="qf-input" id="field-address" placeholder="Street, City, Province, Postal Code" />
+      </div>
+      <div class="qf-row">
+        <div class="qf-field">
+          <label class="qf-label">Address Type</label>
+          <select class="qf-select" id="field-residential">
+            <option value="Commercial">Commercial</option>
+            <option value="Residential">Residential</option>
+          </select>
+        </div>
+        <div class="qf-field">
+          <label class="qf-label">Payment Method</label>
+          <select class="qf-select" id="field-payment">
+            <option value="EFT / e-Transfer">EFT / e-Transfer</option>
+            <option value="Credit Card (+3%)">Credit Card (+3%)</option>
+            <option value="Cheque">Cheque</option>
+          </select>
+        </div>
+      </div>
+      <div class="qf-checks">
+        <label class="qf-check-label">
+          <input class="qf-check" type="checkbox" id="field-pickup" />
+          I'd like to arrange a pickup
+        </label>
+        <label class="qf-check-label">
+          <input class="qf-check" type="checkbox" id="field-tailgate" />
+          Power tailgate required
+        </label>
+      </div>
+      <div class="qf-field" style="margin-top:10px">
+        <label class="qf-label">Additional Notes</label>
+        <textarea class="qf-input" id="field-notes" placeholder="Special requests, sample requests..."></textarea>
+      </div>
+      <button class="quote-submit" type="submit" id="form-submit">Send Quote Request</button>
+      <p class="quote-note">We respond within one business day with pricing and availability.</p>
+    </form>
+
+    <div class="quote-success" id="form-success">
+      <p>Quote sent successfully! We'll be in touch within one business day.<br><br>Questions? Call <a href="tel:18559080086" style="color:#2d7a2d">1-855-908-0086</a></p>
     </div>
+
   </div>
 </div>
 
-<!-- ================================================
-     TOAST CONTAINER
-     ================================================ -->
-<div class="toast-container" id="toast-container" aria-live="polite"></div>
+<!-- Quote Float Button -->
+<button class="quote-float" id="quote-float">
+  Quote Builder
+  <span class="qf-count" id="qf-count">0</span>
+</button>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
 
 <!-- ================================================
      SCRIPTS
@@ -504,7 +513,6 @@
 <script src="js/coffees.js"></script>
 <script src="js/app.js"></script>
 <script>
-  // Init EmailJS if configured
   if (typeof emailjs !== 'undefined' && SITE_SETTINGS.emailjsPublicKey !== 'YOUR_PUBLIC_KEY') {
     emailjs.init(SITE_SETTINGS.emailjsPublicKey);
   }

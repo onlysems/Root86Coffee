@@ -1,5 +1,5 @@
 // ============================================================
-//  ROOT 86 COFFEE — Coffee Data File
+//  ROOT 86 COFFEE - Coffee Data File
 //  Edit this file to add, update, or remove coffees.
 //  Each coffee object follows the structure below.
 // ============================================================
@@ -17,7 +17,7 @@ const COFFEES = [
     available: true,
     grade: "17/18",
     variety: "Catuai, Mundo Novo",
-    altitude: "900–1,100m",
+    altitude: "900-1,100m",
     tastingNotes: "Dark Chocolate, Hazelnut, Caramel",
     description: "A classic Brazilian natural from the Alta Mogiana plateau, celebrated for its full body, low acidity, and rich confectionary sweetness. The 17/18 screen size ensures large, uniform beans ideal for blending or single-origin espresso."
   },
@@ -33,9 +33,9 @@ const COFFEES = [
     available: true,
     grade: "Fine Cup",
     variety: "Yellow Bourbon, Catuai",
-    altitude: "1,000–1,200m",
+    altitude: "1,000-1,200m",
     tastingNotes: "Brown Sugar, Almond, Dried Fruit",
-    description: "Sourced from the volcanic soils of Sul de Minas Gerais near Poços de Caldas, this natural process coffee delivers the hallmark Brazilian profile — approachable, sweet, and deeply satisfying. An excellent base for espresso blends."
+    description: "Sourced from the volcanic soils of Sul de Minas Gerais near Poços de Caldas, this natural process coffee delivers the hallmark Brazilian profile: approachable, sweet, and deeply satisfying. An excellent base for espresso blends."
   },
   {
     id: 3,
@@ -49,7 +49,7 @@ const COFFEES = [
     available: true,
     grade: "Excelso EP GP",
     variety: "Castillo, Caturra",
-    altitude: "1,400–1,800m",
+    altitude: "1,400-1,800m",
     tastingNotes: "Red Apple, Caramel, Milk Chocolate",
     description: "Rainforest Alliance certified, this Cundinamarca Excelso is fully washed and precisely graded European Preparation and Good Preparation, ensuring exceptional cup cleanliness. Grown on small family farms in Colombia's classic central cordillera."
   },
@@ -65,9 +65,9 @@ const COFFEES = [
     available: true,
     grade: "Excelso EP",
     variety: "Caturra, Castillo",
-    altitude: "1,500–1,900m",
+    altitude: "1,500-1,900m",
     tastingNotes: "Peach, Citrus, Honey, Dark Caramel",
-    description: "From the lush coffee triangle of Quindío, this Excelso EP showcases Colombia at its finest — bright, balanced, and beautifully structured. The European Preparation sorting guarantees a clean, consistent roast. Versatile across all brew methods."
+    description: "From the lush coffee triangle of Quindío, this Excelso EP showcases Colombia at its finest: bright, balanced, and beautifully structured. The European Preparation sorting guarantees a clean, consistent roast. Versatile across all brew methods."
   },
   {
     id: 5,
@@ -81,9 +81,9 @@ const COFFEES = [
     available: true,
     grade: "Specialty",
     variety: "Caturra, Colombia",
-    altitude: "1,600–2,000m",
+    altitude: "1,600-2,000m",
     tastingNotes: "Blackcurrant, Jasmine, Brown Sugar",
-    description: "Certified organic from the high-altitude microclimates of Huila — Colombia's premier specialty origin. The volcanic soils and cool temperatures produce a coffee of remarkable complexity: floral, fruited, and clean with lingering sweetness."
+    description: "Certified organic from the high-altitude microclimates of Huila, Colombia's premier specialty origin. The volcanic soils and cool temperatures produce a coffee of remarkable complexity: floral, fruited, and clean with lingering sweetness."
   },
   {
     id: 6,
@@ -97,9 +97,9 @@ const COFFEES = [
     available: true,
     grade: "Specialty",
     variety: "Caturra, Castillo",
-    altitude: "1,700–2,000m",
+    altitude: "1,700-2,000m",
     tastingNotes: "Red Cherry, Milk Chocolate, Caramel",
-    description: "The Terra Rosa Women's Lot celebrates female producers from Huila who contribute some of the region's finest coffees. This lot supports economic empowerment initiatives and delivers a beautifully balanced cup — fruity, sweet, and approachable."
+    description: "The Terra Rosa Women's Lot celebrates female producers from Huila who contribute some of the region's finest coffees. This lot supports economic empowerment initiatives and delivers a beautifully balanced cup: fruity, sweet, and approachable."
   },
   {
     id: 7,
@@ -113,7 +113,7 @@ const COFFEES = [
     available: true,
     grade: "Specialty",
     variety: "Caturra, Typica",
-    altitude: "1,800–2,200m",
+    altitude: "1,800-2,200m",
     tastingNotes: "Citrus, Stone Fruit, Toffee",
     description: "Grown at extreme altitude in Nariño near the Ecuadorian border, EcoTerra Women's Lot is a testament to the dedication of female producers who cultivate coffee in some of Colombia's most challenging terrain. Bright acidity meets rich sweetness."
   },
@@ -129,7 +129,7 @@ const COFFEES = [
     available: true,
     grade: "Specialty",
     variety: "Caturra, Colombia",
-    altitude: "1,600–1,900m",
+    altitude: "1,600-1,900m",
     tastingNotes: "Green Apple, Hibiscus, Dark Honey",
     description: "A triple-certified gem from Planadas, Tolima. Organic, Fair Trade, and Women's COOP certified, this lot represents the gold standard of ethical sourcing. The remote municipality of Planadas produces bright, winey, and florally complex coffees."
   },
@@ -145,9 +145,9 @@ const COFFEES = [
     available: true,
     grade: "Specialty",
     variety: "Marsellesa",
-    altitude: "1,400–1,600m",
+    altitude: "1,400-1,600m",
     tastingNotes: "Peach Jam, Raisin, Brown Sugar, Vanilla",
-    description: "Hacienda San Ignacio is home to the rare Marsellesa hybrid — a disease-resistant variety developed in Nicaragua that produces exceptional cup quality. The honey process imparts rich stone fruit sweetness and a silky, full body. A truly distinctive Costa Rican lot."
+    description: "Hacienda San Ignacio is home to the rare Marsellesa hybrid, a disease-resistant variety developed in Nicaragua that produces exceptional cup quality. The honey process imparts rich stone fruit sweetness and a silky, full body. A truly distinctive Costa Rican lot."
   },
   {
     id: 10,
@@ -161,9 +161,9 @@ const COFFEES = [
     available: true,
     grade: "Fancy",
     variety: "Caturra, Catuai",
-    altitude: "1,200–1,600m",
+    altitude: "1,200-1,600m",
     tastingNotes: "Citrus, Caramel, Milk Chocolate",
-    description: "A carefully blended selection from Costa Rica's most storied growing regions — the West and Central Valleys. Micromill processing ensures exceptional cleanliness and consistency. Ideal for roasters seeking a reliable, high-quality Central American base."
+    description: "A carefully blended selection from Costa Rica's most storied growing regions, the West and Central Valleys. Micromill processing ensures exceptional cleanliness and consistency. Ideal for roasters seeking a reliable, high-quality Central American base."
   },
   {
     id: 11,
@@ -177,9 +177,9 @@ const COFFEES = [
     available: true,
     grade: "SHB EP GP",
     variety: "Bourbon, Caturra, Catuai",
-    altitude: "1,500–2,000m",
+    altitude: "1,500-2,000m",
     tastingNotes: "Dark Cherry, Lime, Brown Sugar",
-    description: "Huehuetenango is Guatemala's crown jewel — a remote northern region where dry hot winds from Mexico protect crops from frost, enabling cultivation at remarkable altitude. This SHB lot delivers the region's signature bright acidity and deep fruited complexity."
+    description: "Huehuetenango is Guatemala's crown jewel, a remote northern region where dry hot winds from Mexico protect crops from frost, enabling cultivation at remarkable altitude. This SHB lot delivers the region's signature bright acidity and deep fruited complexity."
   },
   {
     id: 12,
@@ -193,9 +193,9 @@ const COFFEES = [
     available: true,
     grade: "Specialty",
     variety: "Bourbon, Typica",
-    altitude: "1,500–1,700m",
+    altitude: "1,500-1,700m",
     tastingNotes: "Dark Chocolate, Apple, Walnut",
-    description: "Grown on the volcanic slopes surrounding the stunning Lake Atitlán, this certified organic lot benefits from the lake's moderating influence on temperature and humidity. Rich, balanced, and deeply chocolatey — an exceptional organic Guatemalan."
+    description: "Grown on the volcanic slopes surrounding the stunning Lake Atitlán, this certified organic lot benefits from the lake's moderating influence on temperature and humidity. Rich, balanced, and deeply chocolatey, an exceptional organic Guatemalan."
   },
   {
     id: 13,
@@ -209,9 +209,9 @@ const COFFEES = [
     available: true,
     grade: "SHB EP GP",
     variety: "Bourbon, Catuai",
-    altitude: "1,300–1,600m",
+    altitude: "1,300-1,600m",
     tastingNotes: "Milk Chocolate, Toffee, Orange Peel",
-    description: "From a single estate in Santa Rosa, this strictly hard bean selection is a workhorse of quality — consistently clean, well-structured, and satisfying across a broad roast range. EP and GP grading guarantees uniformity in every bag."
+    description: "From a single estate in Santa Rosa, this strictly hard bean selection is a workhorse of quality, consistently clean, well-structured, and satisfying across a broad roast range. EP and GP grading guarantees uniformity in every bag."
   },
   {
     id: 14,
@@ -225,9 +225,9 @@ const COFFEES = [
     available: true,
     grade: "SHG",
     variety: "Lempira, IHCAFE 90",
-    altitude: "1,200–1,500m",
+    altitude: "1,200-1,500m",
     tastingNotes: "Peach, Caramel, Toasted Nuts",
-    description: "Certified organic from the ancient city of Copán, surrounded by Mayan ruins and cloud forest. The cool altitudes of this UNESCO World Heritage region produce a soft, sweetly balanced coffee with gentle stone fruit notes and clean, lingering finish."
+    description: "Certified organic from the ancient city of Copán, surrounded by Mayan ruins and cloud forest. The cool altitudes of this UNESCO World Heritage region produce a soft, sweetly balanced coffee with gentle stone fruit notes and a clean, lingering finish."
   },
   {
     id: 15,
@@ -241,9 +241,9 @@ const COFFEES = [
     available: true,
     grade: "Grade 2",
     variety: "Ethiopia Heirloom",
-    altitude: "1,800–2,200m",
+    altitude: "1,800-2,200m",
     tastingNotes: "Jasmine, Bergamot, Lemon, Peach",
-    description: "The Gersi washing station in Gedeo, Yirgacheffe is legendary. Its meticulous washed processing reveals the full aromatic potential of Ethiopia's ancient heirloom varieties — extraordinary florals, vibrant citrus acidity, and tea-like delicacy. A specialty benchmark."
+    description: "The Gersi washing station in Gedeo, Yirgacheffe is legendary. Its meticulous washed processing reveals the full aromatic potential of Ethiopia's ancient heirloom varieties: extraordinary florals, vibrant citrus acidity, and tea-like delicacy. A specialty benchmark."
   },
   {
     id: 16,
@@ -257,7 +257,7 @@ const COFFEES = [
     available: true,
     grade: "Grade 2",
     variety: "Ethiopia Heirloom",
-    altitude: "1,800–2,200m",
+    altitude: "1,800-2,200m",
     tastingNotes: "Blueberry, Strawberry, Dark Chocolate, Rose",
     description: "The Koke station natural is one of Ethiopia's most celebrated coffees. Slow-dried on raised beds under the Yirgacheffe sun, the cherries develop intense berry fruit and floral complexity. An unmistakable, unforgettable natural process experience."
   },
@@ -273,9 +273,9 @@ const COFFEES = [
     available: true,
     grade: "Grade 2",
     variety: "Ethiopia Heirloom",
-    altitude: "1,750–2,100m",
+    altitude: "1,750-2,100m",
     tastingNotes: "Lemongrass, White Peach, Honey, Floral",
-    description: "Konga is a premium washing station within the famed Gedeo Zone of Yirgacheffe. The washed process showcases the clean, bright citrus and floral character of local heirloom varieties — a pristine expression of Ethiopia's world-famous terroir."
+    description: "Konga is a premium washing station within the famed Gedeo Zone of Yirgacheffe. The washed process showcases the clean, bright citrus and floral character of local heirloom varieties, a pristine expression of Ethiopia's world-famous terroir."
   },
   {
     id: 18,
@@ -289,9 +289,9 @@ const COFFEES = [
     available: true,
     grade: "AB Plus",
     variety: "SL28, SL34, Ruiru 11",
-    altitude: "1,700–1,900m",
+    altitude: "1,700-1,900m",
     tastingNotes: "Blackcurrant, Tomato, Grapefruit, Dark Berry",
-    description: "Kenyan AB Plus from the Sondhi mill exemplifies Kenya's distinctive savory-fruited cup profile. The double-washed fermentation and meticulous grading produce a wine-like complexity rarely found elsewhere. Bold, bright, and uncompromising — truly a roaster's coffee."
+    description: "Kenyan AB Plus from the Sondhi mill exemplifies Kenya's distinctive savory-fruited cup profile. The double-washed fermentation and meticulous grading produce a wine-like complexity rarely found elsewhere. Bold, bright, and uncompromising, truly a roaster's coffee."
   },
   {
     id: 19,
@@ -305,9 +305,9 @@ const COFFEES = [
     available: true,
     grade: "Specialty",
     variety: "Red Bourbon",
-    altitude: "1,700–2,000m",
+    altitude: "1,700-2,000m",
     tastingNotes: "Raspberry, Plum, Caramel, Rose",
-    description: "Nyampinga — meaning 'beautiful girl' in Kinyarwanda — celebrates the female members of this organic-certified cooperative. Rwanda's iconic Bourbon variety on volcanic soil yields a deeply fruited, florally elegant cup with exceptional clarity and sweetness."
+    description: "Nyampinga, meaning 'beautiful girl' in Kinyarwanda, celebrates the female members of this organic-certified cooperative. Rwanda's iconic Bourbon variety on volcanic soil yields a deeply fruited, florally elegant cup with exceptional clarity and sweetness."
   },
   {
     id: 20,
@@ -321,7 +321,7 @@ const COFFEES = [
     available: true,
     grade: "Peaberry Plus",
     variety: "Kent, Bourbon",
-    altitude: "1,400–1,800m",
+    altitude: "1,400-1,800m",
     tastingNotes: "Blackberry, Citrus, Dark Chocolate",
     description: "Grown on the fertile lower slopes of Mount Kilimanjaro, this peaberry selection offers the concentrated sweetness that the naturally occurring single-bean cherry delivers. Bright East African acidity, deep berry fruit, and a satisfying cocoa finish."
   },
@@ -337,9 +337,9 @@ const COFFEES = [
     available: true,
     grade: "Peaberry Plus",
     variety: "Kent, Blue Mountain",
-    altitude: "1,500–1,900m",
+    altitude: "1,500-1,900m",
     tastingNotes: "Plum, Mandarin, Brown Sugar",
-    description: "From Tanzania's Southern Highlands — an emerging fine coffee region rivalling Kilimanjaro — this peaberry estate lot showcases the region's distinctive fruit-forward, sweet-acid balance. Consistently clean and bright with excellent roast flexibility."
+    description: "From Tanzania's Southern Highlands, an emerging fine coffee region rivalling Kilimanjaro, this peaberry estate lot showcases the region's distinctive fruit-forward, sweet-acid balance. Consistently clean and bright with excellent roast flexibility."
   },
   {
     id: 22,
@@ -353,9 +353,9 @@ const COFFEES = [
     available: true,
     grade: "AA",
     variety: "SL14, SL28, Typica",
-    altitude: "1,700–2,100m",
+    altitude: "1,700-2,100m",
     tastingNotes: "Apricot, Dark Berry, Dark Chocolate, Cedar",
-    description: "Mt. Elgon straddles the Uganda-Kenya border at dramatic altitude. Rainforest Alliance certified and fully washed, this AA-grade selection delivers a Kenyan-adjacent cup profile — complex, fruit-forward, and bold — at an accessible price point."
+    description: "Mt. Elgon straddles the Uganda-Kenya border at dramatic altitude. Rainforest Alliance certified and fully washed, this AA-grade selection delivers a Kenyan-adjacent cup profile: complex, fruit-forward, and bold, at an accessible price point."
   },
   {
     id: 23,
@@ -369,7 +369,7 @@ const COFFEES = [
     available: true,
     grade: "Grade 1",
     variety: "Tim Tim, Ateng, Bourbon",
-    altitude: "1,000–1,500m",
+    altitude: "1,000-1,500m",
     tastingNotes: "Dark Chocolate, Tobacco, Earth, Cedar",
     description: "The quintessential Sumatran. Giling Basah (wet-hulling) processing creates Mandheling's iconic low-acidity, full-body, and complex earthy-herbal character. Grade 1 ensures the cleanest possible expression of this bold, deeply satisfying origin. A cornerstone blend component."
   },
@@ -385,9 +385,9 @@ const COFFEES = [
     available: true,
     grade: "Grade 1",
     variety: "Tim Tim, Ateng",
-    altitude: "1,100–1,500m",
+    altitude: "1,100-1,500m",
     tastingNotes: "Dark Chocolate, Molasses, Dried Herbs, Clove",
-    description: "A certified organic Women's Producer lot that combines Sumatra's deep, earthy character with ethical sourcing and environmental stewardship. Female farmers in the Mandheling region produce this exceptional G1 lot — bold, complex, and purposeful."
+    description: "A certified organic Women's Producer lot that combines Sumatra's deep, earthy character with ethical sourcing and environmental stewardship. Female farmers in the Mandheling region produce this exceptional G1 lot: bold, complex, and purposeful."
   },
   {
     id: 25,
@@ -401,9 +401,9 @@ const COFFEES = [
     available: true,
     grade: "SHG",
     variety: "Bourbon, Typica, Caturra",
-    altitude: "1,400–1,700m",
+    altitude: "1,400-1,700m",
     tastingNotes: "Hazelnut, Milk Chocolate, Caramel, Orange",
-    description: "Named for the dedicated producer Angel Diaz, this certified organic SHG Chiapas lot showcases the gentle, approachable side of Mexican specialty. Sweet, well-balanced, and roast-flexible — it excels from light to dark, making it ideal for diverse roaster profiles."
+    description: "Named for the dedicated producer Angel Diaz, this certified organic SHG Chiapas lot showcases the gentle, approachable side of Mexican specialty. Sweet, well-balanced, and roast-flexible, it excels from light to dark, making it ideal for diverse roaster profiles."
   },
   {
     id: 26,
@@ -417,9 +417,9 @@ const COFFEES = [
     available: true,
     grade: "HG",
     variety: "Bourbon, Typica",
-    altitude: "1,000–1,400m",
+    altitude: "1,000-1,400m",
     tastingNotes: "Chocolate, Walnut, Brown Sugar",
-    description: "A reliable, well-priced High Grown Chiapas for roasters seeking consistent quality and roast flexibility. The volcanic soils of Chiapas lend a pleasant earthiness to this straightforward, crowd-pleasing coffee — perfect for espresso or drip blends."
+    description: "A reliable, well-priced High Grown Chiapas for roasters seeking consistent quality and roast flexibility. The volcanic soils of Chiapas lend a pleasant earthiness to this straightforward, crowd-pleasing coffee, perfect for espresso or drip blends."
   },
   {
     id: 27,
@@ -433,7 +433,7 @@ const COFFEES = [
     available: true,
     grade: "SHG",
     variety: "Bourbon, Typica, Pluma",
-    altitude: "1,400–1,800m",
+    altitude: "1,400-1,800m",
     tastingNotes: "Dried Apricot, Dark Chocolate, Almond, Honey",
     description: "Oaxaca's Pluma region produces some of Mexico's finest certified organic coffees. This SHG lot from indigenous smallholders offers a gentle brightness, warm sweetness, and nutty complexity. An honest, satisfying coffee that rewards careful roasting."
   },
@@ -449,9 +449,9 @@ const COFFEES = [
     available: true,
     grade: "Specialty",
     variety: "Bourbon, Typica",
-    altitude: "1,200–1,600m",
+    altitude: "1,200-1,600m",
     tastingNotes: "Milk Chocolate, Toasted Hazelnut, Caramel",
-    description: "Processed using the renowned Mountain Water Process at Descamex in Veracruz — the gold standard of chemical-free decaffeination. Certified organic, this decaf retains exceptional sweetness and body. An outstanding option for roasters who refuse to compromise on decaf quality."
+    description: "Processed using the renowned Mountain Water Process at Descamex in Veracruz, the gold standard of chemical-free decaffeination. Certified organic, this decaf retains exceptional sweetness and body. An outstanding option for roasters who refuse to compromise on decaf quality."
   },
   {
     id: 29,
@@ -465,9 +465,9 @@ const COFFEES = [
     available: true,
     grade: "Specialty",
     variety: "Bourbon, Typica, Caturra",
-    altitude: "1,700–2,100m",
+    altitude: "1,700-2,100m",
     tastingNotes: "Peach, Caramel, Milk Chocolate, Floral",
-    description: "El Gran Mirador — 'The Great Viewpoint' — earns its name from the breathtaking Cajamarca highland landscape where this certified organic coffee grows. Small indigenous producers tend their plots with generational care, yielding a bright, sweetly floral cup of quiet distinction."
+    description: "El Gran Mirador, meaning 'The Great Viewpoint', earns its name from the breathtaking Cajamarca highland landscape where this certified organic coffee grows. Small indigenous producers tend their plots with generational care, yielding a bright, sweetly floral cup of quiet distinction."
   },
   {
     id: 30,
@@ -481,9 +481,9 @@ const COFFEES = [
     available: true,
     grade: "Fine Cup",
     variety: "Catuai, Mundo Novo",
-    altitude: "900–1,100m",
+    altitude: "900-1,100m",
     tastingNotes: "Dark Chocolate, Walnut, Brown Sugar",
-    description: "Swiss Water Process decaffeination preserves the natural sweetness and body of this Brazilian natural. 99.9% caffeine-free and entirely chemical-free, the SWP Brazil Decaf is a roaster's favourite — smooth, chocolatey, and genuinely enjoyable as a standalone decaf or in blends."
+    description: "Swiss Water Process decaffeination preserves the natural sweetness and body of this Brazilian natural. 99.9% caffeine-free and entirely chemical-free, the SWP Brazil Decaf is a roaster's favourite: smooth, chocolatey, and genuinely enjoyable as a standalone decaf or in blends."
   },
   {
     id: 31,
@@ -497,9 +497,9 @@ const COFFEES = [
     available: true,
     grade: "Specialty",
     variety: "Bourbon, Typica",
-    altitude: "1,600–2,000m",
+    altitude: "1,600-2,000m",
     tastingNotes: "Caramel, Dried Fruit, Almond",
-    description: "Certified organic and Swiss Water decaffeinated — this Peruvian lot is a double commitment to quality and responsibility. Light-bodied with gentle sweetness and warm nutty notes, it's an accessible, crowd-pleasing decaf that works across all brewing methods."
+    description: "Certified organic and Swiss Water decaffeinated, this Peruvian lot is a double commitment to quality and responsibility. Light-bodied with gentle sweetness and warm nutty notes, it's an accessible, crowd-pleasing decaf that works across all brewing methods."
   },
   {
     id: 32,
@@ -515,12 +515,12 @@ const COFFEES = [
     variety: "Multi-Variety",
     altitude: "Varies",
     tastingNotes: "Dark Chocolate, Toffee, Crema Body",
-    description: "Purpose-crafted for espresso, this premium Swiss Water Process blend is engineered for thick crema, deep body, and rich chocolatey sweetness — all without caffeine. Ideal for cafés seeking a decaf espresso that genuinely satisfies. Swiss Water certified 99.9% caffeine-free."
+    description: "Purpose-crafted for espresso, this premium Swiss Water Process blend is engineered for thick crema, deep body, and rich chocolatey sweetness, all without caffeine. Ideal for cafes seeking a decaf espresso that genuinely satisfies. Swiss Water certified 99.9% caffeine-free."
   }
 ];
 
 // ============================================================
-//  FILTER OPTIONS — Edit these to update dropdown menus
+//  FILTER OPTIONS - Edit these to update dropdown menus
 // ============================================================
 
 const FILTER_OPTIONS = {

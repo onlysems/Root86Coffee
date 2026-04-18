@@ -1,5 +1,5 @@
 /* ============================================================
-   ROOT 86 COFFEE — Main Application
+   ROOT 86 COFFEE — Main Application v2
    ============================================================ */
 
 // ── State ──────────────────────────────────────────────────
@@ -7,54 +7,159 @@ const state = {
   quote: [],
   filters: { origin: '', process: '', certification: '', warehouse: '', search: '' },
   filteredCoffees: [...COFFEES],
-  activeCoffeeId: null
+  activeCoffeeId: null,
+  panelOpen: false
 };
 
-// ── Emoji flags ─────────────────────────────────────────────
+// ── Flags ───────────────────────────────────────────────────
 const FLAGS = {
-  'Brazil': '🇧🇷', 'Colombia': '🇨🇴', 'Costa Rica': '🇨🇷',
-  'Ethiopia': '🇪🇹', 'Guatemala': '🇬🇹', 'Honduras': '🇭🇳',
-  'Indonesia': '🇮🇩', 'Kenya': '🇰🇪', 'Mexico': '🇲🇽',
-  'Peru': '🇵🇪', 'Rwanda': '🇷🇼', 'Tanzania': '🇹🇿',
-  'Uganda': '🇺🇬', 'Blend': '🌍'
+  'Brazil':'🇧🇷','Colombia':'🇨🇴','Costa Rica':'🇨🇷','Ethiopia':'🇪🇹',
+  'Guatemala':'🇬🇹','Honduras':'🇭🇳','Indonesia':'🇮🇩','Kenya':'🇰🇪',
+  'Mexico':'🇲🇽','Peru':'🇵🇪','Rwanda':'🇷🇼','Tanzania':'🇹🇿',
+  'Uganda':'🇺🇬','Blend':'🌍'
 };
 
-const CERT_CLASSES = {
-  'Organic': 'organic', 'Fair Trade': 'fair-trade',
-  'Rainforest Alliance': 'rfa', 'Women\'s Lot': 'womens', 'Decaf': 'decaf'
+const CERT_CLASS = {
+  'Organic':'cflag-organic','Fair Trade':'cflag-ft',
+  'Rainforest Alliance':'cflag-rfa',"Women's Lot":'cflag-womens','Decaf':'cflag-decaf'
 };
 
-// ── DOM helpers ──────────────────────────────────────────────
-const $ = (sel, ctx = document) => ctx.querySelector(sel);
-const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
+// ── DOM ────────────────────────────────────────────────────
+const $ = (s,c=document) => c.querySelector(s);
+const $$ = (s,c=document) => [...c.querySelectorAll(s)];
 
-// ── Initialise ───────────────────────────────────────────────
+// ── Init ───────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  initCursor();
+  initHeroCanvas();
+  initNav();
   buildFilters();
-  renderCoffeeGrid();
-  renderQuoteList();
+  renderGrid();
+  renderQuoteItems();
   bindEvents();
-  animateHeroNumbers();
+  animateNumbers();
 });
 
-// ── Build filter dropdowns ────────────────────────────────────
-function buildFilters() {
-  const populateSelect = (id, options) => {
-    const sel = $(id);
-    if (!sel) return;
-    options.forEach(opt => {
-      const el = document.createElement('option');
-      el.value = opt; el.textContent = opt;
-      sel.appendChild(el);
-    });
-  };
-  populateSelect('#filter-origin',  FILTER_OPTIONS.origins);
-  populateSelect('#filter-process', FILTER_OPTIONS.processes);
-  populateSelect('#filter-cert',    FILTER_OPTIONS.certifications);
-  populateSelect('#filter-wh',      FILTER_OPTIONS.warehouses);
+// ================================================
+// CURSOR
+// ================================================
+function initCursor() {
+  const dot  = $('#cursor-dot');
+  const ring = $('#cursor-ring');
+  if (!dot || !ring) return;
+
+  let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    dot.style.left = mouseX + 'px';
+    dot.style.top  = mouseY + 'px';
+  });
+
+  // Smooth ring follow
+  function animateRing() {
+    ringX += (mouseX - ringX) * 0.12;
+    ringY += (mouseY - ringY) * 0.12;
+    ring.style.left = ringX + 'px';
+    ring.style.top  = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // Hover expand
+  document.querySelectorAll('a, button, [role="button"]').forEach(el => {
+    el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+  });
 }
 
-// ── Apply filters ─────────────────────────────────────────────
+// ================================================
+// HERO CANVAS (particle animation)
+// ================================================
+function initHeroCanvas() {
+  const canvas = $('#hero-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const particles = [];
+  const COUNT = 90;
+
+  function resize() {
+    canvas.width  = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  for (let i = 0; i < COUNT; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.5 + 0.3,
+      vx: (Math.random() - 0.5) * 0.35,
+      vy: (Math.random() - 0.5) * 0.35,
+      o: Math.random() * 0.5 + 0.1
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0) p.x = canvas.width;
+      if (p.x > canvas.width) p.x = 0;
+      if (p.y < 0) p.y = canvas.height;
+      if (p.y > canvas.height) p.y = 0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(200,16,46,${p.o})`;
+      ctx.fill();
+    });
+
+    // Draw connecting lines
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(200,16,46,${0.06 * (1 - dist/120)})`;
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+// ================================================
+// NAV SCROLL
+// ================================================
+function initNav() {
+  window.addEventListener('scroll', () => {
+    const nav = $('#main-nav');
+    if (nav) nav.classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+}
+
+// ================================================
+// FILTERS
+// ================================================
+function buildFilters() {
+  const add = (id, opts) => {
+    const sel = $(id); if (!sel) return;
+    opts.forEach(o => { const el = document.createElement('option'); el.value = o; el.textContent = o; sel.appendChild(el); });
+  };
+  add('#filter-origin',  FILTER_OPTIONS.origins);
+  add('#filter-process', FILTER_OPTIONS.processes);
+  add('#filter-cert',    FILTER_OPTIONS.certifications);
+  add('#filter-wh',      FILTER_OPTIONS.warehouses);
+}
+
 function applyFilters() {
   const { origin, process, certification, warehouse, search } = state.filters;
   state.filteredCoffees = COFFEES.filter(c => {
@@ -64,322 +169,272 @@ function applyFilters() {
     if (warehouse && !c.warehouses.includes(warehouse)) return false;
     if (search) {
       const q = search.toLowerCase();
-      if (
-        !c.name.toLowerCase().includes(q) &&
-        !c.origin.toLowerCase().includes(q) &&
-        !c.region.toLowerCase().includes(q) &&
-        !c.tastingNotes.toLowerCase().includes(q)
-      ) return false;
+      if (!c.name.toLowerCase().includes(q) &&
+          !c.origin.toLowerCase().includes(q) &&
+          !c.region.toLowerCase().includes(q) &&
+          !c.tastingNotes.toLowerCase().includes(q)) return false;
     }
     return true;
   });
-  renderCoffeeGrid();
+  renderGrid();
 }
 
-// ── Render coffee grid ────────────────────────────────────────
-function renderCoffeeGrid() {
+// ================================================
+// COFFEE GRID
+// ================================================
+function renderGrid() {
   const grid = $('#coffee-grid');
   const countEl = $('#results-count');
   if (!grid) return;
 
   const count = state.filteredCoffees.length;
-  if (countEl) countEl.innerHTML = `Showing <span>${count}</span> coffee${count !== 1 ? 's' : ''}`;
+  if (countEl) countEl.innerHTML = `Showing <strong>${count}</strong> coffee${count !== 1 ? 's' : ''}`;
 
   if (count === 0) {
-    grid.innerHTML = `
-      <div class="no-results">
-        <div class="no-results-icon">☕</div>
-        <h3>No coffees match your filters</h3>
-        <p style="color:var(--cream-muted);font-size:0.85rem;margin-top:0.5rem;">Try adjusting or resetting your filters</p>
-      </div>`;
+    grid.innerHTML = `<div class="no-results"><p>No coffees found</p><span>Try adjusting your filters</span></div>`;
     return;
   }
 
-  grid.innerHTML = state.filteredCoffees.map(c => coffeeCardHTML(c)).join('');
+  grid.innerHTML = state.filteredCoffees.map(c => cardHTML(c)).join('');
 
-  // Bind card events
-  $$('.coffee-info-btn', grid).forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      openModal(parseInt(btn.dataset.id));
-    });
-  });
-  $$('.coffee-add-btn', grid).forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      const id = parseInt(btn.dataset.id);
-      toggleQuoteItem(id);
-    });
-  });
-  $$('.coffee-card', grid).forEach(card => {
-    card.addEventListener('click', () => openModal(parseInt(card.dataset.id)));
-  });
+  $$('.more-info-btn', grid).forEach(btn =>
+    btn.addEventListener('click', e => { e.stopPropagation(); openModal(parseInt(btn.dataset.id)); }));
+  $$('.add-quote-btn', grid).forEach(btn =>
+    btn.addEventListener('click', e => { e.stopPropagation(); toggleQuote(parseInt(btn.dataset.id)); }));
+  $$('.ccard', grid).forEach(card =>
+    card.addEventListener('click', () => openModal(parseInt(card.dataset.id))));
 
-  updateAddButtons();
+  updateGridButtons();
 }
 
-function coffeeCardHTML(c) {
-  const flag = FLAGS[c.origin] || '☕';
-  const inQuote = state.quote.some(q => q.id === c.id);
+function cardHTML(c) {
+  const flag = FLAGS[c.origin] || '';
+  const inQ  = state.quote.some(q => q.id === c.id);
+  const certFlags = c.certifications.map(cert =>
+    `<span class="cflag ${CERT_CLASS[cert] || ''}">${cert}</span>`).join('');
+
   return `
-    <div class="coffee-card${!c.available ? ' unavailable' : ''}" data-id="${c.id}">
-      <div class="coffee-card-top">
-        <span class="coffee-origin-flag">${flag}</span>
-        <span class="coffee-available-dot${!c.available ? ' unavailable' : ''}" title="${c.available ? 'In stock' : 'Out of stock'}"></span>
+    <div class="ccard${!c.available ? ' sold-out' : ''}" data-id="${c.id}">
+      <div class="ccard-flags">
+        <span class="cflag cflag-origin">${c.origin}</span>
+        ${certFlags}
       </div>
-      <h3 class="coffee-name">${c.name}</h3>
-      <p class="coffee-region">${c.region} · ${c.origin}</p>
-      <div class="coffee-badges">
-        <span class="badge badge-process">${c.process}</span>
-        ${c.certifications.map(cert => `<span class="badge badge-cert ${CERT_CLASSES[cert] || ''}">${cert}</span>`).join('')}
+      <div class="ccard-name">${flag ? `<span class="ccard-flag">${flag}</span>` : ''}${c.name}</div>
+      <div class="ccard-details">
+        <div class="ccard-detail"><strong>Process:</strong> ${c.process}</div>
+        <div class="ccard-detail"><strong>Region:</strong> ${c.region}</div>
+        <div class="ccard-detail"><strong>Bag Weight:</strong> ${c.bagWeight} lbs</div>
+        <div class="ccard-detail" style="font-style:italic;margin-top:2px">${c.tastingNotes}</div>
       </div>
-      <p class="coffee-weight">Bag: <span>${c.bagWeight} lbs</span></p>
-      <p class="coffee-tasting">${c.tastingNotes}</p>
-      <div class="coffee-actions">
-        <button class="coffee-info-btn" data-id="${c.id}">More Info</button>
-        <button class="coffee-add-btn ${inQuote ? 'added' : ''}" data-id="${c.id}">
-          ${inQuote ? '✓ Added — Remove' : '+ Add to Quote'}
+      <div class="ccard-footer">
+        <div>
+          <button class="more-info-btn" data-id="${c.id}">More Info</button>
+          <span class="avail-badge ${c.available ? 'avail-yes' : 'avail-no'}">${c.available ? 'In Stock' : 'Out of Stock'}</span>
+        </div>
+        <button class="add-quote-btn${inQ ? ' added' : ''}${!c.available ? '' : ''}" data-id="${c.id}"
+          ${!c.available ? 'disabled' : ''}>
+          ${inQ ? 'Added' : 'Add to Quote'}
         </button>
       </div>
     </div>`;
 }
 
-// ── Toggle quote item ─────────────────────────────────────────
-function toggleQuoteItem(id) {
+function updateGridButtons() {
+  $$('.add-quote-btn').forEach(btn => {
+    const id = parseInt(btn.dataset.id);
+    const inQ = state.quote.some(q => q.id === id);
+    btn.classList.toggle('added', inQ);
+    btn.textContent = inQ ? 'Added' : 'Add to Quote';
+  });
+  // Modal button
+  const mb = $('#modal-add-btn');
+  if (mb && state.activeCoffeeId) {
+    const inQ = state.quote.some(q => q.id === state.activeCoffeeId);
+    mb.classList.toggle('added', inQ);
+    mb.textContent = inQ ? 'In Quote - Remove' : 'Add to Quote';
+  }
+}
+
+// ================================================
+// QUOTE
+// ================================================
+function toggleQuote(id) {
   const coffee = COFFEES.find(c => c.id === id);
   if (!coffee) return;
   const idx = state.quote.findIndex(q => q.id === id);
   if (idx === -1) {
     state.quote.push(coffee);
-    showToast(`${coffee.name.split(' ').slice(0,3).join(' ')} added to quote`, 'success');
+    showToast(coffee.name.split(' ').slice(0,3).join(' ') + ' added to quote');
   } else {
     state.quote.splice(idx, 1);
-    showToast(`Removed from quote`, 'removed');
+    showToast('Removed from quote', true);
   }
-  renderQuoteList();
-  updateAddButtons();
-  updateQuoteBar();
+  renderQuoteItems();
+  updateGridButtons();
+  updateFloatBtn();
   updateNavCount();
 }
 
-function updateAddButtons() {
-  $$('.coffee-add-btn').forEach(btn => {
-    const id = parseInt(btn.dataset.id);
-    const inQuote = state.quote.some(q => q.id === id);
-    btn.className = `coffee-add-btn ${inQuote ? 'added' : ''}`;
-    btn.textContent = inQuote ? '✓ Added — Remove' : '+ Add to Quote';
-  });
-  // Also update modal button
-  const modalBtn = $('#modal-add-btn');
-  if (modalBtn && state.activeCoffeeId) {
-    const inQuote = state.quote.some(q => q.id === state.activeCoffeeId);
-    modalBtn.className = `modal-add-btn${inQuote ? ' added' : ''}`;
-    modalBtn.textContent = inQuote ? '✓ In Quote — Remove' : '+ Add to Quote';
-  }
-}
-
-// ── Render quote list ─────────────────────────────────────────
-function renderQuoteList() {
-  const list = $('#quote-items');
-  const countEl = $('#quote-count');
-  if (!list) return;
-
-  if (countEl) countEl.textContent = `${state.quote.length} item${state.quote.length !== 1 ? 's' : ''}`;
-
+function renderQuoteItems() {
+  const wrap = $('#quote-items-wrap');
+  if (!wrap) return;
   if (state.quote.length === 0) {
-    list.innerHTML = `
-      <div class="quote-empty">
-        <div class="quote-empty-icon">📋</div>
-        <p>Your quote is empty.<br>Browse coffees above and add them here.</p>
+    wrap.innerHTML = `
+      <div class="quote-empty-state">
+        <div class="quote-empty-icon">☕</div>
+        <p>Your quote is empty</p>
+        <span>Browse coffees and add them here</span>
       </div>`;
     return;
   }
-
-  list.innerHTML = state.quote.map(c => `
+  wrap.innerHTML = `<div class="quote-items">${state.quote.map(c => `
     <div class="quote-item">
-      <div class="quote-item-info">
-        <div class="quote-item-name">${c.name}</div>
-        <div class="quote-item-detail">${c.origin} · ${c.process} · ${c.bagWeight} lbs</div>
+      <div class="qi-info">
+        <div class="qi-name">${c.name}</div>
+        <div class="qi-detail">${c.origin} · ${c.process} · ${c.bagWeight} lbs</div>
       </div>
-      <button class="quote-item-remove" data-id="${c.id}" title="Remove">✕</button>
-    </div>`).join('');
+      <button class="qi-remove" data-id="${c.id}" title="Remove">x</button>
+    </div>`).join('')}</div>`;
 
-  $$('.quote-item-remove', list).forEach(btn => {
-    btn.addEventListener('click', () => toggleQuoteItem(parseInt(btn.dataset.id)));
-  });
+  $$('.qi-remove', wrap).forEach(btn =>
+    btn.addEventListener('click', () => toggleQuote(parseInt(btn.dataset.id))));
 }
 
-// ── Quote sticky bar ──────────────────────────────────────────
-function updateQuoteBar() {
-  const bar = $('#quote-bar');
-  const countEl = $('#quote-bar-count');
-  const textEl = $('#quote-bar-text');
-  if (!bar) return;
-  if (state.quote.length > 0) {
-    bar.classList.add('visible');
-    if (countEl) countEl.textContent = state.quote.length;
-    if (textEl) textEl.innerHTML = `<strong>${state.quote.length} coffee${state.quote.length !== 1 ? 's' : ''}</strong> in your quote`;
-  } else {
-    bar.classList.remove('visible');
-  }
+function updateFloatBtn() {
+  const count = state.quote.length;
+  const el = $('#qf-count');
+  if (el) { el.textContent = count; el.classList.toggle('visible', count > 0); }
 }
 
 function updateNavCount() {
   const el = $('#nav-quote-count');
-  if (!el) return;
-  el.textContent = state.quote.length;
-  el.style.display = state.quote.length > 0 ? 'inline-flex' : 'none';
+  if (el) { el.textContent = state.quote.length; el.classList.toggle('visible', state.quote.length > 0); }
 }
 
-// ── Modal ─────────────────────────────────────────────────────
+// ================================================
+// PANEL (slide-in quote)
+// ================================================
+function openPanel() {
+  $('#quote-panel')?.classList.add('open');
+  $('#quote-overlay')?.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  state.panelOpen = true;
+}
+function closePanel() {
+  $('#quote-panel')?.classList.remove('open');
+  $('#quote-overlay')?.classList.remove('open');
+  document.body.style.overflow = '';
+  state.panelOpen = false;
+}
+
+// ================================================
+// MODAL
+// ================================================
 function openModal(id) {
-  const coffee = COFFEES.find(c => c.id === id);
-  if (!coffee) return;
+  const c = COFFEES.find(x => x.id === id);
+  if (!c) return;
   state.activeCoffeeId = id;
-  const overlay = $('#modal-overlay');
-  const flag = FLAGS[coffee.origin] || '☕';
-  const inQuote = state.quote.some(q => q.id === id);
+  const flag = FLAGS[c.origin] || '';
+  const inQ  = state.quote.some(q => q.id === id);
 
-  $('#modal-flag').textContent = flag;
-  $('#modal-name').textContent = coffee.name;
-  $('#modal-region').textContent = `${coffee.region} · ${coffee.origin}`;
-  $('#modal-process').textContent = coffee.process;
-  $('#modal-altitude').textContent = coffee.altitude;
-  $('#modal-variety').textContent = coffee.variety;
-  $('#modal-grade').textContent = coffee.grade;
-  $('#modal-weight').textContent = `${coffee.bagWeight} lbs`;
-  $('#modal-desc').textContent = coffee.description;
+  $('#modal-flag').textContent  = flag;
+  $('#modal-name').textContent  = c.name;
+  $('#modal-region').textContent = `${c.region} · ${c.origin}`;
+  $('#modal-process').textContent  = c.process;
+  $('#modal-grade').textContent    = c.grade;
+  $('#modal-variety').textContent  = c.variety;
+  $('#modal-altitude').textContent = c.altitude;
+  $('#modal-weight').textContent   = `${c.bagWeight} lbs`;
+  $('#modal-desc').textContent     = c.description;
 
-  const badgesEl = $('#modal-badges');
-  badgesEl.innerHTML = [
-    `<span class="badge badge-process">${coffee.process}</span>`,
-    ...coffee.certifications.map(cert => `<span class="badge badge-cert ${CERT_CLASSES[cert] || ''}">${cert}</span>`)
+  $('#modal-badges').innerHTML = [
+    `<span class="cflag cflag-origin">${c.origin}</span>`,
+    ...c.certifications.map(cert => `<span class="cflag ${CERT_CLASS[cert] || ''}">${cert}</span>`)
   ].join('');
 
-  const notesEl = $('#modal-tasting-notes');
-  notesEl.innerHTML = coffee.tastingNotes.split(',').map(n =>
+  $('#modal-tasting-notes').innerHTML = c.tastingNotes.split(',').map(n =>
     `<span class="tasting-note">${n.trim()}</span>`).join('');
 
-  const whEl = $('#modal-warehouses');
-  whEl.innerHTML = coffee.warehouses.map(w =>
+  $('#modal-warehouses').innerHTML = c.warehouses.map(w =>
     `<span class="warehouse-badge"><span class="warehouse-dot"></span>${w}</span>`).join('');
 
   const addBtn = $('#modal-add-btn');
-  addBtn.className = `modal-add-btn${inQuote ? ' added' : ''}`;
-  addBtn.textContent = inQuote ? '✓ In Quote — Remove' : '+ Add to Quote';
-  addBtn.onclick = () => { toggleQuoteItem(id); };
+  addBtn.classList.toggle('added', inQ);
+  addBtn.textContent = inQ ? 'In Quote - Remove' : 'Add to Quote';
+  addBtn.onclick = () => { toggleQuote(id); };
 
-  overlay.classList.add('active');
+  $('#modal-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
-
 function closeModal() {
-  const overlay = $('#modal-overlay');
-  overlay.classList.remove('active');
-  document.body.style.overflow = '';
+  $('#modal-overlay')?.classList.remove('open');
+  if (!state.panelOpen) document.body.style.overflow = '';
   state.activeCoffeeId = null;
 }
 
-// ── Toast ─────────────────────────────────────────────────────
-function showToast(message, type = 'success') {
-  const container = $('#toast-container');
-  if (!container) return;
-  const toast = document.createElement('div');
-  toast.className = `toast ${type}`;
-  toast.innerHTML = `<span class="toast-icon"></span><span>${message}</span>`;
-  container.appendChild(toast);
-  requestAnimationFrame(() => { toast.classList.add('visible'); });
-  setTimeout(() => {
-    toast.classList.remove('visible');
-    setTimeout(() => toast.remove(), 400);
-  }, 3000);
-}
-
-// ── Quote form submit ─────────────────────────────────────────
-async function handleQuoteSubmit(e) {
+// ================================================
+// FORM SUBMIT
+// ================================================
+async function handleSubmit(e) {
   e.preventDefault();
-  if (state.quote.length === 0) {
-    showToast('Please add at least one coffee to your quote', 'removed');
-    return;
-  }
+  if (state.quote.length === 0) { showToast('Add at least one coffee first', true); return; }
 
   const btn = $('#form-submit');
-  btn.disabled = true;
-  btn.textContent = 'Sending...';
-  btn.classList.add('loading');
+  btn.disabled = true; btn.textContent = 'Sending...';
 
-  const coffeeList = state.quote.map(c =>
-    `• ${c.name} (${c.bagWeight} lbs, ${c.process})`).join('\n');
+  const coffeeList = state.quote.map(c => `- ${c.name} (${c.bagWeight} lbs, ${c.process})`).join('\n');
 
   const data = {
-    company: $('#field-company').value,
-    contact: $('#field-contact').value,
-    phone: $('#field-phone').value,
-    email: $('#field-email').value,
-    address: $('#field-address').value,
+    company:     $('#field-company').value,
+    contact:     $('#field-contact').value,
+    phone:       $('#field-phone').value,
+    email:       $('#field-email').value,
+    address:     $('#field-address').value,
     residential: $('#field-residential').value,
-    payment: $('#field-payment').value,
-    pickup: $('#field-pickup').checked,
-    tailgate: $('#field-tailgate').checked,
-    notes: $('#field-notes').value,
-    coffees: coffeeList,
-    coffeeCount: state.quote.length
+    payment:     $('#field-payment').value,
+    pickup:      $('#field-pickup').checked,
+    tailgate:    $('#field-tailgate').checked,
+    notes:       $('#field-notes').value,
+    coffees:     coffeeList,
+    count:       state.quote.length
   };
 
-  // ── Try EmailJS first, fall back to mailto ──
   try {
-    if (typeof emailjs !== 'undefined' &&
-        SITE_SETTINGS.emailjsServiceId !== 'YOUR_SERVICE_ID') {
-      await emailjs.send(
-        SITE_SETTINGS.emailjsServiceId,
-        SITE_SETTINGS.emailjsTemplateId,
-        {
-          to_email: SITE_SETTINGS.email,
-          from_name: data.contact,
-          from_company: data.company,
-          from_email: data.email,
-          from_phone: data.phone,
-          address: data.address,
-          residential: data.residential,
-          payment: data.payment,
-          pickup: data.pickup ? 'Yes' : 'No',
-          tailgate: data.tailgate ? 'Yes' : 'No',
-          notes: data.notes || 'None',
-          coffee_list: data.coffees,
-          coffee_count: data.coffeeCount
-        },
-        SITE_SETTINGS.emailjsPublicKey
-      );
+    if (typeof emailjs !== 'undefined' && SITE_SETTINGS.emailjsServiceId !== 'YOUR_SERVICE_ID') {
+      await emailjs.send(SITE_SETTINGS.emailjsServiceId, SITE_SETTINGS.emailjsTemplateId, {
+        to_email:     SITE_SETTINGS.email,
+        from_name:    data.contact,
+        from_company: data.company,
+        from_email:   data.email,
+        from_phone:   data.phone,
+        address:      data.address,
+        residential:  data.residential,
+        payment:      data.payment,
+        pickup:       data.pickup ? 'Yes' : 'No',
+        tailgate:     data.tailgate ? 'Yes' : 'No',
+        notes:        data.notes || 'None',
+        coffee_list:  data.coffees,
+        coffee_count: data.count
+      }, SITE_SETTINGS.emailjsPublicKey);
       showSuccess();
     } else {
-      // Fallback: mailto
-      const subject = encodeURIComponent(`Quote Request — Root 86 Coffee (${data.coffeeCount} coffees)`);
+      // Mailto fallback
+      const subject = encodeURIComponent(`Quote Request - Root 86 Coffee (${data.count} coffees)`);
       const body = encodeURIComponent(
-        `QUOTE REQUEST — ROOT 86 COFFEE\n` +
-        `${'─'.repeat(40)}\n\n` +
+        `QUOTE REQUEST - ROOT 86 COFFEE\n` +
         `Company: ${data.company}\n` +
-        `Contact: ${data.contact}\n` +
-        `Phone: ${data.phone}\n` +
-        `Email: ${data.email}\n` +
-        `Address: ${data.address}\n` +
-        `Residential/Commercial: ${data.residential}\n` +
-        `Payment Method: ${data.payment}\n` +
-        `Pickup: ${data.pickup ? 'Yes' : 'No'}\n` +
-        `Power Tailgate: ${data.tailgate ? 'Yes' : 'No'}\n` +
-        `Notes: ${data.notes || 'None'}\n\n` +
-        `COFFEES REQUESTED (${data.coffeeCount}):\n` +
-        `${'─'.repeat(40)}\n` +
-        `${data.coffees}`
+        `Contact: ${data.contact}\nPhone: ${data.phone}\nEmail: ${data.email}\n` +
+        `Address: ${data.address}\nType: ${data.residential}\nPayment: ${data.payment}\n` +
+        `Pickup: ${data.pickup ? 'Yes' : 'No'}\nTailgate: ${data.tailgate ? 'Yes' : 'No'}\n` +
+        `Notes: ${data.notes || 'None'}\n\nCOFFEES (${data.count}):\n${data.coffees}`
       );
       window.location.href = `mailto:${SITE_SETTINGS.email}?subject=${subject}&body=${body}`;
       showSuccess();
     }
-  } catch (err) {
+  } catch(err) {
     console.error(err);
-    btn.disabled = false;
-    btn.textContent = 'Send Quote Request';
-    btn.classList.remove('loading');
-    showToast('Something went wrong. Please try again or email us directly.', 'removed');
+    btn.disabled = false; btn.textContent = 'Send Quote Request';
+    showToast('Something went wrong. Please try again.', true);
   }
 }
 
@@ -387,89 +442,81 @@ function showSuccess() {
   $('#quote-form').style.display = 'none';
   $('#form-success').style.display = 'block';
   state.quote = [];
-  renderQuoteList();
-  updateQuoteBar();
-  updateNavCount();
-  updateAddButtons();
+  renderQuoteItems(); updateFloatBtn(); updateNavCount(); updateGridButtons();
 }
 
-// ── Hero counter animation ─────────────────────────────────────
-function animateHeroNumbers() {
-  $$('.hero-stat-num').forEach(el => {
+// ================================================
+// TOAST
+// ================================================
+function showToast(msg, isRemove = false) {
+  const t = $('#toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.className = `toast${isRemove ? ' removed' : ''} visible`;
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('visible'), 3000);
+}
+
+// ================================================
+// NUMBER ANIMATION
+// ================================================
+function animateNumbers() {
+  $$('[data-target]').forEach(el => {
     const target = parseInt(el.dataset.target);
+    const suffix = el.dataset.suffix || '';
     if (isNaN(target)) return;
-    let current = 0;
-    const step = Math.ceil(target / 50);
+    let cur = 0;
+    const step = Math.ceil(target / 40);
     const timer = setInterval(() => {
-      current = Math.min(current + step, target);
-      el.textContent = current + (el.dataset.suffix || '');
-      if (current >= target) clearInterval(timer);
-    }, 30);
+      cur = Math.min(cur + step, target);
+      el.textContent = cur + suffix;
+      if (cur >= target) clearInterval(timer);
+    }, 35);
   });
 }
 
-// ── Navbar scroll behaviour ─────────────────────────────────────
-function handleNavScroll() {
-  const nav = $('#main-nav');
-  if (nav) nav.classList.toggle('scrolled', window.scrollY > 60);
-}
-
-// ── Bind all events ────────────────────────────────────────────
+// ================================================
+// BIND EVENTS
+// ================================================
 function bindEvents() {
-  // Nav scroll
-  window.addEventListener('scroll', handleNavScroll, { passive: true });
-
   // Filters
-  $('#filter-origin')?.addEventListener('change', e => { state.filters.origin = e.target.value; applyFilters(); });
+  $('#filter-origin')?.addEventListener('change',  e => { state.filters.origin = e.target.value; applyFilters(); });
   $('#filter-process')?.addEventListener('change', e => { state.filters.process = e.target.value; applyFilters(); });
-  $('#filter-cert')?.addEventListener('change', e => { state.filters.certification = e.target.value; applyFilters(); });
-  $('#filter-wh')?.addEventListener('change', e => { state.filters.warehouse = e.target.value; applyFilters(); });
+  $('#filter-cert')?.addEventListener('change',    e => { state.filters.certification = e.target.value; applyFilters(); });
+  $('#filter-wh')?.addEventListener('change',      e => { state.filters.warehouse = e.target.value; applyFilters(); });
 
-  const searchInput = $('#filter-search');
-  if (searchInput) {
-    let debounceTimer;
-    searchInput.addEventListener('input', e => {
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(() => {
-        state.filters.search = e.target.value;
-        applyFilters();
-      }, 250);
-    });
-  }
+  let debounce;
+  $('#filter-search')?.addEventListener('input', e => {
+    clearTimeout(debounce);
+    debounce = setTimeout(() => { state.filters.search = e.target.value; applyFilters(); }, 250);
+  });
 
-  // Filter reset
   $('#filter-reset')?.addEventListener('click', () => {
-    state.filters = { origin: '', process: '', certification: '', warehouse: '', search: '' };
-    $$('.filter-select').forEach(s => s.value = '');
-    const searchEl = $('#filter-search');
-    if (searchEl) searchEl.value = '';
+    state.filters = { origin:'', process:'', certification:'', warehouse:'', search:'' };
+    $$('.search-select').forEach(s => s.value = '');
+    const si = $('#filter-search'); if (si) si.value = '';
     applyFilters();
   });
 
-  // Modal close
+  // Quote panel open
+  const openPanelBtns = ['#nav-quote-btn','#hero-quote-btn','#quote-float','#mobile-quote-btn','#contact-quote-btn'];
+  openPanelBtns.forEach(sel => $(sel)?.addEventListener('click', openPanel));
+  $('#qp-close')?.addEventListener('click', closePanel);
+  $('#quote-overlay')?.addEventListener('click', closePanel);
+
+  // Form
+  $('#quote-form')?.addEventListener('submit', handleSubmit);
+
+  // Modal
   $('#modal-close')?.addEventListener('click', closeModal);
   $('#modal-overlay')?.addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-  // Quote form
-  $('#quote-form')?.addEventListener('submit', handleQuoteSubmit);
-
-  // Quote bar buttons
-  $('#quote-bar-go')?.addEventListener('click', () => {
-    document.querySelector('#quote-section')?.scrollIntoView({ behavior: 'smooth' });
-  });
-  $('#quote-bar-clear')?.addEventListener('click', () => {
-    state.quote = [];
-    renderQuoteList(); updateQuoteBar(); updateNavCount(); updateAddButtons();
-    showToast('Quote cleared', 'removed');
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeModal(); closePanel(); }
   });
 
-  // Nav CTA scroll
-  $('#nav-quote-btn')?.addEventListener('click', () => {
-    document.querySelector('#quote-section')?.scrollIntoView({ behavior: 'smooth' });
-  });
-
-  // Smooth scroll for all anchor links
+  // Smooth anchor scroll
   $$('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
       const target = document.querySelector(a.getAttribute('href'));
@@ -477,13 +524,8 @@ function bindEvents() {
     });
   });
 
-  // Mobile hamburger (simple toggle)
-  const hamburger = $('#nav-hamburger');
-  const mobileMenu = $('#mobile-menu');
-  if (hamburger && mobileMenu) {
-    hamburger.addEventListener('click', () => {
-      const open = mobileMenu.classList.toggle('open');
-      hamburger.setAttribute('aria-expanded', open);
-    });
-  }
+  // Mobile hamburger
+  const ham = $('#nav-hamburger');
+  const mob = $('#mobile-menu');
+  if (ham && mob) ham.addEventListener('click', () => mob.classList.toggle('open'));
 }
