@@ -505,63 +505,95 @@ function animateNumbers() {
 }
 
 // ================================================
-// CANADA MAP
+// CANADA MAP (Leaflet)
 // ================================================
 function initMap() {
-  const tooltip  = $('#map-tooltip');
-  const ttCity   = $('#map-tt-city');
-  const ttProv   = $('#map-tt-province');
-  const ttDesc   = $('#map-tt-desc');
-  const mapWrap  = $('.canada-map-wrap');
-  if (!tooltip || !mapWrap) return;
+  const el = document.getElementById('canada-map');
+  if (!el || typeof L === 'undefined') return;
 
-  $$('.map-pin-group').forEach(pin => {
-    pin.addEventListener('mouseenter', e => {
-      ttCity.textContent  = pin.dataset.city;
-      ttProv.textContent  = pin.dataset.province;
-      ttDesc.textContent  = pin.dataset.desc;
-      positionTooltip(e, pin);
-      tooltip.classList.add('visible');
-    });
-    pin.addEventListener('mousemove', e => positionTooltip(e, pin));
-    pin.addEventListener('mouseleave', () => tooltip.classList.remove('visible'));
-    // keyboard/touch
-    pin.addEventListener('focus', e => {
-      ttCity.textContent  = pin.dataset.city;
-      ttProv.textContent  = pin.dataset.province;
-      ttDesc.textContent  = pin.dataset.desc;
-      positionTooltip(e, pin);
-      tooltip.classList.add('visible');
-    });
-    pin.addEventListener('blur', () => tooltip.classList.remove('visible'));
+  const LOCATIONS = [
+    {
+      lat: 49.2827, lng: -123.1207,
+      city: 'Vancouver', province: 'British Columbia',
+      desc: 'Serving Western Canada\'s thriving specialty roaster community with fast access and competitive freight from the Pacific coast.',
+      delay: '0s'
+    },
+    {
+      lat: 49.3186, lng: -124.3137,
+      city: 'Parksville', province: 'British Columbia',
+      desc: 'Our Vancouver Island home base and sample courier address, supporting Vancouver Island\'s growing community of independent roasters.',
+      delay: '0.8s'
+    },
+    {
+      lat: 46.8090, lng: -71.1804,
+      city: 'Lévis', province: 'Quebec',
+      desc: 'Our Eastern hub, strategically positioned to serve Quebec and Atlantic roasters with efficient delivery across the French-speaking market.',
+      delay: '1.6s'
+    }
+  ];
+
+  // Initialise map — centred on Canada, no scroll zoom
+  const map = L.map('canada-map', {
+    center: [56, -96],
+    zoom: 4,
+    zoomControl: false,
+    scrollWheelZoom: false,
+    attributionControl: true
   });
 
-  function positionTooltip(e, pin) {
-    const rect = mapWrap.getBoundingClientRect();
-    const svgEl = mapWrap.querySelector('.canada-map');
-    const svgRect = svgEl.getBoundingClientRect();
+  // Clean, minimal tile layer (CartoDB Positron — free, no key)
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 19
+  }).addTo(map);
 
-    // Get the cx/cy of the dot inside this pin group
-    const dot = pin.querySelector('.map-pin-dot');
-    const cx = parseFloat(dot.getAttribute('cx'));
-    const cy = parseFloat(dot.getAttribute('cy'));
+  // Zoom control bottom-right
+  L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-    // Scale SVG coords to rendered pixel coords
-    const scaleX = svgRect.width  / 960;
-    const scaleY = svgRect.height / 560;
-    const px = (svgRect.left - rect.left) + cx * scaleX;
-    const py = (svgRect.top  - rect.top)  + cy * scaleY;
-
-    // Place tooltip above the pin, horizontally clamped
-    let left = px - 100;
-    let top  = py - 115;
-    if (left < 4) left = 4;
-    if (left + 220 > rect.width - 4) left = rect.width - 224;
-    if (top < 4) top = py + 24;
-
-    tooltip.style.left = left + 'px';
-    tooltip.style.top  = top  + 'px';
+  // Custom div icon
+  function makeIcon(delay) {
+    return L.divIcon({
+      className: '',
+      html: `<div class="r86-marker" style="animation-delay:${delay}"></div>`,
+      iconSize: [16, 16],
+      iconAnchor: [8, 8],
+      popupAnchor: [0, -14]
+    });
   }
+
+  // Add markers with branded popups
+  LOCATIONS.forEach(loc => {
+    const popup = L.popup({ closeButton: true, maxWidth: 260, className: 'r86-popup-wrap' })
+      .setContent(`
+        <div class="r86-popup">
+          <div class="r86-popup-city">${loc.city}</div>
+          <span class="r86-popup-prov">${loc.province}</span>
+          <p class="r86-popup-desc">${loc.desc}</p>
+        </div>`);
+
+    L.marker([loc.lat, loc.lng], { icon: makeIcon(loc.delay) })
+      .addTo(map)
+      .bindPopup(popup);
+  });
+
+  // Fit bounds to show all markers with padding
+  const bounds = L.latLngBounds(LOCATIONS.map(l => [l.lat, l.lng]));
+  map.fitBounds(bounds, { padding: [80, 120] });
+
+  // Restore cursor behaviour inside the map (Leaflet sets cursor:grab)
+  el.addEventListener('mouseenter', () => {
+    const dot  = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    if (dot)  dot.style.opacity  = '0';
+    if (ring) ring.style.opacity = '0';
+  });
+  el.addEventListener('mouseleave', () => {
+    const dot  = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    if (dot)  dot.style.opacity  = '1';
+    if (ring) ring.style.opacity = '0.5';
+  });
 }
 
 // ================================================

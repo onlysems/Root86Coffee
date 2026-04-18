@@ -770,90 +770,81 @@ footer { background: var(--red-deep); padding: 52px 0 32px; border-top: 3px soli
    CANADA MAP SECTION
    ================================================ */
 .map-section { background: var(--off-white); padding: 100px 0; overflow: hidden; }
-.map-section .container { max-width: 1280px; }
 .map-header { margin-bottom: 52px; }
 
-.canada-map-wrap {
-  position: relative; width: 100%;
-}
-.canada-map {
-  width: 100%; height: auto; display: block;
-  max-height: 520px;
+.canada-map-wrap { position: relative; width: 100%; }
+
+#canada-map {
+  width: 100%; height: 480px;
+  border: 1px solid rgba(26,0,5,0.08);
+  box-shadow: 0 4px 40px rgba(26,0,5,0.07);
 }
 
-/* Province paths */
-.province {
-  fill: rgba(200,16,46,0.05);
-  stroke: rgba(200,16,46,0.18);
-  stroke-width: 1;
-  transition: fill var(--transition);
-}
-.province:hover { fill: rgba(200,16,46,0.1); }
-.province-active {
-  fill: rgba(200,16,46,0.1);
-  stroke: rgba(200,16,46,0.3);
-}
+/* Override Leaflet defaults to match brand */
+.leaflet-container { font-family: var(--font-sans); cursor: none !important; }
+.leaflet-grab, .leaflet-grabbing { cursor: none !important; }
 
-/* Map pins */
-@keyframes pin-pulse {
-  0%,100% { r: 10; opacity: 0.25; }
-  50% { r: 18; opacity: 0; }
+/* Custom marker pin */
+.r86-marker {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--red);
+  border: 3px solid var(--white);
+  box-shadow: 0 0 0 2px var(--red), 0 4px 16px rgba(200,16,46,0.45);
+  position: relative;
 }
-.map-pin-ring {
-  fill: none; stroke: var(--red); stroke-width: 1.5;
-  animation: pin-pulse 2.4s ease-out infinite;
-  transform-box: fill-box; transform-origin: center;
+@keyframes marker-pulse {
+  0%   { box-shadow: 0 0 0 2px var(--red), 0 4px 16px rgba(200,16,46,0.45), 0 0 0 0 rgba(200,16,46,0.4); }
+  70%  { box-shadow: 0 0 0 2px var(--red), 0 4px 16px rgba(200,16,46,0.45), 0 0 0 14px rgba(200,16,46,0); }
+  100% { box-shadow: 0 0 0 2px var(--red), 0 4px 16px rgba(200,16,46,0.45), 0 0 0 0 rgba(200,16,46,0); }
 }
-.map-pin-dot {
-  fill: var(--red); cursor: none;
-  transition: r 0.2s ease;
-}
-.map-pin-group:hover .map-pin-dot { r: 9; }
-.map-pin-label {
-  font-family: 'Jost', sans-serif; font-size: 9px;
-  font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
-  fill: var(--red); pointer-events: none;
-}
+.r86-marker { animation: marker-pulse 2.4s ease-out infinite; }
+.r86-marker:nth-child(1) { animation-delay: 0s; }
 
-/* Map tooltip */
-.map-tooltip {
-  position: absolute; z-index: 10;
-  background: var(--white); border: 1px solid rgba(200,16,46,0.15);
+/* Leaflet popup styled to brand */
+.leaflet-popup-content-wrapper {
+  border-radius: 0 !important;
   border-left: 3px solid var(--red);
-  padding: 18px 22px; min-width: 200px;
-  box-shadow: 0 12px 40px rgba(26,0,5,0.13);
-  pointer-events: none; opacity: 0;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  transform: translateY(6px);
+  box-shadow: 0 12px 40px rgba(26,0,5,0.15) !important;
+  padding: 0 !important;
 }
-.map-tooltip.visible { opacity: 1; transform: translateY(0); }
-.map-tooltip-city {
-  font-family: 'Cormorant Garamond', serif; font-size: 1.25rem;
-  font-weight: 300; color: var(--ink); margin-bottom: 2px;
+.leaflet-popup-content { margin: 0 !important; }
+.leaflet-popup-tip-container { display: none; }
+.leaflet-popup-close-button {
+  color: var(--muted) !important; font-size: 18px !important;
+  top: 8px !important; right: 10px !important;
 }
-.map-tooltip-province {
-  font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase;
-  color: var(--red); margin-bottom: 10px;
+.r86-popup { padding: 20px 24px; min-width: 200px; }
+.r86-popup-city {
+  font-family: var(--font-serif); font-size: 1.2rem;
+  font-weight: 300; color: var(--ink); margin-bottom: 2px; line-height: 1.2;
 }
-.map-tooltip-desc { font-size: 0.77rem; color: var(--muted); line-height: 1.7; }
+.r86-popup-prov {
+  font-size: 0.58rem; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--red); margin-bottom: 10px; display: block;
+}
+.r86-popup-desc { font-size: 0.76rem; color: var(--muted); line-height: 1.75; }
 
-/* Map location cards below map */
+/* Leaflet attribution small */
+.leaflet-control-attribution {
+  font-size: 0.58rem !important; opacity: 0.5;
+}
+
+/* Location cards below map */
 .map-locations {
   display: grid; grid-template-columns: repeat(3,1fr); gap: 2px;
-  margin-top: 32px;
+  margin-top: 2px;
 }
 .map-loc-card {
   background: var(--white); padding: 28px 32px;
-  border-top: 3px solid transparent;
   border: 1px solid rgba(26,0,5,0.07);
+  border-top: 3px solid transparent;
   transition: border-top-color var(--transition), transform var(--transition);
-  cursor: default;
 }
-.map-loc-card:hover, .map-loc-card.active {
+.map-loc-card:hover {
   border-top-color: var(--red); transform: translateY(-3px);
 }
 .map-loc-name {
-  font-family: 'Cormorant Garamond', serif; font-size: 1.3rem;
+  font-family: var(--font-serif); font-size: 1.3rem;
   font-weight: 300; color: var(--ink); margin-bottom: 3px;
 }
 .map-loc-prov {
@@ -863,6 +854,6 @@ footer { background: var(--red-deep); padding: 52px 0 32px; border-top: 3px soli
 .map-loc-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.8; }
 
 @media (max-width: 768px) {
+  #canada-map { height: 320px; }
   .map-locations { grid-template-columns: 1fr; }
-  .map-tooltip { display: none; }
 }
