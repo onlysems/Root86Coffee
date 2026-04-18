@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Root 86 Coffee — Content Manager</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700&display=swap');
+    :root {
+      --espresso:#0C0907;--surface:#1C1410;--surface-2:#26190F;--surface-3:#301F12;
+      --gold:#C8882A;--gold-light:#E8A84A;--gold-dim:#8A5E1C;
+      --cream:#F0E6D3;--cream-dim:#B8A898;--cream-muted:#7A6858;
+      --border:rgba(200,136,42,0.12);--border-hover:rgba(200,136,42,0.35);
+      --red:#E05A4A;--green:#4CAF6E;
+      --radius:10px;--font-serif:'DM Serif Display',serif;--font-sans:'Inter',sans-serif;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font-sans);background:var(--espresso);color:var(--cream);line-height:1.6;-webkit-font-smoothing:antialiased}
+    a{color:var(--gold);text-decoration:none}
+    button{cursor:pointer;font-family:inherit}
+    input,select,textarea{font-family:inherit}
+
+    /* ── Login ── */
+    .login-overlay{position:fixed;inset:0;background:var(--espresso);z-index:999;display:flex;align-items:center;justify-content:center;padding:2rem}
+    .login-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:3rem;width:100%;max-width:400px;text-align:center}
+    .login-logo{font-family:var(--font-serif);font-size:2rem;margin-bottom:0.25rem}
+    .login-sub{font-size:0.7rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:2rem}
+    .login-box h2{font-family:var(--font-serif);font-size:1.5rem;margin-bottom:0.5rem}
+    .login-box p{font-size:0.85rem;color:var(--cream-muted);margin-bottom:1.5rem}
+    .login-input{width:100%;background:var(--surface-2);border:1px solid var(--border);color:var(--cream);padding:0.75rem 1rem;border-radius:var(--radius);font-size:0.9rem;outline:none;margin-bottom:1rem}
+    .login-input:focus{border-color:var(--gold-dim)}
+    .login-btn{width:100%;padding:0.8rem;background:var(--gold);color:var(--espresso);font-weight:700;font-size:0.875rem;letter-spacing:0.08em;text-transform:uppercase;border:none;border-radius:var(--radius);cursor:pointer;transition:background 0.2s}
+    .login-btn:hover{background:var(--gold-light)}
+    .login-error{color:var(--red);font-size:0.8rem;margin-top:0.5rem;display:none}
+    .login-hint{font-size:0.72rem;color:var(--cream-muted);margin-top:1rem;opacity:0.6}
+
+    /* ── Layout ── */
+    .admin-wrap{display:none;min-height:100vh}
+    .admin-wrap.visible{display:block}
+    .admin-header{background:var(--surface);border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+    .admin-logo{font-family:var(--font-serif);font-size:1.3rem}
+    .admin-logo span{font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);display:block}
+    .admin-header-right{display:flex;gap:1rem;align-items:center}
+    .admin-badge{font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--cream-muted);border:1px solid var(--border);padding:0.3rem 0.75rem;border-radius:100px}
+    .admin-logout{font-size:0.75rem;color:var(--red);cursor:pointer;border:1px solid rgba(224,90,74,0.3);padding:0.3rem 0.75rem;border-radius:100px;background:none;transition:all 0.2s}
+    .admin-logout:hover{background:rgba(224,90,74,0.1)}
+
+    .admin-main{padding:2rem;max-width:1400px;margin:0 auto}
+    .admin-section{background:var(--surface);border:1px solid var(--border);border-radius:16px;margin-bottom:2rem;overflow:hidden}
+    .admin-section-header{padding:1.5rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+    .admin-section-title{font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold)}
+
+    /* ── Buttons ── */
+    .btn{padding:0.55rem 1.25rem;border-radius:var(--radius);font-size:0.78rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;border:none;transition:all 0.2s;cursor:pointer}
+    .btn-gold{background:var(--gold);color:var(--espresso)}
+    .btn-gold:hover{background:var(--gold-light)}
+    .btn-outline{background:none;border:1px solid var(--border);color:var(--cream-dim)}
+    .btn-outline:hover{border-color:var(--gold-dim);color:var(--gold)}
+    .btn-danger{background:none;border:1px solid rgba(224,90,74,0.3);color:var(--red)}
+    .btn-danger:hover{background:rgba(224,90,74,0.1)}
+    .btn-sm{padding:0.35rem 0.75rem;font-size:0.7rem}
+    .btn-green{background:rgba(76,175,110,0.15);border:1px solid rgba(76,175,110,0.3);color:var(--green)}
+    .btn-green:hover{background:rgba(76,175,110,0.25)}
+
+    /* ── Coffee Table ── */
+    .coffee-table{width:100%;border-collapse:collapse}
+    .coffee-table th{padding:0.75rem 1.5rem;text-align:left;font-size:0.65rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--border)}
+    .coffee-table td{padding:0.875rem 1.5rem;border-bottom:1px solid var(--border);font-size:0.85rem;vertical-align:middle}
+    .coffee-table tr:last-child td{border-bottom:none}
+    .coffee-table tr:hover td{background:var(--surface-2)}
+    .table-name{font-weight:500;color:var(--cream)}
+    .table-origin{color:var(--cream-dim)}
+    .table-badge{display:inline-flex;padding:0.15rem 0.5rem;border-radius:100px;font-size:0.65rem;font-weight:600;text-transform:uppercase;margin:0.1rem}
+    .table-badge-process{background:rgba(200,136,42,0.1);color:var(--gold);border:1px solid rgba(200,136,42,0.2)}
+    .table-badge-cert{background:rgba(240,230,211,0.07);color:var(--cream-dim);border:1px solid rgba(240,230,211,0.12)}
+    .table-avail{display:inline-flex;align-items:center;gap:0.35rem;font-size:0.75rem}
+    .table-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+    .dot-green{background:var(--green);box-shadow:0 0 4px rgba(76,175,110,0.5)}
+    .dot-red{background:var(--red);box-shadow:0 0 4px rgba(224,90,74,0.4)}
+    .table-actions{display:flex;gap:0.5rem;flex-wrap:wrap}
+
+    /* ── Add/Edit Form ── */
+    .form-panel{padding:2rem;background:var(--surface-2)}
+    .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:1rem}
+    .form-group{display:flex;flex-direction:column;gap:0.4rem}
+    .form-label{font-size:0.65rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold)}
+    .form-label .req{color:var(--red)}
+    .form-input,.form-select,.form-textarea{background:var(--surface);border:1px solid var(--border);color:var(--cream);padding:0.6rem 0.875rem;border-radius:var(--radius);font-size:0.875rem;outline:none;transition:border-color 0.2s;width:100%}
+    .form-select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C8882A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.9rem center;padding-right:2.5rem}
+    .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--gold-dim)}
+    .form-input::placeholder,.form-textarea::placeholder{color:var(--cream-muted);opacity:0.5}
+    .form-textarea{resize:vertical;min-height:80px}
+    .form-select option{background:var(--surface)}
+    .form-full{grid-column:1/-1}
+    .form-actions{display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1rem}
+
+    /* ── Checkboxes for certifications ── */
+    .cert-checks{display:flex;flex-wrap:wrap;gap:0.5rem}
+    .cert-check-label{display:flex;align-items:center;gap:0.4rem;font-size:0.8rem;color:var(--cream-dim);cursor:pointer;padding:0.3rem 0.75rem;border:1px solid var(--border);border-radius:100px;transition:all 0.2s}
+    .cert-check-label:has(input:checked){border-color:var(--gold-dim);color:var(--gold);background:rgba(200,136,42,0.1)}
+    .cert-check-label input{accent-color:var(--gold)}
+    .wh-checks{display:flex;flex-wrap:wrap;gap:0.5rem}
+    .wh-check-label{display:flex;align-items:center;gap:0.4rem;font-size:0.8rem;color:var(--cream-dim);cursor:pointer;padding:0.3rem 0.75rem;border:1px solid var(--border);border-radius:100px;transition:all 0.2s}
+    .wh-check-label:has(input:checked){border-color:var(--gold-dim);color:var(--gold);background:rgba(200,136,42,0.1)}
+
+    /* ── Export ── */
+    .export-panel{padding:2rem}
+    .export-textarea{width:100%;background:var(--espresso);border:1px solid var(--border);color:var(--cream-muted);padding:1rem;border-radius:var(--radius);font-family:monospace;font-size:0.75rem;line-height:1.5;min-height:200px;resize:vertical;outline:none}
+    .export-instructions{font-size:0.85rem;color:var(--cream-dim);line-height:1.7;margin-bottom:1rem}
+    .export-steps{margin-top:1rem;padding:1rem 1.5rem;background:var(--surface-2);border-radius:var(--radius);font-size:0.82rem;color:var(--cream-muted);line-height:1.8}
+    .export-steps li{margin-left:1rem;list-style:decimal}
+
+    /* ── Toast ── */
+    .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:0.875rem 1.25rem;font-size:0.85rem;color:var(--cream);z-index:2000;box-shadow:0 8px 30px rgba(0,0,0,0.4);transform:translateX(120%);opacity:0;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);display:flex;align-items:center;gap:0.5rem}
+    .toast.show{transform:translateX(0);opacity:1}
+    .toast.success{border-color:rgba(76,175,110,0.4)}
+    .toast.error{border-color:rgba(224,90,74,0.4)}
+
+    /* ── Availability toggle ── */
+    .toggle-switch{position:relative;display:inline-flex;align-items:center;gap:0.5rem;cursor:pointer}
+    .toggle-switch input{opacity:0;width:0;height:0;position:absolute}
+    .toggle-track{width:36px;height:20px;background:var(--surface-3);border:1px solid var(--border);border-radius:100px;position:relative;transition:background 0.2s}
+    .toggle-track::after{content:'';position:absolute;width:14px;height:14px;background:var(--cream-muted);border-radius:50%;top:2px;left:2px;transition:all 0.2s}
+    .toggle-switch input:checked + .toggle-track{background:rgba(76,175,110,0.2);border-color:rgba(76,175,110,0.5)}
+    .toggle-switch input:checked + .toggle-track::after{transform:translateX(16px);background:var(--green)}
+    .toggle-label{font-size:0.78rem;color:var(--cream-muted)}
+
+    @media(max-width:768px){.admin-main{padding:1rem}.form-grid{grid-template-columns:1fr}.coffee-table{display:block;overflow-x:auto}}
+  </style>
+</head>
+<body>
+
+<!-- ── Login Gate ── -->
+<div class="login-overlay" id="login-overlay">
+  <div class="login-box">
+    <div class="login-logo">ROOT 86</div>
+    <div class="login-sub">Content Manager</div>
+    <h2>Admin Access</h2>
+    <p>Enter the admin password to manage your coffee catalogue</p>
+    <input class="login-input" type="password" id="login-pw" placeholder="Password" autocomplete="current-password" />
+    <button class="login-btn" id="login-btn">Enter</button>
+    <div class="login-error" id="login-error">Incorrect password. Try again.</div>
+    <p class="login-hint">Default password: root86admin<br>Change it in admin.html line ~245</p>
+  </div>
+</div>
+
+<!-- ── Admin Panel ── -->
+<div class="admin-wrap" id="admin-wrap">
+
+  <!-- Header -->
+  <div class="admin-header">
+    <div class="admin-logo">ROOT 86 <span>Content Manager</span></div>
+    <div class="admin-header-right">
+      <span class="admin-badge">☕ Coffee Catalogue</span>
+      <button class="admin-logout" id="logout-btn">Log Out</button>
+    </div>
+  </div>
+
+  <div class="admin-main">
+
+    <!-- ── Add New Coffee ── -->
+    <div class="admin-section">
+      <div class="admin-section-header">
+        <span class="admin-section-title">➕ Add New Coffee</span>
+        <button class="btn btn-gold" id="toggle-add-form">Open Form</button>
+      </div>
+      <div id="add-form-wrap" style="display:none">
+        <div class="form-panel">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Coffee Name <span class="req">*</span></label>
+              <input class="form-input" id="add-name" placeholder="e.g. Ethiopia Yirgacheffe Koke G2 Natural" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Origin <span class="req">*</span></label>
+              <select class="form-select" id="add-origin">
+                <option value="">Select origin…</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Region</label>
+              <input class="form-input" id="add-region" placeholder="e.g. Yirgacheffe, Gedeo" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Process <span class="req">*</span></label>
+              <select class="form-select" id="add-process">
+                <option value="">Select process…</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Grade</label>
+              <input class="form-input" id="add-grade" placeholder="e.g. Grade 2, SHB, AA" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Variety</label>
+              <input class="form-input" id="add-variety" placeholder="e.g. Caturra, Bourbon" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Altitude</label>
+              <input class="form-input" id="add-altitude" placeholder="e.g. 1,800–2,200m" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Bag Weight (lbs) <span class="req">*</span></label>
+              <input class="form-input" type="number" id="add-weight" placeholder="e.g. 132" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tasting Notes <span class="req">*</span></label>
+              <input class="form-input" id="add-tasting" placeholder="e.g. Blueberry, Dark Chocolate, Rose" />
+            </div>
+            <div class="form-group form-full">
+              <label class="form-label">Description</label>
+              <textarea class="form-textarea" id="add-description" placeholder="A short paragraph describing the coffee's origin story, processing, and what makes it special…"></textarea>
+            </div>
+            <div class="form-group form-full">
+              <label class="form-label">Certifications</label>
+              <div class="cert-checks" id="add-certs">
+                <label class="cert-check-label"><input type="checkbox" value="Organic"> Organic</label>
+                <label class="cert-check-label"><input type="checkbox" value="Fair Trade"> Fair Trade</label>
+                <label class="cert-check-label"><input type="checkbox" value="Rainforest Alliance"> Rainforest Alliance</label>
+                <label class="cert-check-label"><input type="checkbox" value="Women's Lot"> Women's Lot</label>
+                <label class="cert-check-label"><input type="checkbox" value="Decaf"> Decaf</label>
+              </div>
+            </div>
+            <div class="form-group form-full">
+              <label class="form-label">Warehouse Availability</label>
+              <div class="wh-checks" id="add-warehouses">
+                <label class="wh-check-label"><input type="checkbox" value="Vancouver, BC"> 📦 Vancouver, BC</label>
+                <label class="wh-check-label"><input type="checkbox" value="Lévis, QC"> 📦 Lévis, QC</label>
+                <label class="wh-check-label"><input type="checkbox" value="Parksville, BC"> 📦 Parksville, BC</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Available for Order</label>
+              <label class="toggle-switch">
+                <input type="checkbox" id="add-available" checked />
+                <div class="toggle-track"></div>
+                <span class="toggle-label" id="add-available-label">Yes — In Stock</span>
+              </label>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn btn-gold" id="save-new-btn">Add Coffee to Catalogue</button>
+            <button class="btn btn-outline" id="cancel-add-btn">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Coffee List ── -->
+    <div class="admin-section">
+      <div class="admin-section-header">
+        <span class="admin-section-title">☕ Coffee Catalogue (<span id="table-count">0</span>)</span>
+        <div style="display:flex;gap:0.5rem">
+          <input style="background:var(--surface-2);border:1px solid var(--border);color:var(--cream);padding:0.45rem 0.875rem;border-radius:var(--radius);font-size:0.8rem;outline:none;width:200px" type="text" id="table-search" placeholder="Search coffees…" />
+        </div>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="coffee-table">
+          <thead>
+            <tr>
+              <th>Coffee</th>
+              <th>Origin</th>
+              <th>Process</th>
+              <th>Certifications</th>
+              <th>Weight</th>
+              <th>Warehouses</th>
+              <th>Available</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="coffee-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ── Edit form (inline) ── -->
+    <div class="admin-section" id="edit-section" style="display:none">
+      <div class="admin-section-header">
+        <span class="admin-section-title">✏️ Editing: <span id="edit-section-name"></span></span>
+        <button class="btn btn-outline btn-sm" id="cancel-edit-btn">Cancel</button>
+      </div>
+      <div class="form-panel">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Coffee Name <span class="req">*</span></label>
+            <input class="form-input" id="edit-name" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Origin</label>
+            <select class="form-select" id="edit-origin"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Region</label>
+            <input class="form-input" id="edit-region" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Process</label>
+            <select class="form-select" id="edit-process"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Grade</label>
+            <input class="form-input" id="edit-grade" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Variety</label>
+            <input class="form-input" id="edit-variety" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Altitude</label>
+            <input class="form-input" id="edit-altitude" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Bag Weight (lbs)</label>
+            <input class="form-input" type="number" id="edit-weight" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tasting Notes</label>
+            <input class="form-input" id="edit-tasting" />
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">Description</label>
+            <textarea class="form-textarea" id="edit-description"></textarea>
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">Certifications</label>
+            <div class="cert-checks" id="edit-certs">
+              <label class="cert-check-label"><input type="checkbox" value="Organic"> Organic</label>
+              <label class="cert-check-label"><input type="checkbox" value="Fair Trade"> Fair Trade</label>
+              <label class="cert-check-label"><input type="checkbox" value="Rainforest Alliance"> Rainforest Alliance</label>
+              <label class="cert-check-label"><input type="checkbox" value="Women's Lot"> Women's Lot</label>
+              <label class="cert-check-label"><input type="checkbox" value="Decaf"> Decaf</label>
+            </div>
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">Warehouse Availability</label>
+            <div class="wh-checks" id="edit-warehouses">
+              <label class="wh-check-label"><input type="checkbox" value="Vancouver, BC"> 📦 Vancouver, BC</label>
+              <label class="wh-check-label"><input type="checkbox" value="Lévis, QC"> 📦 Lévis, QC</label>
+              <label class="wh-check-label"><input type="checkbox" value="Parksville, BC"> 📦 Parksville, BC</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Available for Order</label>
+            <label class="toggle-switch">
+              <input type="checkbox" id="edit-available" />
+              <div class="toggle-track"></div>
+              <span class="toggle-label" id="edit-available-label">Yes — In Stock</span>
+            </label>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-gold" id="save-edit-btn">Save Changes</button>
+          <button class="btn btn-danger" id="delete-coffee-btn">🗑 Delete Coffee</button>
+          <button class="btn btn-outline" id="cancel-edit-btn-2">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Export ── -->
+    <div class="admin-section">
+      <div class="admin-section-header">
+        <span class="admin-section-title">📤 Export & Save Changes</span>
+        <div style="display:flex;gap:0.5rem">
+          <button class="btn btn-green btn-sm" id="copy-btn">Copy to Clipboard</button>
+          <button class="btn btn-gold btn-sm" id="export-btn">Generate Export</button>
+        </div>
+      </div>
+      <div class="export-panel">
+        <p class="export-instructions">
+          After making changes, click <strong style="color:var(--gold)">Generate Export</strong> to get the updated <code style="background:var(--surface-2);padding:0.1rem 0.4rem;border-radius:4px;font-size:0.85em">coffees.js</code> file content, then follow the steps below to publish your changes to GitHub.
+        </p>
+        <textarea class="export-textarea" id="export-output" readonly placeholder="Click 'Generate Export' to see the updated coffees.js content here…"></textarea>
+        <div class="export-steps">
+          <strong style="color:var(--cream);display:block;margin-bottom:0.5rem">How to publish your changes:</strong>
+          <ol>
+            <li>Click <strong>Generate Export</strong> then <strong>Copy to Clipboard</strong></li>
+            <li>Go to your GitHub repository page</li>
+            <li>Open the file <code>js/coffees.js</code></li>
+            <li>Click the pencil ✏️ icon to edit it</li>
+            <li>Select all the existing content (Ctrl+A) and paste your copied content</li>
+            <li>Scroll down and click <strong>Commit changes</strong></li>
+            <li>Your website will update within 1–2 minutes!</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /admin-main -->
+</div><!-- /admin-wrap -->
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="js/coffees.js"></script>
+<script>
+/* ── Password ── (change 'root86admin' to your preferred password) ── */
+const ADMIN_PASSWORD = 'root86admin';
+
+/* ── State ── */
+let adminCoffees = JSON.parse(JSON.stringify(COFFEES)); // deep copy
+let editingId = null;
+
+/* ── Login ── */
+document.getElementById('login-btn').addEventListener('click', tryLogin);
+document.getElementById('login-pw').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+
+function tryLogin() {
+  if (document.getElementById('login-pw').value === ADMIN_PASSWORD) {
+    document.getElementById('login-overlay').style.display = 'none';
+    document.getElementById('admin-wrap').classList.add('visible');
+    initAdmin();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+    document.getElementById('login-pw').value = '';
+    document.getElementById('login-pw').focus();
+  }
+}
+
+document.getElementById('logout-btn').addEventListener('click', () => {
+  document.getElementById('login-overlay').style.display = 'flex';
+  document.getElementById('admin-wrap').classList.remove('visible');
+  document.getElementById('login-pw').value = '';
+});
+
+/* ── Init ── */
+function initAdmin() {
+  populateSelectOptions('add-origin', FILTER_OPTIONS.origins);
+  populateSelectOptions('add-process', FILTER_OPTIONS.processes);
+  populateSelectOptions('edit-origin', FILTER_OPTIONS.origins);
+  populateSelectOptions('edit-process', FILTER_OPTIONS.processes);
+  renderTable();
+
+  // Add available toggle label
+  document.getElementById('add-available').addEventListener('change', e => {
+    document.getElementById('add-available-label').textContent = e.target.checked ? 'Yes — In Stock' : 'No — Out of Stock';
+  });
+  document.getElementById('edit-available').addEventListener('change', e => {
+    document.getElementById('edit-available-label').textContent = e.target.checked ? 'Yes — In Stock' : 'No — Out of Stock';
+  });
+
+  // Add form toggle
+  document.getElementById('toggle-add-form').addEventListener('click', () => {
+    const wrap = document.getElementById('add-form-wrap');
+    const btn = document.getElementById('toggle-add-form');
+    const open = wrap.style.display === 'none';
+    wrap.style.display = open ? 'block' : 'none';
+    btn.textContent = open ? 'Close Form' : 'Open Form';
+  });
+  document.getElementById('cancel-add-btn').addEventListener('click', () => {
+    document.getElementById('add-form-wrap').style.display = 'none';
+    document.getElementById('toggle-add-form').textContent = 'Open Form';
+  });
+
+  // Save new
+  document.getElementById('save-new-btn').addEventListener('click', saveNewCoffee);
+
+  // Edit actions
+  document.getElementById('cancel-edit-btn').addEventListener('click', closeEdit);
+  document.getElementById('cancel-edit-btn-2').addEventListener('click', closeEdit);
+  document.getElementById('save-edit-btn').addEventListener('click', saveEdit);
+  document.getElementById('delete-coffee-btn').addEventListener('click', deleteCoffee);
+
+  // Table search
+  document.getElementById('table-search').addEventListener('input', e => {
+    renderTable(e.target.value);
+  });
+
+  // Export
+  document.getElementById('export-btn').addEventListener('click', generateExport);
+  document.getElementById('copy-btn').addEventListener('click', copyExport);
+}
+
+function populateSelectOptions(id, options) {
+  const sel = document.getElementById(id);
+  options.forEach(opt => {
+    const el = document.createElement('option');
+    el.value = opt; el.textContent = opt;
+    sel.appendChild(el);
+  });
+}
+
+/* ── Table render ── */
+function renderTable(search = '') {
+  const tbody = document.getElementById('coffee-table-body');
+  const countEl = document.getElementById('table-count');
+  const filtered = search
+    ? adminCoffees.filter(c => c.name.toLowerCase().includes(search.toLowerCase()) || c.origin.toLowerCase().includes(search.toLowerCase()))
+    : adminCoffees;
+  countEl.textContent = adminCoffees.length;
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:3rem;color:var(--cream-muted)">No coffees found</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(c => `
+    <tr data-id="${c.id}">
+      <td class="table-name">${c.name}</td>
+      <td class="table-origin">${c.origin}</td>
+      <td><span class="table-badge table-badge-process">${c.process}</span></td>
+      <td>${c.certifications.map(cert => `<span class="table-badge table-badge-cert">${cert}</span>`).join('') || '<span style="color:var(--cream-muted);font-size:0.75rem">None</span>'}</td>
+      <td style="color:var(--cream-dim)">${c.bagWeight} lbs</td>
+      <td style="font-size:0.75rem;color:var(--cream-dim)">${c.warehouses.join('<br>')}</td>
+      <td>
+        <span class="table-avail">
+          <span class="table-dot ${c.available ? 'dot-green' : 'dot-red'}"></span>
+          ${c.available ? 'In Stock' : 'Out of Stock'}
+        </span>
+      </td>
+      <td>
+        <div class="table-actions">
+          <button class="btn btn-outline btn-sm edit-btn" data-id="${c.id}">✏️ Edit</button>
+          <button class="btn btn-danger btn-sm quick-delete-btn" data-id="${c.id}">🗑</button>
+        </div>
+      </td>
+    </tr>`).join('');
+
+  tbody.querySelectorAll('.edit-btn').forEach(btn => btn.addEventListener('click', () => openEdit(parseInt(btn.dataset.id))));
+  tbody.querySelectorAll('.quick-delete-btn').forEach(btn => btn.addEventListener('click', () => {
+    if (confirm('Delete this coffee from the catalogue?')) {
+      adminCoffees = adminCoffees.filter(c => c.id !== parseInt(btn.dataset.id));
+      renderTable();
+      showToast('Coffee deleted', 'error');
+    }
+  }));
+}
+
+/* ── Add new coffee ── */
+function saveNewCoffee() {
+  const name = document.getElementById('add-name').value.trim();
+  const origin = document.getElementById('add-origin').value;
+  const process = document.getElementById('add-process').value;
+  const weight = parseInt(document.getElementById('add-weight').value);
+
+  if (!name || !origin || !process || !weight) {
+    showToast('Please fill in all required fields', 'error');
+    return;
+  }
+
+  const certs = [...document.querySelectorAll('#add-certs input:checked')].map(i => i.value);
+  const warehouses = [...document.querySelectorAll('#add-warehouses input:checked')].map(i => i.value);
+  const available = document.getElementById('add-available').checked;
+
+  const newId = Math.max(...adminCoffees.map(c => c.id), 0) + 1;
+  adminCoffees.push({
+    id: newId,
+    name,
+    origin,
+    region: document.getElementById('add-region').value.trim(),
+    process,
+    certifications: certs,
+    bagWeight: weight,
+    warehouses,
+    available,
+    grade: document.getElementById('add-grade').value.trim(),
+    variety: document.getElementById('add-variety').value.trim(),
+    altitude: document.getElementById('add-altitude').value.trim(),
+    tastingNotes: document.getElementById('add-tasting').value.trim(),
+    description: document.getElementById('add-description').value.trim()
+  });
+
+  // Reset form
+  document.getElementById('add-name').value = '';
+  document.getElementById('add-region').value = '';
+  document.getElementById('add-grade').value = '';
+  document.getElementById('add-variety').value = '';
+  document.getElementById('add-altitude').value = '';
+  document.getElementById('add-tasting').value = '';
+  document.getElementById('add-description').value = '';
+  document.getElementById('add-weight').value = '';
+  document.getElementById('add-origin').value = '';
+  document.getElementById('add-process').value = '';
+  document.querySelectorAll('#add-certs input').forEach(i => i.checked = false);
+  document.querySelectorAll('#add-warehouses input').forEach(i => i.checked = false);
+  document.getElementById('add-available').checked = true;
+
+  renderTable();
+  showToast('Coffee added! Remember to export & publish.', 'success');
+}
+
+/* ── Edit coffee ── */
+function openEdit(id) {
+  const c = adminCoffees.find(x => x.id === id);
+  if (!c) return;
+  editingId = id;
+
+  document.getElementById('edit-section').style.display = 'block';
+  document.getElementById('edit-section-name').textContent = c.name;
+  document.getElementById('edit-name').value = c.name;
+  document.getElementById('edit-origin').value = c.origin;
+  document.getElementById('edit-region').value = c.region;
+  document.getElementById('edit-process').value = c.process;
+  document.getElementById('edit-grade').value = c.grade;
+  document.getElementById('edit-variety').value = c.variety;
+  document.getElementById('edit-altitude').value = c.altitude;
+  document.getElementById('edit-weight').value = c.bagWeight;
+  document.getElementById('edit-tasting').value = c.tastingNotes;
+  document.getElementById('edit-description').value = c.description;
+  document.getElementById('edit-available').checked = c.available;
+  document.getElementById('edit-available-label').textContent = c.available ? 'Yes — In Stock' : 'No — Out of Stock';
+
+  document.querySelectorAll('#edit-certs input').forEach(i => { i.checked = c.certifications.includes(i.value); });
+  document.querySelectorAll('#edit-warehouses input').forEach(i => { i.checked = c.warehouses.includes(i.value); });
+
+  document.getElementById('edit-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function saveEdit() {
+  if (!editingId) return;
+  const idx = adminCoffees.findIndex(c => c.id === editingId);
+  if (idx === -1) return;
+
+  adminCoffees[idx] = {
+    ...adminCoffees[idx],
+    name: document.getElementById('edit-name').value.trim(),
+    origin: document.getElementById('edit-origin').value,
+    region: document.getElementById('edit-region').value.trim(),
+    process: document.getElementById('edit-process').value,
+    grade: document.getElementById('edit-grade').value.trim(),
+    variety: document.getElementById('edit-variety').value.trim(),
+    altitude: document.getElementById('edit-altitude').value.trim(),
+    bagWeight: parseInt(document.getElementById('edit-weight').value),
+    tastingNotes: document.getElementById('edit-tasting').value.trim(),
+    description: document.getElementById('edit-description').value.trim(),
+    available: document.getElementById('edit-available').checked,
+    certifications: [...document.querySelectorAll('#edit-certs input:checked')].map(i => i.value),
+    warehouses: [...document.querySelectorAll('#edit-warehouses input:checked')].map(i => i.value)
+  };
+
+  renderTable();
+  closeEdit();
+  showToast('Changes saved! Remember to export & publish.', 'success');
+}
+
+function deleteCoffee() {
+  if (!editingId) return;
+  if (!confirm('Are you sure you want to delete this coffee? This cannot be undone.')) return;
+  adminCoffees = adminCoffees.filter(c => c.id !== editingId);
+  renderTable();
+  closeEdit();
+  showToast('Coffee deleted', 'error');
+}
+
+function closeEdit() {
+  editingId = null;
+  document.getElementById('edit-section').style.display = 'none';
+}
+
+/* ── Export ── */
+function generateExport() {
+  const js = `// ============================================================
+//  ROOT 86 COFFEE — Coffee Data File
+//  Edit this file to add, update, or remove coffees.
+// ============================================================
+
+const COFFEES = ${JSON.stringify(adminCoffees, null, 2)};
+
+// ============================================================
+//  FILTER OPTIONS
+// ============================================================
+
+const FILTER_OPTIONS = ${JSON.stringify(FILTER_OPTIONS, null, 2)};
+
+// ============================================================
+//  SITE SETTINGS
+// ============================================================
+
+const SITE_SETTINGS = ${JSON.stringify(SITE_SETTINGS, null, 2)};
+`;
+  document.getElementById('export-output').value = js;
+  showToast('Export generated! Copy it and update coffees.js on GitHub.', 'success');
+}
+
+function copyExport() {
+  const text = document.getElementById('export-output').value;
+  if (!text) { showToast('Generate the export first!', 'error'); return; }
+  navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard!', 'success'));
+}
+
+/* ── Toast ── */
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = (type === 'success' ? '✓ ' : '✕ ') + msg;
+  t.className = `toast ${type} show`;
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+</script>
+</body>
+</html>
