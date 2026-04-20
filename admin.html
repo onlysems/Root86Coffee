@@ -83,6 +83,46 @@
   .topbar-btn.primary:hover{background:#000}
   .topbar-btn.danger{color:var(--red);border-color:rgba(200,16,46,.4)}
   .topbar-btn.danger:hover{background:rgba(200,16,46,.06)}
+  .inbox-badge{display:inline-block;background:var(--red);color:#fff;border-radius:10px;padding:1px 7px;font-size:.68rem;margin-left:6px;font-weight:500}
+
+  /* ── Inbox overlay ── */
+  .inbox-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;z-index:200}
+  .inbox-overlay.open{display:block}
+  .inbox-panel{position:fixed;top:0;right:0;bottom:0;width:min(720px,100%);background:#fff;display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(0,0,0,.15);transform:translateX(100%);transition:transform .25s ease;z-index:201}
+  .inbox-overlay.open .inbox-panel{transform:translateX(0)}
+  .inbox-head{padding:18px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
+  .inbox-head h2{font-size:1.1rem;font-weight:500;margin:0}
+  .inbox-head .sub{font-size:.78rem;color:var(--muted)}
+  .inbox-tabs{display:flex;gap:4px;padding:0 24px;border-bottom:1px solid var(--line);background:#fafafa}
+  .inbox-tab{padding:10px 14px;font-size:.78rem;background:none;border:none;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+  .inbox-tab.active{color:var(--ink);border-bottom-color:var(--red)}
+  .inbox-list{flex:1;overflow-y:auto;padding:8px 0}
+  .inbox-item{padding:14px 24px;border-bottom:1px solid rgba(0,0,0,.05);cursor:pointer;transition:background .15s}
+  .inbox-item:hover{background:#fafafa}
+  .inbox-item.closed{opacity:.55}
+  .inbox-item-top{display:flex;justify-content:space-between;gap:12px;margin-bottom:4px}
+  .inbox-item-title{font-size:.9rem;color:var(--ink);font-weight:500;line-height:1.35}
+  .inbox-item-meta{font-size:.7rem;color:var(--muted);white-space:nowrap}
+  .inbox-item-snippet{font-size:.78rem;color:var(--muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .inbox-tag{display:inline-block;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;margin-right:6px;font-weight:500}
+  .inbox-tag.contact{background:rgba(46,130,200,.1);color:#2567a8}
+  .inbox-tag.quote{background:rgba(200,16,46,.08);color:var(--red)}
+  .inbox-empty{padding:60px 24px;text-align:center;color:var(--muted);font-size:.85rem}
+  .inbox-loading{padding:40px;text-align:center;color:var(--muted);font-size:.8rem}
+  .inbox-detail{flex:1;overflow-y:auto;padding:24px;display:none}
+  .inbox-detail.show{display:block}
+  .inbox-detail h3{font-size:1.05rem;margin:0 0 6px;font-weight:500}
+  .inbox-detail .meta{font-size:.75rem;color:var(--muted);margin-bottom:18px}
+  .inbox-detail pre{font-family:inherit;white-space:pre-wrap;word-wrap:break-word;font-size:.85rem;line-height:1.7;color:var(--ink);background:#fafafa;padding:16px;border-radius:4px;border:1px solid var(--line)}
+  .inbox-detail-actions{display:flex;gap:8px;margin-top:18px}
+  .inbox-back{padding:8px 14px;font-size:.75rem;background:none;border:1px solid var(--line);border-radius:4px;cursor:pointer}
+  .inbox-back:hover{background:var(--hover)}
+  .inbox-close-btn{padding:8px 14px;font-size:.75rem;background:var(--ink);color:#fff;border:none;border-radius:4px;cursor:pointer}
+  .inbox-close-btn:hover{background:#000}
+  .inbox-close-btn.danger{background:var(--red)}
+  .inbox-reopen-btn{padding:8px 14px;font-size:.75rem;background:none;border:1px solid var(--line);border-radius:4px;cursor:pointer}
+  .inbox-reply-btn{padding:8px 14px;font-size:.75rem;background:none;color:var(--ink);border:1px solid var(--line);border-radius:4px;cursor:pointer;text-decoration:none}
+  .inbox-reply-btn:hover{background:var(--hover)}
 
   /* ── Subbar ── */
   .subbar{
@@ -271,6 +311,7 @@
       Content &nbsp;/&nbsp; <strong>Coffees</strong>
     </div>
     <div class="topbar-spacer"></div>
+    <button class="topbar-btn" id="btn-inbox">Inbox <span class="inbox-badge" id="inbox-badge" style="display:none">0</span></button>
     <button class="topbar-btn" id="btn-reset">Discard Drafts</button>
     <button class="topbar-btn" id="btn-export">Export</button>
     <button class="topbar-btn primary" id="btn-publish">Publish to GitHub</button>
@@ -383,6 +424,30 @@
       <button id="export-copy" class="primary">Copy to Clipboard</button>
       <button id="export-download">Download coffees.js</button>
     </div>
+  </div>
+</div>
+
+<!-- Inbox overlay -->
+<div class="inbox-overlay" id="inbox-overlay">
+  <div class="inbox-panel">
+    <div class="inbox-head">
+      <div>
+        <h2>Inbox</h2>
+        <div class="sub">Form submissions from the website</div>
+      </div>
+      <div style="flex:1"></div>
+      <button class="inbox-back" id="inbox-refresh">Refresh</button>
+      <button class="inbox-back" id="inbox-close">Close</button>
+    </div>
+    <div class="inbox-tabs">
+      <button class="inbox-tab active" data-tab="open">Open <span id="tab-open-count"></span></button>
+      <button class="inbox-tab" data-tab="closed">Closed</button>
+      <button class="inbox-tab" data-tab="all">All</button>
+    </div>
+    <div class="inbox-list" id="inbox-list">
+      <div class="inbox-loading">Loading...</div>
+    </div>
+    <div class="inbox-detail" id="inbox-detail"></div>
   </div>
 </div>
 
@@ -505,6 +570,17 @@ function bind(){
   $('#btn-logout').addEventListener('click', logout);
   $('#btn-export').addEventListener('click', openExport);
   $('#btn-publish').addEventListener('click', openPublish);
+  $('#btn-inbox').addEventListener('click', openInbox);
+  $('#inbox-close').addEventListener('click', closeInbox);
+  $('#inbox-refresh').addEventListener('click', () => loadInbox(true));
+  document.querySelectorAll('.inbox-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.inbox-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      INBOX_STATE.filter = tab.dataset.tab;
+      renderInboxList();
+    });
+  });
   $('#publish-close').addEventListener('click', () => $('#publish-modal').classList.remove('open'));
   $('#gh-publish-go').addEventListener('click', publishToGitHub);
   $('#gh-forget').addEventListener('click', () => {
@@ -528,7 +604,7 @@ function bind(){
   $('#export-download').addEventListener('click', downloadExport);
 
   document.addEventListener('keydown', e => {
-    if (e.key==='Escape') { closeEdit(); $('#export-modal').classList.remove('open'); $('#publish-modal').classList.remove('open'); }
+    if (e.key==='Escape') { closeEdit(); $('#export-modal').classList.remove('open'); $('#publish-modal').classList.remove('open'); closeInbox(); }
   });
 }
 
@@ -879,6 +955,165 @@ async function publishToGitHub(){
   } finally {
     btn.disabled = false;
   }
+}
+
+// ── Inbox (GitHub Issues) ─────────────────────────────────
+const INBOX_STATE = { issues: [], filter: 'open', activeNumber: null };
+
+function openInbox(){
+  $('#inbox-overlay').classList.add('open');
+  $('#inbox-detail').classList.remove('show');
+  loadInbox();
+}
+function closeInbox(){
+  $('#inbox-overlay').classList.remove('open');
+}
+
+async function loadInbox(force){
+  const token = localStorage.getItem(GH_TOKEN_KEY);
+  if (!token){
+    $('#inbox-list').innerHTML = '<div class="inbox-empty">Paste your GitHub token via <strong>Publish to GitHub</strong> first.<br>The inbox uses the same token to read issues.</div>';
+    return;
+  }
+  $('#inbox-list').innerHTML = '<div class="inbox-loading">Loading submissions...</div>';
+  try {
+    // Fetch open + closed (up to 100 each) with label=submission
+    const headers = {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28'
+    };
+    const url = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/issues?labels=submission&state=all&per_page=100&_=${Date.now()}`;
+    const res = await fetch(url, { headers, cache: 'no-store' });
+    if (!res.ok){
+      const err = await res.json().catch(()=>({}));
+      throw new Error(`${res.status} ${err.message || res.statusText}`);
+    }
+    const items = await res.json();
+    // Filter out pull requests (GitHub returns them under /issues too)
+    INBOX_STATE.issues = items.filter(i => !i.pull_request);
+    updateInboxBadge();
+    renderInboxList();
+  } catch(e){
+    $('#inbox-list').innerHTML = `<div class="inbox-empty">Failed to load: ${e.message}</div>`;
+  }
+}
+
+function updateInboxBadge(){
+  const openCount = INBOX_STATE.issues.filter(i => i.state === 'open').length;
+  const badge = $('#inbox-badge');
+  badge.textContent = openCount;
+  badge.style.display = openCount > 0 ? 'inline-block' : 'none';
+  $('#tab-open-count').textContent = openCount ? ` (${openCount})` : '';
+}
+
+function renderInboxList(){
+  const f = INBOX_STATE.filter;
+  let list = INBOX_STATE.issues;
+  if (f === 'open')   list = list.filter(i => i.state === 'open');
+  if (f === 'closed') list = list.filter(i => i.state === 'closed');
+
+  if (!list.length){
+    $('#inbox-list').innerHTML = '<div class="inbox-empty">No submissions yet.</div>';
+    return;
+  }
+
+  $('#inbox-list').innerHTML = list.map(issue => {
+    const kind = issue.labels.find(l => l.name === 'quote') ? 'quote' : 'contact';
+    const dt = new Date(issue.created_at);
+    const when = dt.toLocaleDateString('en-CA', { month:'short', day:'numeric' }) + ' · ' + dt.toLocaleTimeString('en-CA', { hour:'numeric', minute:'2-digit' });
+    const snippet = (issue.body || '').replace(/\*\*/g,'').replace(/\n+/g,' ').slice(0, 200);
+    return `
+      <div class="inbox-item${issue.state==='closed'?' closed':''}" data-num="${issue.number}">
+        <div class="inbox-item-top">
+          <div class="inbox-item-title">
+            <span class="inbox-tag ${kind}">${kind}</span>${escapeHtml(issue.title.replace(/^\[(contact|quote)\]\s*/i,''))}
+          </div>
+          <div class="inbox-item-meta">${when}</div>
+        </div>
+        <div class="inbox-item-snippet">${escapeHtml(snippet)}</div>
+      </div>`;
+  }).join('');
+
+  document.querySelectorAll('.inbox-item').forEach(el => {
+    el.addEventListener('click', () => openIssue(parseInt(el.dataset.num)));
+  });
+}
+
+function openIssue(num){
+  const issue = INBOX_STATE.issues.find(i => i.number === num);
+  if (!issue) return;
+  INBOX_STATE.activeNumber = num;
+  const dt = new Date(issue.created_at);
+  const when = dt.toLocaleString('en-CA', { timeZone: 'America/Vancouver' });
+  const emailMatch = (issue.body || '').match(/\*\*Email:\*\*\s*([^\s<]+)/);
+  const replyEmail = emailMatch ? emailMatch[1] : null;
+  const replySubj = encodeURIComponent('Re: ' + issue.title);
+
+  $('#inbox-detail').innerHTML = `
+    <button class="inbox-back" id="detail-back">&larr; Back to list</button>
+    <h3 style="margin-top:18px">${escapeHtml(issue.title)}</h3>
+    <div class="meta">Submitted ${when} · <a href="${issue.html_url}" target="_blank" rel="noopener" style="color:var(--red)">View on GitHub &#8599;</a></div>
+    <pre>${escapeHtml(issue.body || '')}</pre>
+    <div class="inbox-detail-actions">
+      ${replyEmail ? `<a class="inbox-reply-btn" href="mailto:${replyEmail}?subject=${replySubj}">&#9993; Reply via email</a>` : ''}
+      ${issue.state === 'open'
+        ? `<button class="inbox-close-btn" id="detail-close-issue">Mark handled (close)</button>`
+        : `<button class="inbox-reopen-btn" id="detail-reopen-issue">Reopen</button>`}
+    </div>
+  `;
+  $('#inbox-detail').classList.add('show');
+  $('#inbox-list').style.display = 'none';
+
+  $('#detail-back').addEventListener('click', () => {
+    $('#inbox-detail').classList.remove('show');
+    $('#inbox-list').style.display = 'block';
+    INBOX_STATE.activeNumber = null;
+  });
+  const closeBtn = $('#detail-close-issue');
+  const reopenBtn = $('#detail-reopen-issue');
+  if (closeBtn) closeBtn.addEventListener('click', () => toggleIssueState(num, 'closed'));
+  if (reopenBtn) reopenBtn.addEventListener('click', () => toggleIssueState(num, 'open'));
+}
+
+async function toggleIssueState(num, newState){
+  const token = localStorage.getItem(GH_TOKEN_KEY);
+  if (!token) { toast('No token', true); return; }
+  try {
+    const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/issues/${num}`, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ state: newState })
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(()=>({}));
+      throw new Error(err.message || res.statusText);
+    }
+    toast(newState === 'closed' ? 'Marked handled' : 'Reopened');
+    // Refresh local state
+    const issue = INBOX_STATE.issues.find(i => i.number === num);
+    if (issue) issue.state = newState;
+    updateInboxBadge();
+    $('#inbox-detail').classList.remove('show');
+    $('#inbox-list').style.display = 'block';
+    renderInboxList();
+  } catch(e){
+    toast('Failed: ' + e.message, true);
+  }
+}
+
+function escapeHtml(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Auto-load badge on admin load (if token present)
+if (localStorage.getItem(GH_TOKEN_KEY)){
+  setTimeout(() => { loadInbox().catch(()=>{}); }, 500);
 }
 
 // ── Toast ─────────────────────────────────

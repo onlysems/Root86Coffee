@@ -423,55 +423,33 @@ async function handleSubmit(e) {
   const btn = $('#form-submit');
   btn.disabled = true; btn.textContent = 'Sending...';
 
-  const coffeeList = state.quote.map(c => `- ${c.name} x${c.qty||1} bag${(c.qty||1)!==1?'s':''} (${c.bagWeight} lbs each = ${(c.qty||1)*c.bagWeight} lbs, ${c.process})`).join('\n');
+  const items = state.quote.map(c => ({
+    name: c.name,
+    origin: c.origin,
+    qty: c.qty || 1,
+    bagWeight: c.bagWeight,
+    process: c.process
+  }));
 
-  const data = {
+  const payload = {
+    form_type:   'quote',
+    name:        $('#field-contact').value,
     company:     $('#field-company').value,
-    contact:     $('#field-contact').value,
-    phone:       $('#field-phone').value,
     email:       $('#field-email').value,
+    phone:       $('#field-phone').value,
     address:     $('#field-address').value,
     residential: $('#field-residential').value,
     payment:     $('#field-payment').value,
     pickup:      $('#field-pickup').checked,
     tailgate:    $('#field-tailgate').checked,
     notes:       $('#field-notes').value,
-    coffees:     coffeeList,
-    count:       state.quote.length
+    items:       items,
+    website:     $('#field-website') ? $('#field-website').value : '' // honeypot
   };
 
   try {
-    if (typeof emailjs !== 'undefined' && SITE_SETTINGS.emailjsServiceId !== 'YOUR_SERVICE_ID') {
-      await emailjs.send(SITE_SETTINGS.emailjsServiceId, SITE_SETTINGS.emailjsTemplateId, {
-        to_email:     SITE_SETTINGS.email,
-        from_name:    data.contact,
-        from_company: data.company,
-        from_email:   data.email,
-        from_phone:   data.phone,
-        address:      data.address,
-        residential:  data.residential,
-        payment:      data.payment,
-        pickup:       data.pickup ? 'Yes' : 'No',
-        tailgate:     data.tailgate ? 'Yes' : 'No',
-        notes:        data.notes || 'None',
-        coffee_list:  data.coffees,
-        coffee_count: data.count
-      }, SITE_SETTINGS.emailjsPublicKey);
-      showSuccess();
-    } else {
-      // Mailto fallback
-      const subject = encodeURIComponent(`Quote Request - Root 86 Coffee (${data.count} coffees)`);
-      const body = encodeURIComponent(
-        `QUOTE REQUEST - ROOT 86 COFFEE\n` +
-        `Company: ${data.company}\n` +
-        `Contact: ${data.contact}\nPhone: ${data.phone}\nEmail: ${data.email}\n` +
-        `Address: ${data.address}\nType: ${data.residential}\nPayment: ${data.payment}\n` +
-        `Pickup: ${data.pickup ? 'Yes' : 'No'}\nTailgate: ${data.tailgate ? 'Yes' : 'No'}\n` +
-        `Notes: ${data.notes || 'None'}\n\nCOFFEES (${data.count}):\n${data.coffees}`
-      );
-      window.location.href = `mailto:${SITE_SETTINGS.email}?subject=${subject}&body=${body}`;
-      showSuccess();
-    }
+    await submitForm(payload);
+    showSuccess();
   } catch(err) {
     console.error(err);
     btn.disabled = false; btn.textContent = 'Send Quote Request';

@@ -262,6 +262,10 @@
         <label class="cp-label">Message <span class="req">*</span></label>
         <textarea class="cp-input" id="cp-message" required placeholder="How can we help? Ask about specific origins, samples, shipping, or anything else..."></textarea>
       </div>
+      <!-- Honeypot: bots fill this, humans don't see it -->
+      <div style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
+        <label>Website <input type="text" id="cp-website" name="website" tabindex="-1" autocomplete="off" /></label>
+      </div>
       <button class="cp-submit" type="submit" id="cp-submit">Send Message</button>
       <p class="cp-note">We respond within one business day. For urgent enquiries call 1-855-908-0086.</p>
     </form>
@@ -313,13 +317,13 @@
 </footer>
 
 <script src="js/coffees.js"></script>
+<script src="js/submit.js"></script>
 <script>
-  // Initialize EmailJS with shared site settings
-  const EMAILJS_CONFIGURED =
-    typeof SITE_SETTINGS !== 'undefined'
-    && SITE_SETTINGS.emailjsPublicKey
-    && SITE_SETTINGS.emailjsPublicKey !== 'YOUR_PUBLIC_KEY';
-  if (EMAILJS_CONFIGURED && typeof emailjs !== 'undefined') {
+  // Initialize EmailJS as a fallback
+  if (typeof SITE_SETTINGS !== 'undefined'
+      && SITE_SETTINGS.emailjsPublicKey
+      && SITE_SETTINGS.emailjsPublicKey !== 'YOUR_PUBLIC_KEY'
+      && typeof emailjs !== 'undefined') {
     emailjs.init(SITE_SETTINGS.emailjsPublicKey);
   }
 
@@ -328,57 +332,26 @@
     const btn = document.getElementById('cp-submit');
     btn.disabled = true; btn.textContent = 'Sending...';
 
-    const name    = document.getElementById('cp-name').value.trim();
-    const company = document.getElementById('cp-company').value.trim();
-    const email   = document.getElementById('cp-email').value.trim();
-    const phone   = document.getElementById('cp-phone').value.trim();
-    const message = document.getElementById('cp-message').value.trim();
+    const payload = {
+      form_type: 'contact',
+      name:    document.getElementById('cp-name').value.trim(),
+      company: document.getElementById('cp-company').value.trim(),
+      email:   document.getElementById('cp-email').value.trim(),
+      phone:   document.getElementById('cp-phone').value.trim(),
+      message: document.getElementById('cp-message').value.trim(),
+      website: document.getElementById('cp-website') ? document.getElementById('cp-website').value : '' // honeypot
+    };
 
-    const showSuccess = () => {
+    try {
+      await submitForm(payload);
       document.getElementById('cp-contact-form').style.display = 'none';
       document.getElementById('cp-success').style.display = 'block';
-    };
-    const showError = (msg) => {
+    } catch (err) {
+      console.error(err);
       btn.disabled = false;
       btn.textContent = 'Send Message';
-      alert(msg || 'Something went wrong. Please email root86coffee@gmail.com directly or call 1-855-908-0086.');
-    };
-
-    // Preferred path: EmailJS (background send, no mail client needed)
-    if (EMAILJS_CONFIGURED && typeof emailjs !== 'undefined') {
-      try {
-        await emailjs.send(
-          SITE_SETTINGS.emailjsServiceId,
-          SITE_SETTINGS.emailjsContactTemplateId || SITE_SETTINGS.emailjsTemplateId,
-          {
-            form_type: 'Contact Form',
-            name: name,
-            company: company || 'N/A',
-            email: email,
-            phone: phone || 'N/A',
-            message: message,
-            submitted_at: new Date().toLocaleString('en-CA', { timeZone: 'America/Vancouver' })
-          }
-        );
-        showSuccess();
-        return;
-      } catch (err) {
-        console.error('EmailJS error:', err);
-        // Fall through to mailto fallback
-      }
+      alert('Something went wrong. Please email root86coffee@gmail.com directly or call 1-855-908-0086.');
     }
-
-    // Fallback: open mail client
-    const subject = encodeURIComponent('Website Enquiry - ' + name + (company ? ' (' + company + ')' : ''));
-    const body    = encodeURIComponent(
-      'Name: ' + name + '\n' +
-      'Company: ' + (company || 'N/A') + '\n' +
-      'Email: ' + email + '\n' +
-      'Phone: ' + (phone || 'N/A') + '\n\n' +
-      'Message:\n' + message
-    );
-    window.location.href = 'mailto:root86coffee@gmail.com?subject=' + subject + '&body=' + body;
-    setTimeout(showSuccess, 800);
   });
 </script>
 

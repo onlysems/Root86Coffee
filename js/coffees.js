@@ -942,5 +942,6 @@ const SITE_SETTINGS = {
   "tagline": "Green Coffee Specialists. Proudly Supplying Canada's Micro-Roasters.",
   "emailjsServiceId": "YOUR_SERVICE_ID",
   "emailjsTemplateId": "YOUR_TEMPLATE_ID",
-  "emailjsPublicKey": "YOUR_PUBLIC_KEY"
+  "emailjsPublicKey": "YOUR_PUBLIC_KEY",
+  "formEndpoint": ""
 };
