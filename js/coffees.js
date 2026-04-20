@@ -20,7 +20,9 @@ const COFFEES = [
     altitude: "N/A",
     tastingNotes: "Clean cup, caramel and toasted almonds.",
     description: "A premium espresso blend of high density beans for a variety of espresso roast levels.  A rich blend of Central and South American, and Indonesian origins, making for a clean, sweet, balanced cup.",
-    image: "https://static.wixstatic.com/media/59d94e_71338118305345e78b3f1e879559713b~mv2.jpeg"
+    image: "https://static.wixstatic.com/media/59d94e_71338118305345e78b3f1e879559713b~mv2.jpeg",
+    favourite: true,
+    onSale: true
   },
   {
     id: 2,
