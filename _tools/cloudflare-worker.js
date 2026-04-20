@@ -132,8 +132,9 @@ export default {
       for (const it of items) {
         const nm = md(cap(it.name, 200));
         const qty = Number(it.qty) || 1;
-        const origin = md(cap(it.origin, 80));
-        lines.push(`- ${nm} ${origin ? `(${origin})` : ''} × ${qty}`);
+        const originStr = md(cap(it.origin, 80));
+        const originPart = originStr ? ' (' + originStr + ')' : '';
+        lines.push('- ' + nm + originPart + ' x ' + qty);
       }
     }
 
@@ -177,6 +178,6 @@ function json(obj, status, cors) {
 }
 
 function md(s) {
-  // Escape < > so raw HTML can't sneak into issue markdown
-  return String(s).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  // Escape < > so raw HTML cannot sneak into issue markdown
+  return String(s).replace(/[<]/g, '&lt;').replace(/[>]/g, '&gt;');
 }
