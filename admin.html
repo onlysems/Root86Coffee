@@ -114,6 +114,18 @@
   .inbox-detail h3{font-size:1.05rem;margin:0 0 6px;font-weight:500}
   .inbox-detail .meta{font-size:.75rem;color:var(--muted);margin-bottom:18px}
   .inbox-detail pre{font-family:inherit;white-space:pre-wrap;word-wrap:break-word;font-size:.85rem;line-height:1.7;color:var(--ink);background:#fafafa;padding:16px;border-radius:4px;border:1px solid var(--line)}
+  .sub-fields{background:#fafafa;border:1px solid var(--line);border-radius:6px;padding:4px 0;margin:0 0 16px}
+  .sub-fields .row{display:grid;grid-template-columns:130px 1fr;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line);font-size:.85rem}
+  .sub-fields .row:last-child{border-bottom:none}
+  .sub-fields .k{color:var(--muted);font-weight:500;text-transform:uppercase;font-size:.7rem;letter-spacing:.05em;align-self:center}
+  .sub-fields .v{color:var(--ink);word-break:break-word}
+  .sub-fields .v a{color:var(--red);text-decoration:none}
+  .sub-fields .v a:hover{text-decoration:underline}
+  .sub-section{margin:18px 0 8px;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600}
+  .sub-message{background:#fff;border:1px solid var(--line);border-left:3px solid var(--red);border-radius:4px;padding:14px 16px;font-size:.9rem;line-height:1.6;white-space:pre-wrap;word-wrap:break-word;color:var(--ink)}
+  .sub-items{list-style:none;padding:0;margin:0;border:1px solid var(--line);border-radius:4px;background:#fafafa}
+  .sub-items li{padding:10px 16px;border-bottom:1px solid var(--line);font-size:.85rem}
+  .sub-items li:last-child{border-bottom:none}
   .inbox-detail-actions{display:flex;gap:8px;margin-top:18px}
   .inbox-back{padding:8px 14px;font-size:.75rem;background:none;border:1px solid var(--line);border-radius:4px;cursor:pointer}
   .inbox-back:hover{background:var(--hover)}
@@ -1050,11 +1062,13 @@ function openIssue(num){
   const replyEmail = emailMatch ? emailMatch[1] : null;
   const replySubj = encodeURIComponent('Re: ' + issue.title);
 
+  const parsed = parseSubmissionBody(issue.body || '');
+
   $('#inbox-detail').innerHTML = `
     <button class="inbox-back" id="detail-back">&larr; Back to list</button>
     <h3 style="margin-top:18px">${escapeHtml(issue.title)}</h3>
     <div class="meta">Submitted ${when} · <a href="${issue.html_url}" target="_blank" rel="noopener" style="color:var(--red)">View on GitHub &#8599;</a></div>
-    <pre>${escapeHtml(issue.body || '')}</pre>
+    ${renderParsedSubmission(parsed)}
     <div class="inbox-detail-actions">
       ${replyEmail ? `<a class="inbox-reply-btn" href="mailto:${replyEmail}?subject=${replySubj}">&#9993; Reply via email</a>` : ''}
       ${issue.state === 'open'
@@ -1109,6 +1123,88 @@ async function toggleIssueState(num, newState){
 
 function escapeHtml(s){
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// --- Submission body parser/renderer -----------------------------------------
+// The Cloudflare Worker writes issue bodies as markdown with
+//   **Field:** value    lines, a --- separator, a free-text message, another
+// --- separator, and a bullet list of quote items. Parse that into a
+// structured object we can render nicely in the admin UI.
+function parseSubmissionBody(raw){
+  const out = { fields: [], message: '', notes: '', items: [], submittedRaw: '' };
+  if (!raw) return out;
+  // Split on the first --- separator to isolate the field header block
+  const sections = raw.split(/\n---\n/);
+  const header = sections[0] || '';
+  const rest = sections.slice(1);
+
+  const fieldRe = /^\*\*([^:]+):\*\*\s*(.*)$/;
+  header.split('\n').forEach(line => {
+    const m = line.match(fieldRe);
+    if (!m) return;
+    const key = m[1].trim();
+    let val = m[2].trim();
+    if (key.toLowerCase() === 'submitted') {
+      out.submittedRaw = val;
+      try {
+        const d = new Date(val);
+        if (!isNaN(d)) val = d.toLocaleString('en-CA', { timeZone: 'America/Vancouver' });
+      } catch {}
+    }
+    out.fields.push({ key, val });
+  });
+
+  // Remaining sections: message text, optional notes, optional items block
+  rest.forEach(section => {
+    const trimmed = section.trim();
+    if (!trimmed) return;
+    if (/^\*\*Quote items/i.test(trimmed)) {
+      trimmed.split('\n').forEach(line => {
+        const m = line.match(/^-\s+(.+)$/);
+        if (m) out.items.push(m[1].trim());
+      });
+    } else if (/^\*\*Notes:/i.test(trimmed)) {
+      out.notes = trimmed.replace(/^\*\*Notes:\*\*\s*/i, '').trim();
+    } else {
+      if (out.message) out.message += '\n\n' + trimmed;
+      else out.message = trimmed;
+    }
+  });
+  return out;
+}
+
+function renderParsedSubmission(p){
+  if (!p.fields.length && !p.message && !p.items.length) {
+    return '<pre>No content.</pre>';
+  }
+  const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const linkify = (k, v) => {
+    const lower = k.toLowerCase();
+    if (lower === 'email' && emailRe.test(v)) {
+      return `<a href="mailto:${escapeHtml(v)}">${escapeHtml(v)}</a>`;
+    }
+    if (lower === 'phone') {
+      const digits = v.replace(/[^\d+]/g,'');
+      return `<a href="tel:${escapeHtml(digits)}">${escapeHtml(v)}</a>`;
+    }
+    return escapeHtml(v);
+  };
+  const rows = p.fields.map(f =>
+    `<div class="row"><div class="k">${escapeHtml(f.key)}</div><div class="v">${linkify(f.key, f.val)}</div></div>`
+  ).join('');
+  let html = `<div class="sub-fields">${rows}</div>`;
+  if (p.message) {
+    html += `<div class="sub-section">Message</div><div class="sub-message">${escapeHtml(p.message)}</div>`;
+  }
+  if (p.notes) {
+    html += `<div class="sub-section">Notes</div><div class="sub-message">${escapeHtml(p.notes)}</div>`;
+  }
+  if (p.items.length) {
+    html += `<div class="sub-section">Quote items (${p.items.length})</div><ul class="sub-items">`;
+    html += p.items.map(it => `<li>${escapeHtml(it)}</li>`).join('');
+    html += `</ul>`;
+  }
+  return html;
 }
 
 // Auto-load badge on admin load (if token present)
