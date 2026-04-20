@@ -1,8 +1,7 @@
 // ============================================================
 //  ROOT 86 COFFEE - Coffee Data File
-//  Imported from Wix export on 2026-04-19.
-//  Edit via admin.html. Fields marked hidden:true are kept in
-//  the data but not shown on the public site.
+//  Edit via admin.html or directly here.
+//  Generated: 2026-04-20
 // ============================================================
 
 const COFFEES = [
@@ -14,22 +13,25 @@ const COFFEES = [
     process: "Swiss Water Process (Decaf)",
     certifications: [],
     bagWeight: 66,
-    warehouses: ["Vancouver, BC", "Parksville, BC", "Lévis, QC"],
+    warehouses: ["Vancouver, BC","Parksville, BC","Lévis, QC"],
     available: true,
     grade: "",
     variety: "",
     altitude: "N/A",
     tastingNotes: "Clean cup, caramel and toasted almonds.",
     description: "A premium espresso blend of high density beans for a variety of espresso roast levels.  A rich blend of Central and South American, and Indonesian origins, making for a clean, sweet, balanced cup.",
-    image: "https://static.wixstatic.com/media/59d94e_71338118305345e78b3f1e879559713b~mv2.jpeg"
-  },  {
+    image: "https://static.wixstatic.com/media/59d94e_71338118305345e78b3f1e879559713b~mv2.jpeg",
+    favourite: true,
+    onSale: true
+  },
+  {
     id: 2,
     name: "SWP Honduras Decaf ORGANIC",
     origin: "Honduras",
     region: "",
     process: "Swiss Water Process (Decaf)",
     certifications: ["Organic"],
-    bagWeight: 0,
+    bagWeight: 152,
     warehouses: [],
     available: false,
     grade: "",
@@ -40,7 +42,8 @@ const COFFEES = [
     image: "https://static.wixstatic.com/media/59d94e_71338118305345e78b3f1e879559713b~mv2.jpeg",
     soldOut: true,
     hidden: true
-  },  {
+  },
+  {
     id: 3,
     name: "Uganda, Mt. Elgon, AA RFA",
     origin: "Uganda",
@@ -56,7 +59,8 @@ const COFFEES = [
     tastingNotes: "well balanced clean cup, juicy body, nice milk chocolate, black tea, dark fruit and lemon.",
     description: "Elevation: 1500-1800M\n\nProcess: Extra washed & sun dried on raised beds & hand sorted\n\nVarietal: SL 14 & 28\n\nNotes:  well balanced clean cup, juicy body, nice milk chocolate, black tea, dark fruit and lemon.",
     image: "https://static.wixstatic.com/media/61a162_119f1d06a492477498ce2ba4ea85c44b~mv2.png"
-  },  {
+  },
+  {
     id: 4,
     name: "Guatemala Santa Rosa Estate SHB EP GP",
     origin: "Guatemala",
@@ -74,7 +78,8 @@ const COFFEES = [
     image: "https://static.wixstatic.com/media/59d94e_c4b915f730274c3a8ae1a75c03579eb1~mv2.jpg",
     favourite: true,
     soldOut: true
-  },  {
+  },
+  {
     id: 5,
     name: "Kenya AB Plus Sondhi",
     origin: "Kenya",
@@ -90,7 +95,8 @@ const COFFEES = [
     tastingNotes: "sparkling acidity, creamy, brown sugar, black tean and dark cherry.",
     description: "Elevation: 1500-1800M\n\nRegion: Murang'a County\n\nProcess: Double washed & sun dried on raised beds & hand sorted\n\nVarietal: SL-28, SL-34, Ruiru 11",
     image: "https://static.wixstatic.com/media/59d94e_d0276efdd1d743d383fe391c7c73b100~mv2.png"
-  },  {
+  },
+  {
     id: 6,
     name: "Colombia Huila Organique",
     origin: "Colombia",
@@ -106,7 +112,8 @@ const COFFEES = [
     tastingNotes: "Clean cup, sweet, pleasing acidity, stone fruit, red berry notes, brown sugar, citrus finish.",
     description: "Elevation: 1600-1800M\n\nProcess: Washed with special sort\n\nVarietal:  Castillo, Colombia, Caturra",
     image: "https://static.wixstatic.com/media/59d94e_cfdbfefbce2c406687651ff9a385c1c7~mv2.png"
-  },  {
+  },
+  {
     id: 7,
     name: "Tanzania PB Plus Northern Kilimanjaro",
     origin: "Tanzania",
@@ -123,14 +130,15 @@ const COFFEES = [
     description: "Elevation: 1400-1700M\n\nProcess: Washed   \nDried on raised beds and hand sorted.\n\nVarietal: Bourbon, Kent\n\nCup notes: sweet, bright acidity, black tea, lemon, caramel, blackberry, dark fruit",
     image: "https://static.wixstatic.com/media/59d94e_4890a363b84c4319867e0e9f91c4295e~mv2.png",
     onSale: true
-  },  {
+  },
+  {
     id: 8,
     name: "El Salvador Santa Ana, Monte Verde",
     origin: "Blend",
     region: "Santa Ana",
     process: "Washed",
     certifications: ["Farmer Traceable"],
-    bagWeight: 0,
+    bagWeight: 152,
     warehouses: [],
     available: false,
     grade: "",
@@ -141,14 +149,15 @@ const COFFEES = [
     image: "https://static.wixstatic.com/media/61a162_b0c1166ee0c540e2b3e4a85cc70b1169~mv2.webp",
     soldOut: true,
     hidden: true
-  },  {
+  },
+  {
     id: 9,
     name: "Panama Boquete Finca La Santa Catuai lot",
     origin: "Panama",
     region: "Jurutungo, Santa Clara, Chriqui Arabica",
     process: "Washed",
     certifications: [],
-    bagWeight: 0,
+    bagWeight: 152,
     warehouses: [],
     available: false,
     grade: "",
@@ -158,7 +167,8 @@ const COFFEES = [
     description: "Elevation: 1100 - 1400M\n\nProcess: Washed\n\nRegion: Jurutungo, Santa Clara, Chriqui Arabica\n\nVarietal: Catuai",
     image: "https://static.wixstatic.com/media/59d94e_9013b1b8ec7e4420813ba425022e5258~mv2.png",
     soldOut: true
-  },  {
+  },
+  {
     id: 10,
     name: "Ethiopia Gedeo Zone, Yirgacheffe Konga Washed",
     origin: "Ethiopia",
@@ -166,7 +176,7 @@ const COFFEES = [
     process: "Washed",
     certifications: [],
     bagWeight: 132,
-    warehouses: ["Vancouver, BC", "Parksville, BC"],
+    warehouses: ["Vancouver, BC","Parksville, BC"],
     available: true,
     grade: "",
     variety: "Heirloom Yirgacheffe type",
@@ -175,15 +185,16 @@ const COFFEES = [
     description: "Elevation: 2000-2300M\n\nProcess: washed process, sun dried on raised beds & hand sorted\n\nVarietal: Heirloom Yirgacheffe type",
     image: "https://static.wixstatic.com/media/59d94e_515f78a388f044ca9a1a8c01fb2717eb~mv2.png",
     favourite: true
-  },  {
+  },
+  {
     id: 11,
     name: "Brazil Vale da Grama Mogiana Specialty prep",
     origin: "Brazil",
     region: "",
     process: "Natural",
     certifications: [],
-    bagWeight: 0,
-    warehouses: ["Vancouver, BC", "Parksville, BC", "Lévis, QC"],
+    bagWeight: 152,
+    warehouses: ["Vancouver, BC","Parksville, BC","Lévis, QC"],
     available: true,
     grade: "",
     variety: "Yellow Bourbon, Catuai",
@@ -191,14 +202,15 @@ const COFFEES = [
     tastingNotes: "delicate acidity, chocolate, tangerine citrus, toasted nuts in a sweet cup.",
     description: "Elevation: 1100-1200M\n\nProcess: Natural \n\nVarietal: Yellow Bourbon, Catuai",
     image: "https://static.wixstatic.com/media/61a162_60e0821594b547cabdc7bf88bc0a0450~mv2.png"
-  },  {
+  },
+  {
     id: 12,
     name: "Ethiopia Sidama Riripa G2 Organic",
     origin: "Ethiopia",
     region: "",
     process: "Washed",
     certifications: ["Organic"],
-    bagWeight: 0,
+    bagWeight: 152,
     warehouses: [],
     available: false,
     grade: "",
@@ -210,7 +222,8 @@ const COFFEES = [
     favourite: true,
     soldOut: true,
     hidden: true
-  },  {
+  },
+  {
     id: 13,
     name: "Honduras SHG Copan ORGANIC",
     origin: "Honduras",
@@ -218,7 +231,7 @@ const COFFEES = [
     process: "Washed",
     certifications: ["Organic"],
     bagWeight: 152,
-    warehouses: ["Vancouver, BC", "Parksville, BC", "Lévis, QC"],
+    warehouses: ["Vancouver, BC","Parksville, BC","Lévis, QC"],
     available: true,
     grade: "",
     variety: "IHCAFE 90, Caturra, Catuai, Parainema, Bourbon",
@@ -226,7 +239,8 @@ const COFFEES = [
     tastingNotes: "nice clean cup, citrus acidity, caramel notes, lemon tea and toasted nuts, well balanced.",
     description: "Elevation: 1300 - 1700M\n\nProcess: Fully Washed, sun dried on patios\n\nVarietal: IHCAFE 90, Caturra, Catuai, Parainema, Bourbon",
     image: "https://static.wixstatic.com/media/59d94e_0ff8bf522a9e4051ae30d1917c281497~mv2.png"
-  },  {
+  },
+  {
     id: 14,
     name: "Costa Rica West & Central Valley Fancy Blend",
     origin: "Costa Rica",
@@ -234,7 +248,7 @@ const COFFEES = [
     process: "Washed",
     certifications: [],
     bagWeight: 152,
-    warehouses: ["Vancouver, BC", "Parksville, BC", "Lévis, QC"],
+    warehouses: ["Vancouver, BC","Parksville, BC","Lévis, QC"],
     available: true,
     grade: "",
     variety: "Caturra, Catuai, Villa Sarchi",
@@ -244,15 +258,16 @@ const COFFEES = [
     image: "https://static.wixstatic.com/media/59d94e_65e9e2b4a512453c9ad0a4404485bba0~mv2.png",
     favourite: true,
     onSale: true
-  },  {
+  },
+  {
     id: 15,
     name: "Colombia Narino EcoTerra Women's lot",
     origin: "Colombia",
     region: "",
     process: "Washed",
-    certifications: ["Farmer Traceable", "Microlot"],
+    certifications: ["Farmer Traceable","Microlot"],
     bagWeight: 154,
-    warehouses: ["Vancouver, BC", "Parksville, BC"],
+    warehouses: ["Vancouver, BC","Parksville, BC"],
     available: true,
     grade: "",
     variety: "Caturra, Castillo, Colombia",
@@ -261,7 +276,8 @@ const COFFEES = [
     description: "Elevation: 1800-2100M\n\nProcess: Washed & sun dried on raised beds for 16 days\n\nVarietal: Caturra, Castillo, Colombia",
     image: "https://static.wixstatic.com/media/59d94e_cfdbfefbce2c406687651ff9a385c1c7~mv2.png",
     favourite: true
-  },  {
+  },
+  {
     id: 16,
     name: "Guatemala Huehuetenango SHB EP GP",
     origin: "Guatemala",
@@ -269,7 +285,7 @@ const COFFEES = [
     process: "Washed",
     certifications: [],
     bagWeight: 152,
-    warehouses: ["Vancouver, BC", "Parksville, BC"],
+    warehouses: ["Vancouver, BC","Parksville, BC"],
     available: true,
     grade: "",
     variety: "Caturra, Bourbon",
@@ -277,13 +293,14 @@ const COFFEES = [
     tastingNotes: "bright acidity, good chocolate notes, pop of citrus with some red berry notes.",
     description: "Elevation: 1400M+\n\nProcess: Fully washed and sun dried on patio and mechanical dryers\n\nVarietal: Caturra, Bourbon",
     image: "https://static.wixstatic.com/media/59d94e_c4b915f730274c3a8ae1a75c03579eb1~mv2.jpg"
-  },  {
+  },
+  {
     id: 17,
     name: "SWP Peru Decaf Organic",
     origin: "Peru",
     region: "",
     process: "Swiss Water Process (Decaf)",
-    certifications: ["Organic", "FT Organic"],
+    certifications: ["Organic","FT Organic"],
     bagWeight: 132,
     warehouses: ["by request"],
     available: true,
@@ -293,7 +310,8 @@ const COFFEES = [
     tastingNotes: "",
     description: "Elevation: 1500 - 1800M\n\nProcess: Swiss Water Decaf\n\nVarietal: Typica, Bourbon, Caturra, Catimor",
     image: "https://static.wixstatic.com/media/59d94e_71338118305345e78b3f1e879559713b~mv2.jpeg"
-  },  {
+  },
+  {
     id: 18,
     name: "Mexico Chiapas HG",
     origin: "Mexico",
@@ -311,14 +329,15 @@ const COFFEES = [
     image: "https://static.wixstatic.com/media/59d94e_e31afddb0d7a4cfcb0bc02335cb71c04~mv2.png",
     onSale: true,
     soldOut: true
-  },  {
+  },
+  {
     id: 19,
     name: "Nicaragua Jinotega FT ORGANIC",
     origin: "Nicaragua",
     region: "",
     process: "Washed",
-    certifications: ["Organic", "FT", "FT Organic"],
-    bagWeight: 0,
+    certifications: ["Organic","FT","FT Organic"],
+    bagWeight: 152,
     warehouses: [],
     available: false,
     grade: "",
@@ -328,13 +347,14 @@ const COFFEES = [
     description: "Elevation: 1400M\n\nProcess: Fully washed, sun dried on patio, mechanical dryer & electronic eye sorting\n\nVarietal: Caturra, Catuai, Catimor, Bourbon",
     image: "https://static.wixstatic.com/media/59d94e_ff0f0d2e2d0d4f3aafe1b8fa1146fccf~mv2.png",
     soldOut: true
-  },  {
+  },
+  {
     id: 20,
     name: "Costa Rica West Valley V&G Estate Natural H1",
     origin: "Costa Rica",
     region: "",
     process: "Natural",
-    certifications: ["Microlot", "Farmer Traceable"],
+    certifications: ["Microlot","Farmer Traceable"],
     bagWeight: 66,
     warehouses: [],
     available: false,
@@ -347,13 +367,14 @@ const COFFEES = [
     favourite: true,
     soldOut: true,
     hidden: true
-  },  {
+  },
+  {
     id: 21,
     name: "Ethiopia Guji Shakiso - Kayon Mountain Estate FT ORGANIC",
     origin: "Ethiopia",
     region: "",
     process: "Natural",
-    certifications: ["Organic", "Farmer Traceable"],
+    certifications: ["Organic","Farmer Traceable"],
     bagWeight: 132,
     warehouses: [],
     available: false,
@@ -366,7 +387,8 @@ const COFFEES = [
     favourite: true,
     soldOut: true,
     hidden: true
-  },  {
+  },
+  {
     id: 22,
     name: "Guatemala Lake Atitlan Organic",
     origin: "Guatemala",
@@ -374,7 +396,7 @@ const COFFEES = [
     process: "Washed",
     certifications: ["Organic"],
     bagWeight: 152,
-    warehouses: ["Vancouver, BC", "Parksville, BC", "Lévis, QC"],
+    warehouses: ["Vancouver, BC","Parksville, BC","Lévis, QC"],
     available: true,
     grade: "",
     variety: "Bourbon, Caturra, Catuai",
@@ -384,15 +406,16 @@ const COFFEES = [
     image: "https://static.wixstatic.com/media/59d94e_c4b915f730274c3a8ae1a75c03579eb1~mv2.jpg",
     favourite: true,
     onSale: true
-  },  {
+  },
+  {
     id: 23,
     name: "Peru El Gran Mirador, ORGANIC",
     origin: "Peru",
     region: "Distrito de Chirinos, Provincia San Ignacio, Cajamarca.",
     process: "Washed",
-    certifications: ["Womens", "Organic", "RFA"],
+    certifications: ["Womens","Organic","RFA"],
     bagWeight: 152,
-    warehouses: ["Vancouver, BC", "Parksville, BC", "Lévis, QC"],
+    warehouses: ["Vancouver, BC","Parksville, BC","Lévis, QC"],
     available: true,
     grade: "",
     variety: "Typica, Bourbon, Caturra, Catimor & Geisha",
@@ -402,7 +425,8 @@ const COFFEES = [
     image: "https://static.wixstatic.com/media/59d94e_9c9b87a2e4df4e0a948330db23cdc479~mv2.png",
     favourite: true,
     onSale: true
-  },  {
+  },
+  {
     id: 24,
     name: "SWP Brazil Decaf",
     origin: "Brazil",
@@ -410,7 +434,7 @@ const COFFEES = [
     process: "Swiss Water Process (Decaf)",
     certifications: [],
     bagWeight: 132,
-    warehouses: ["Vancouver, BC", "Parksville, BC"],
+    warehouses: ["Vancouver, BC","Parksville, BC"],
     available: true,
     grade: "",
     variety: "Red Catuai, Yellow Bourbon & Catucai, Obata",
@@ -418,13 +442,14 @@ const COFFEES = [
     tastingNotes: "Cocoa and Nut.",
     description: "Elevation: 900-1100M\n\nProcess: Swiss Water Process\n\nRegion: Mogiana Region\n\nVarietal: Red Catuai, Yellow Bourbon & Catucai, Obata",
     image: "https://static.wixstatic.com/media/59d94e_71338118305345e78b3f1e879559713b~mv2.jpeg"
-  },  {
+  },
+  {
     id: 25,
     name: "Costa Rica West Valley V&G Estate Natural Catigua MG2",
     origin: "Costa Rica",
     region: "",
     process: "Natural",
-    certifications: ["Farmer Traceable", "Microlot"],
+    certifications: ["Farmer Traceable","Microlot"],
     bagWeight: 66,
     warehouses: [],
     available: false,
@@ -437,15 +462,16 @@ const COFFEES = [
     favourite: true,
     soldOut: true,
     hidden: true
-  },  {
+  },
+  {
     id: 26,
     name: "Papua New Guinea PSC Simbu",
     origin: "Papua New Guinea",
     region: "Simbu Province, Central Highlands",
     process: "Washed",
     certifications: [],
-    bagWeight: 0,
-    warehouses: ["Vancouver, BC", "Parksville, BC"],
+    bagWeight: 152,
+    warehouses: ["Vancouver, BC","Parksville, BC"],
     available: true,
     grade: "",
     variety: "",
@@ -453,13 +479,14 @@ const COFFEES = [
     tastingNotes: "Exotic well balanced intense flavor with raspberry, strawberry, citrus/lemon  and nectarine notes",
     description: "Elevation: 1600M\n\nProcess: Fully Washed\n\nRegion: Simbu Province, Central Highlands.",
     image: "https://static.wixstatic.com/media/59d94e_366314a7ae4c4c349af64800e76b3ad9~mv2.png"
-  },  {
+  },
+  {
     id: 27,
     name: "Costa Rica West Valley V&G Estate Natural Starmaya",
     origin: "Costa Rica",
     region: "",
     process: "Natural",
-    certifications: ["Farmer Traceable", "Microlot"],
+    certifications: ["Farmer Traceable","Microlot"],
     bagWeight: 66,
     warehouses: [],
     available: false,
@@ -472,7 +499,8 @@ const COFFEES = [
     favourite: true,
     soldOut: true,
     hidden: true
-  },  {
+  },
+  {
     id: 28,
     name: "Mexico Chiapas Angel Diaz SHG Organic",
     origin: "Mexico",
@@ -480,7 +508,7 @@ const COFFEES = [
     process: "Washed",
     certifications: ["Organic"],
     bagWeight: 152,
-    warehouses: ["Vancouver, BC", "Parksville, BC", "Lévis, QC"],
+    warehouses: ["Vancouver, BC","Parksville, BC","Lévis, QC"],
     available: true,
     grade: "",
     variety: "Bourbon & Typica",
@@ -489,7 +517,8 @@ const COFFEES = [
     description: "Elevation: 1300-1700M\n\nProcess: Fully washed & sun dried on patios                           \n\nVarietal: Bourbon & Typica",
     image: "https://static.wixstatic.com/media/59d94e_e31afddb0d7a4cfcb0bc02335cb71c04~mv2.png",
     favourite: true
-  },  {
+  },
+  {
     id: 29,
     name: "Tanzania PB Plus Southern Estate",
     origin: "Tanzania",
@@ -497,7 +526,7 @@ const COFFEES = [
     process: "Washed",
     certifications: [],
     bagWeight: 132,
-    warehouses: ["Vancouver, BC", "Parksville, BC"],
+    warehouses: ["Vancouver, BC","Parksville, BC"],
     available: true,
     grade: "",
     variety: "Bourbon, Kent",
@@ -505,7 +534,8 @@ const COFFEES = [
     tastingNotes: "Sweet brown sugar aroma, smooth juicy medium body, clean sweet aftertaste, exotic well balanced flavor and bright vibrant acidity with citrus, grapefruit, lemon, raspberry, pomegranate and blacktea notes.",
     description: "Elevation: 1300M\n\nProcess: Washed   \nDried on covered patios and hand sorted.\n\nVarietal: Bourbon, Kent\n\nCup notes: Sweet brown sugar aroma, smooth juicy medium body, clean sweet aftertaste, exotic well balanced flavor and bright vibrant acidity with citrus, grapefruit, lemon, raspberry, pomegranate and blacktea notes.",
     image: "https://static.wixstatic.com/media/59d94e_4890a363b84c4319867e0e9f91c4295e~mv2.png"
-  },  {
+  },
+  {
     id: 30,
     name: "Brazil Pocos de Caldas, Sul de Minas Gerais",
     origin: "Brazil",
@@ -513,7 +543,7 @@ const COFFEES = [
     process: "Natural",
     certifications: [],
     bagWeight: 130,
-    warehouses: ["Vancouver, BC", "Parksville, BC", "Lévis, QC"],
+    warehouses: ["Vancouver, BC","Parksville, BC","Lévis, QC"],
     available: true,
     grade: "",
     variety: "Yellow Bourbon, Catuai & Catucai",
@@ -522,14 +552,15 @@ const COFFEES = [
     description: "Elevation: 1100-1300M\n\nProcess: Natural\n\nVarietal: Yellow Bourbon, Catuai & Catucai",
     image: "https://static.wixstatic.com/media/61a162_60e0821594b547cabdc7bf88bc0a0450~mv2.png",
     favourite: true
-  },  {
+  },
+  {
     id: 31,
     name: "Costa Rica Tarrazu SHB",
     origin: "Costa Rica",
     region: "",
     process: "Washed",
     certifications: [],
-    bagWeight: 0,
+    bagWeight: 152,
     warehouses: ["Lévis, QC"],
     available: true,
     grade: "",
@@ -538,7 +569,8 @@ const COFFEES = [
     tastingNotes: "Nice bright acidity, sweet, honey crisp apple, brown sugar, nice lingering aftertaste.",
     description: "Elevation: 1500M   \n\nProcess: Washed\n\nVarietal: Caturra & Catuai",
     image: "https://static.wixstatic.com/media/59d94e_65e9e2b4a512453c9ad0a4404485bba0~mv2.png"
-  },  {
+  },
+  {
     id: 32,
     name: "Mexico Water Process Decaf (MWP) ORGANIC",
     origin: "Mexico",
@@ -546,7 +578,7 @@ const COFFEES = [
     process: "Mountain Water Process (Decaf)",
     certifications: ["Organic"],
     bagWeight: 132,
-    warehouses: ["Vancouver, BC", "Parksville, BC", "Lévis, QC"],
+    warehouses: ["Vancouver, BC","Parksville, BC","Lévis, QC"],
     available: true,
     grade: "",
     variety: "",
@@ -556,7 +588,8 @@ const COFFEES = [
     image: "https://static.wixstatic.com/media/59d94e_e31afddb0d7a4cfcb0bc02335cb71c04~mv2.png",
     favourite: true,
     onSale: true
-  },  {
+  },
+  {
     id: 33,
     name: "Brazil Alta Mogiana 17/18",
     origin: "Brazil",
@@ -572,13 +605,14 @@ const COFFEES = [
     tastingNotes: "Well balanced sweet, clean cup, chocolate, toasted hazelnut.",
     description: "Elevation: 900-1100M\n\nProcess: Full natural and dried on patios and mechanical driers\n\nRegion: Mogiana Region\n\nVarietal: Red Catuai, Yellow Bourbon & Catucai, Obata",
     image: "https://static.wixstatic.com/media/61a162_60e0821594b547cabdc7bf88bc0a0450~mv2.png"
-  },  {
+  },
+  {
     id: 34,
     name: "Indonesia Sumatra Mandheling G1, Women's Producer ORGANIC",
     origin: "Indonesia",
     region: "Gayo Highland, Sumatra Aceh",
     process: "Wet-Hulled",
-    certifications: ["Microlot", "Womens", "Organic"],
+    certifications: ["Microlot","Womens","Organic"],
     bagWeight: 132,
     warehouses: [],
     available: false,
@@ -589,14 +623,15 @@ const COFFEES = [
     description: "Elevation: 1150-1500M\n\nProcess: Wet hulled & hand sorted \n\nRegion: Gayo Highland, Sumatra Aceh\n\nVarietal: Catimor, Typica, Tim-Tim",
     image: "https://static.wixstatic.com/media/59d94e_1a1070fd3948453f9171d1c05f1ae522~mv2.png",
     soldOut: true
-  },  {
+  },
+  {
     id: 35,
     name: "Honduras Lempira SHG Tierra Lenca - ORGANIC",
     origin: "Honduras",
     region: "",
     process: "Washed",
-    certifications: ["Organic", "Womens"],
-    bagWeight: 0,
+    certifications: ["Organic","Womens"],
+    bagWeight: 152,
     warehouses: [],
     available: false,
     grade: "",
@@ -606,7 +641,8 @@ const COFFEES = [
     description: "Elevation: 1400 - 1500M\n\nProcess: Fully Washed, sun dried patios and mechanical dryers\n\nVarietal: Catuai, Typica & Bourbon",
     image: "https://static.wixstatic.com/media/59d94e_0ff8bf522a9e4051ae30d1917c281497~mv2.png",
     soldOut: true
-  },  {
+  },
+  {
     id: 36,
     name: "Ethiopia Gedeo Yirgacheffe Koke G2 Natural",
     origin: "Ethiopia",
@@ -614,7 +650,7 @@ const COFFEES = [
     process: "Natural",
     certifications: [],
     bagWeight: 132,
-    warehouses: ["Vancouver, BC", "Parksville, BC"],
+    warehouses: ["Vancouver, BC","Parksville, BC"],
     available: true,
     grade: "",
     variety: "Heirloom Yirgacheffe type",
@@ -623,15 +659,16 @@ const COFFEES = [
     description: "Elevation: 1900-2100M\n\nProcess: Natural process, sun dried on raised beds &  hand sorted\n\nVarietal: Heirloom Yirgacheffe type",
     image: "https://static.wixstatic.com/media/59d94e_515f78a388f044ca9a1a8c01fb2717eb~mv2.png",
     favourite: true
-  },  {
+  },
+  {
     id: 37,
     name: "Colombia Huila Terra Rosa Women's lot",
     origin: "Colombia",
     region: "",
     process: "Washed",
-    certifications: ["Farmer Traceable", "R86 Fav", "Microlot"],
+    certifications: ["Farmer Traceable","R86 Fav","Microlot"],
     bagWeight: 154,
-    warehouses: ["Vancouver, BC", "Parksville, BC"],
+    warehouses: ["Vancouver, BC","Parksville, BC"],
     available: true,
     grade: "",
     variety: "Castillo, Caturra, and Colombia",
@@ -640,7 +677,8 @@ const COFFEES = [
     description: "Elevation: 1650-1850M\n\nProcess: Washed & sun dried on raised beds for 16 days\n\nVarietal: Castillo, Caturra, and Colombia",
     image: "https://static.wixstatic.com/media/59d94e_cfdbfefbce2c406687651ff9a385c1c7~mv2.png",
     favourite: true
-  },  {
+  },
+  {
     id: 38,
     name: "Indonesia Sumatra Mandheling G1",
     origin: "Indonesia",
@@ -648,7 +686,7 @@ const COFFEES = [
     process: "Wet-Hulled",
     certifications: [],
     bagWeight: 132,
-    warehouses: ["Lévis, QC", "Vancouver, BC"],
+    warehouses: ["Lévis, QC","Vancouver, BC"],
     available: true,
     grade: "",
     variety: "Bourbon, Typica, Caturra, Catimor",
@@ -656,14 +694,15 @@ const COFFEES = [
     tastingNotes: "velvety body, cacao, clean, pipe tobacco, light ginger and long finish.",
     description: "Elevation: 1300-1500M\n\nProcess: Wet hulled & hand sorted \n\nRegion: Gayo of Western Aceh\n\nVarietal: Bourbon, Typica, Caturra, Catimor",
     image: "https://static.wixstatic.com/media/59d94e_1a1070fd3948453f9171d1c05f1ae522~mv2.png"
-  },  {
+  },
+  {
     id: 39,
     name: "Indonesia Flores RFA ORGANIC",
     origin: "Indonesia",
     region: "Ngada",
     process: "Wet-Hulled",
-    certifications: ["Organic", "RFA"],
-    bagWeight: 0,
+    certifications: ["Organic","RFA"],
+    bagWeight: 152,
     warehouses: [],
     available: false,
     grade: "",
@@ -675,7 +714,8 @@ const COFFEES = [
     favourite: true,
     soldOut: true,
     hidden: true
-  },  {
+  },
+  {
     id: 40,
     name: "Mexico Oaxaca SHG Organic",
     origin: "Mexico",
@@ -683,7 +723,7 @@ const COFFEES = [
     process: "Washed",
     certifications: ["Organic"],
     bagWeight: 152,
-    warehouses: ["Vancouver, BC", "Parksville, BC"],
+    warehouses: ["Vancouver, BC","Parksville, BC"],
     available: true,
     grade: "",
     variety: "Typica, Bourbon, Marsella, Costa Rica 95",
@@ -692,7 +732,8 @@ const COFFEES = [
     description: "Elevation: 1100-1400M\n\nProcess: Fully washed & sun dried on patios and mechanical dryers.                           \n\nVarietal: Typica, Bourbon, Marsella, Costa Rica 95",
     image: "https://static.wixstatic.com/media/59d94e_e31afddb0d7a4cfcb0bc02335cb71c04~mv2.png",
     favourite: true
-  },  {
+  },
+  {
     id: 41,
     name: "Colombia Genova Quindio Excelso EP",
     origin: "Colombia",
@@ -709,14 +750,15 @@ const COFFEES = [
     description: "Elevation: 1400-1600M\n\nProcess: Washed & Sun dried on patio and mechanical dryers\n\nVarietal: Typica, Castillo & Caturra",
     image: "https://static.wixstatic.com/media/59d94e_cfdbfefbce2c406687651ff9a385c1c7~mv2.png",
     soldOut: true
-  },  {
+  },
+  {
     id: 42,
     name: "Guatemala San Marcos Estate SHB EP GP",
     origin: "Guatemala",
     region: "",
     process: "Washed",
     certifications: ["Farmer Traceable"],
-    bagWeight: 0,
+    bagWeight: 152,
     warehouses: [],
     available: false,
     grade: "",
@@ -727,7 +769,8 @@ const COFFEES = [
     image: "https://static.wixstatic.com/media/59d94e_c4b915f730274c3a8ae1a75c03579eb1~mv2.jpg",
     soldOut: true,
     hidden: true
-  },  {
+  },
+  {
     id: 43,
     name: "Ethiopia Gedeo Yirgacheffe Gersi Gr2 Washed",
     origin: "Ethiopia",
@@ -743,7 +786,8 @@ const COFFEES = [
     tastingNotes: "Sweet and clean classic Yirgacheffe flavours of jasmine, camomile, citrus, black tea-like, with notes of honey or preserve stone fruit.",
     description: "Elevation: 1700-2200M\n\nProcess: Washed, sun dried on raised beds &  hand sorted             \n                                      \nRegion: Gedeb, Gedeo\n\nVarietal: Heirloom Yirgacheffe type",
     image: "https://static.wixstatic.com/media/59d94e_515f78a388f044ca9a1a8c01fb2717eb~mv2.png"
-  },  {
+  },
+  {
     id: 44,
     name: "Costa Rica Hacienda San Ignacio, Marsellesa hybrid",
     origin: "Costa Rica",
@@ -751,7 +795,7 @@ const COFFEES = [
     process: "Natural",
     certifications: ["Farmer Traceable"],
     bagWeight: 66,
-    warehouses: ["Vancouver, BC", "Parksville, BC"],
+    warehouses: ["Vancouver, BC","Parksville, BC"],
     available: true,
     grade: "",
     variety: "Marsellesa (Sarchimor)",
@@ -760,7 +804,8 @@ const COFFEES = [
     description: "Elevation: 1100-1400M\n\nProcess: Natural \n\nVarietal:  Marsellesa (Sarchimor)",
     image: "https://static.wixstatic.com/media/59d94e_65e9e2b4a512453c9ad0a4404485bba0~mv2.png",
     favourite: true
-  },  {
+  },
+  {
     id: 45,
     name: "Colombia Cundinamarca Excelso RFA GP EP",
     origin: "Colombia",
@@ -768,7 +813,7 @@ const COFFEES = [
     process: "Washed",
     certifications: ["RFA"],
     bagWeight: 154,
-    warehouses: ["Vancouver, BC", "Parksville, BC"],
+    warehouses: ["Vancouver, BC","Parksville, BC"],
     available: true,
     grade: "",
     variety: "Typica, Castillo & Caturra",
@@ -778,7 +823,8 @@ const COFFEES = [
     image: "https://static.wixstatic.com/media/59d94e_cfdbfefbce2c406687651ff9a385c1c7~mv2.png",
     favourite: true,
     onSale: true
-  },  {
+  },
+  {
     id: 46,
     name: "Colombia Antioquia Excelso EP",
     origin: "Colombia",
@@ -796,14 +842,15 @@ const COFFEES = [
     image: "https://static.wixstatic.com/media/59d94e_cfdbfefbce2c406687651ff9a385c1c7~mv2.png",
     soldOut: true,
     hidden: true
-  },  {
+  },
+  {
     id: 47,
     name: "Ethiopia Sidama Natural Gr 3 Bombe",
     origin: "Ethiopia",
     region: "",
     process: "Natural",
     certifications: [],
-    bagWeight: 0,
+    bagWeight: 152,
     warehouses: [],
     available: false,
     grade: "",
@@ -814,13 +861,14 @@ const COFFEES = [
     image: "https://static.wixstatic.com/media/59d94e_515f78a388f044ca9a1a8c01fb2717eb~mv2.png",
     favourite: true,
     soldOut: true
-  },  {
+  },
+  {
     id: 48,
     name: "Rwanda Nyampinga ORGANIC. Womens COOP",
     origin: "Rwanda",
     region: "",
     process: "Washed",
-    certifications: ["Womens", "Organic"],
+    certifications: ["Womens","Organic"],
     bagWeight: 132,
     warehouses: [],
     available: false,
@@ -832,15 +880,16 @@ const COFFEES = [
     image: "https://static.wixstatic.com/media/59d94e_9953cfe2e6de4817879f7a5390deca04~mv2.jpg",
     favourite: true,
     soldOut: true
-  },  {
+  },
+  {
     id: 49,
     name: "Colombia Tolima Planadas ORGANIC, Womens COOP",
     origin: "Colombia",
     region: "",
     process: "Washed",
-    certifications: ["Organic", "Womens"],
+    certifications: ["Organic","Womens"],
     bagWeight: 154,
-    warehouses: ["Vancouver, BC", "Parksville, BC"],
+    warehouses: ["Vancouver, BC","Parksville, BC"],
     available: true,
     grade: "",
     variety: "Primarily Colombia, Typica & Caturra",
@@ -849,13 +898,14 @@ const COFFEES = [
     description: "Elevation: 1500-1800M\n\nProcess: Washed, sun dried on raised beds & patios\nExtra sorting for improved cup quality and flavour clarity\n\nVarietal: Primarily Colombia, Typica & Caturra",
     image: "https://static.wixstatic.com/media/59d94e_cfdbfefbce2c406687651ff9a385c1c7~mv2.png",
     favourite: true
-  },  {
+  },
+  {
     id: 50,
     name: "Costa Rica West Valley V&G Estate White Honey",
     origin: "Costa Rica",
     region: "",
     process: "Honey",
-    certifications: ["Microlot", "Farmer Traceable"],
+    certifications: ["Microlot","Farmer Traceable"],
     bagWeight: 66,
     warehouses: [],
     available: false,
@@ -876,10 +926,10 @@ const COFFEES = [
 // ============================================================
 
 const FILTER_OPTIONS = {
-  origins: ["Blend", "Brazil", "Colombia", "Costa Rica", "Ethiopia", "Guatemala", "Honduras", "Indonesia", "Kenya", "Mexico", "Nicaragua", "Panama", "Papua New Guinea", "Peru", "Rwanda", "Tanzania", "Uganda"],
-  processes: ["Honey", "Mountain Water Process (Decaf)", "Natural", "Swiss Water Process (Decaf)", "Washed", "Wet-Hulled"],
-  certifications: ["FT", "FT Organic", "Farmer Traceable", "Microlot", "Organic", "R86 Fav", "RFA", "Womens"],
-  warehouses: ["Lévis, QC", "Parksville, BC", "Vancouver, BC", "by request"]
+  origins: ["Blend","Brazil","Colombia","Costa Rica","Ethiopia","Guatemala","Honduras","Indonesia","Kenya","Mexico","Nicaragua","Panama","Papua New Guinea","Peru","Rwanda","Tanzania","Uganda"],
+  processes: ["Honey","Mountain Water Process (Decaf)","Natural","Swiss Water Process (Decaf)","Washed","Wet-Hulled"],
+  certifications: ["FT","FT Organic","Farmer Traceable","Microlot","Organic","R86 Fav","RFA","Womens"],
+  warehouses: ["Lévis, QC","Parksville, BC","Vancouver, BC","by request"]
 };
 
 // ============================================================
@@ -887,12 +937,12 @@ const FILTER_OPTIONS = {
 // ============================================================
 
 const SITE_SETTINGS = {
-  companyName: "Root 86 Coffee",
-  email: "root86coffee@gmail.com",
-  phone: "1-855-908-0086",
-  address: "PO Box 60008, Nanaimo, BC V9S 0A5",
-  tagline: "Green Coffee Specialists. Proudly Supplying Canada's Micro-Roasters.",
-  emailjsServiceId: "YOUR_SERVICE_ID",
-  emailjsTemplateId: "YOUR_TEMPLATE_ID",
-  emailjsPublicKey: "YOUR_PUBLIC_KEY"
+  "companyName": "Root 86 Coffee",
+  "email": "root86coffee@gmail.com",
+  "phone": "1-855-908-0086",
+  "address": "PO Box 60008, Nanaimo, BC V9S 0A5",
+  "tagline": "Green Coffee Specialists. Proudly Supplying Canada's Micro-Roasters.",
+  "emailjsServiceId": "YOUR_SERVICE_ID",
+  "emailjsTemplateId": "YOUR_TEMPLATE_ID",
+  "emailjsPublicKey": "YOUR_PUBLIC_KEY"
 };
