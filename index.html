@@ -32,7 +32,7 @@
   <link rel="dns-prefetch" href="https://basemaps.cartocdn.com" />
 
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9749;</text></svg>" />
-  <link rel="stylesheet" href="css/styles.css?v=nobeans" />
+  <link rel="stylesheet" href="css/styles.css?v=btb3" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
 
@@ -111,12 +111,6 @@
   </script>
 </head>
 <body>
-
-<!-- Custom Cursor -->
-<div class="cursor" id="cursor">
-  <div class="cursor-dot" id="cursor-dot"></div>
-  <div class="cursor-ring" id="cursor-ring"></div>
-</div>
 
 <!-- Scroll progress indicator -->
 <div id="scroll-progress"></div>
@@ -207,6 +201,27 @@
     <div class="stat-label">Standard: Exceptional</div>
   </div>
 </div>
+
+<!-- ================================================
+     BEHIND THE BAG
+     Auto-rotating carousel of real coffee lot images.
+     ================================================ -->
+<section class="btb-section" id="btb-section">
+  <div class="container btb-grid">
+    <div class="btb-copy">
+      <span class="btb-eyebrow">Behind the Bag</span>
+      <h2 class="btb-title">From origin<br>to your <em>roaster</em>.</h2>
+      <p class="btb-body">
+        Every lot at Root 86 is personally cupped, sourced, and warehoused in Canada before it reaches your roastery floor. A glimpse at the coffees moving through our cupping table this season.
+      </p>
+    </div>
+    <div class="btb-media">
+      <div class="btb-carousel" id="btb-carousel" aria-label="Coffee lot images"></div>
+      <div class="btb-dots" id="btb-dots" aria-hidden="true"></div>
+      <div class="btb-frame"></div>
+    </div>
+  </div>
+</section>
 
 <!-- ================================================
      MARQUEE
@@ -675,7 +690,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="js/coffees.js"></script>
 <script src="js/submit.js"></script>
-<script src="js/app.js?v=nobeans"></script>
+<script src="js/app.js?v=btb3"></script>
 <script src="js/track.js" defer></script>
 <script>
   if (typeof emailjs !== 'undefined' && typeof SITE_SETTINGS !== 'undefined' && SITE_SETTINGS.emailjsPublicKey && SITE_SETTINGS.emailjsPublicKey !== 'YOUR_PUBLIC_KEY') {

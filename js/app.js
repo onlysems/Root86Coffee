@@ -51,39 +51,79 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollProgress();
   initStatCounters();
   initMap();
+  initBtbCarousel();
 });
 
 // ================================================
-// CURSOR
+// BEHIND-THE-BAG IMAGE CAROUSEL
+// Cycles through unique coffee lot images from COFFEES.
 // ================================================
-function initCursor() {
-  const dot  = $('#cursor-dot');
-  const ring = $('#cursor-ring');
-  if (!dot || !ring) return;
+function initBtbCarousel(){
+  const wrap = document.getElementById('btb-carousel');
+  const dotsWrap = document.getElementById('btb-dots');
+  if (!wrap || typeof COFFEES === 'undefined') return;
 
-  let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
-
-  document.addEventListener('mousemove', e => {
-    mouseX = e.clientX; mouseY = e.clientY;
-    dot.style.left = mouseX + 'px';
-    dot.style.top  = mouseY + 'px';
-  });
-
-  // Smooth ring follow
-  function animateRing() {
-    ringX += (mouseX - ringX) * 0.12;
-    ringY += (mouseY - ringY) * 0.12;
-    ring.style.left = ringX + 'px';
-    ring.style.top  = ringY + 'px';
-    requestAnimationFrame(animateRing);
+  // Collect unique image URLs (dedupe since some coffees share one)
+  const seen = new Set();
+  const images = [];
+  for (const c of COFFEES) {
+    if (!c.image || seen.has(c.image)) continue;
+    seen.add(c.image);
+    images.push({ src: c.image, name: c.name || '', origin: c.origin || '' });
+    if (images.length >= 12) break; // cap for perf
   }
-  animateRing();
+  if (!images.length) { const sec = document.getElementById('btb-section'); if (sec) sec.hidden = true; return; }
 
-  // Hover expand
-  document.querySelectorAll('a, button, [role="button"]').forEach(el => {
-    el.addEventListener('mouseenter', () => ring.classList.add('hover'));
-    el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+  // Build slides
+  images.forEach((img, i) => {
+    const slide = document.createElement('div');
+    slide.className = 'btb-slide' + (i === 0 ? ' active' : '');
+    slide.innerHTML = `
+      <img src="${img.src}" alt="${img.name}" loading="lazy" onerror="this.parentElement.classList.add('broken')" />
+      <div class="btb-slide-label">
+        <span class="btb-slide-origin">${img.origin}</span>
+        <span class="btb-slide-name">${img.name}</span>
+      </div>`;
+    wrap.appendChild(slide);
+
+    if (dotsWrap) {
+      const dot = document.createElement('button');
+      dot.className = 'btb-dot' + (i === 0 ? ' active' : '');
+      dot.type = 'button';
+      dot.setAttribute('aria-label', `Show image ${i + 1}`);
+      dot.addEventListener('click', () => goTo(i));
+      dotsWrap.appendChild(dot);
+    }
   });
+
+  const slides = wrap.querySelectorAll('.btb-slide');
+  const dots   = dotsWrap ? dotsWrap.querySelectorAll('.btb-dot') : [];
+  let idx = 0;
+  let timer;
+
+  function goTo(n){
+    slides[idx].classList.remove('active');
+    if (dots[idx]) dots[idx].classList.remove('active');
+    idx = (n + slides.length) % slides.length;
+    slides[idx].classList.add('active');
+    if (dots[idx]) dots[idx].classList.add('active');
+    restart();
+  }
+  function next(){ goTo(idx + 1); }
+  function restart(){ clearInterval(timer); timer = setInterval(next, 4200); }
+
+  restart();
+
+  // Pause when tab hidden / off-screen
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) clearInterval(timer); else restart();
+  });
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) restart(); else clearInterval(timer); });
+    }, { threshold: 0.1 });
+    io.observe(wrap);
+  }
 }
 
 // ================================================
@@ -759,20 +799,6 @@ function initMap() {
   // Fit bounds to show all markers with padding
   const bounds = L.latLngBounds(LOCATIONS.map(l => [l.lat, l.lng]));
   map.fitBounds(bounds, { padding: [80, 120] });
-
-  // Restore cursor behaviour inside the map (Leaflet sets cursor:grab)
-  el.addEventListener('mouseenter', () => {
-    const dot  = document.getElementById('cursor-dot');
-    const ring = document.getElementById('cursor-ring');
-    if (dot)  dot.style.opacity  = '0';
-    if (ring) ring.style.opacity = '0';
-  });
-  el.addEventListener('mouseleave', () => {
-    const dot  = document.getElementById('cursor-dot');
-    const ring = document.getElementById('cursor-ring');
-    if (dot)  dot.style.opacity  = '1';
-    if (ring) ring.style.opacity = '0.5';
-  });
 
   // ── Animated shipping routes ──────────────────────────────────
   // Red pulses travel from each warehouse to major Canadian cities on

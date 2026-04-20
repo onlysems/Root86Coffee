@@ -50,19 +50,6 @@ body::after {
   opacity: 0.3;
 }
 
-/* ── Custom cursor ── */
-.cursor { position: fixed; top: 0; left: 0; z-index: 9999; pointer-events: none; }
-.cursor-dot {
-  position: absolute; width: 8px; height: 8px; border-radius: 50%;
-  background: var(--red); transform: translate(-50%,-50%);
-}
-.cursor-ring {
-  position: absolute; width: 34px; height: 34px; border-radius: 50%;
-  border: 1.5px solid var(--red); transform: translate(-50%,-50%);
-  transition: transform 0.12s ease, opacity 0.2s; opacity: 0.5;
-}
-.cursor-ring.hover { transform: translate(-50%,-50%) scale(1.5); opacity: 0.3; }
-
 /* ── Typography ── */
 h1 { font-family: var(--font-serif); font-weight: 300; font-size: clamp(48px, 7.5vw, 98px); line-height: 0.95; letter-spacing: -0.01em; }
 h2 { font-family: var(--font-serif); font-weight: 300; font-size: clamp(32px, 3.6vw, 52px); line-height: 1.1; }
@@ -1079,15 +1066,115 @@ footer { background: var(--red-deep); padding: 52px 0 32px; border-top: 3px soli
 }
 
 /* ============================================================
+   BEHIND THE BAG — image carousel
+   ============================================================ */
+.btb-section {
+  padding: 100px 0;
+  background: var(--off-white);
+  overflow: hidden;
+}
+.btb-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 80px;
+  align-items: center;
+}
+.btb-copy { padding-left: 24px; }
+.btb-eyebrow {
+  font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--red); display: block; margin-bottom: 18px; font-weight: 500;
+}
+.btb-title {
+  font-family: var(--font-serif); font-size: clamp(38px, 4vw, 58px);
+  font-weight: 300; line-height: 1.05; color: var(--ink); margin-bottom: 24px;
+}
+.btb-title em { font-style: italic; color: var(--red); }
+.btb-body {
+  font-size: 0.95rem; line-height: 1.8; color: var(--muted);
+  max-width: 440px;
+}
+.btb-media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px -20px rgba(26,0,5,0.35);
+  background: var(--ink);
+}
+.btb-carousel { position: absolute; inset: 0; }
+.btb-slide {
+  position: absolute; inset: 0;
+  opacity: 0;
+  transition: opacity 0.9s ease;
+  pointer-events: none;
+}
+.btb-slide.active { opacity: 1; }
+.btb-slide img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  background: #1a0005;
+}
+.btb-slide.broken { display: none; }
+.btb-slide-label {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 40px 28px 22px;
+  background: linear-gradient(180deg, rgba(26,0,5,0) 0%, rgba(26,0,5,0.78) 100%);
+  color: #fff;
+  display: flex; flex-direction: column; gap: 4px;
+  pointer-events: none;
+}
+.btb-slide-origin {
+  font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(255,255,255,0.82);
+  font-weight: 500;
+}
+.btb-slide-name {
+  font-family: var(--font-serif); font-size: 1.2rem; font-weight: 400;
+  line-height: 1.25;
+}
+.btb-dots {
+  position: absolute; right: 14px; top: 14px;
+  display: flex; gap: 6px;
+  z-index: 3;
+}
+.btb-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+  border: none; padding: 0; cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.btb-dot.active { background: var(--red); transform: scale(1.25); }
+.btb-dot:hover { background: rgba(255,255,255,0.8); }
+.btb-frame {
+  position: absolute; inset: 0;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 6px rgba(26,0,5,0.04);
+  z-index: 2;
+}
+@media (max-width: 900px) {
+  .btb-grid { grid-template-columns: 1fr; gap: 40px; padding: 0 32px; }
+  .btb-copy { padding-left: 0; }
+  .btb-section { padding: 64px 0; }
+}
+@media (max-width: 768px) {
+  .btb-section { padding: 48px 0; }
+  .btb-grid { gap: 28px; padding: 0 20px; }
+  .btb-title { font-size: clamp(28px, 8vw, 42px); margin-bottom: 14px; }
+  .btb-body { font-size: 0.88rem; line-height: 1.7; max-width: none; }
+  .btb-media { aspect-ratio: 4 / 3; border-radius: 6px; }
+  .btb-slide-name { font-size: 1rem; }
+  .btb-slide-label { padding: 28px 18px 16px; }
+}
+
+/* ============================================================
    MOBILE-ONLY FIXES
    - Hide custom cursor + bean trail
    - Tuck back-to-top button out of content flow
    - Tame tooltips / chips / hero stacking
    ============================================================ */
 /* Custom cursor + bean trail removed at user's request — hide everywhere */
-#cursor, .cursor, .cursor-dot, .cursor-ring { display: none !important; }
 #bean-trail { display: none !important; }
-body { cursor: auto !important; }
 
 @media (max-width: 768px) {
   /* Scroll-progress bar: keep thin so it never looks like a nav border */
