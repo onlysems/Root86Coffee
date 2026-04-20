@@ -336,7 +336,7 @@
   .modal-head .close{margin-left:auto;font-size:1.2rem;color:var(--muted);padding:4px 10px}
   .modal-body{padding:24px 28px;display:grid;grid-template-columns:1fr 1fr;gap:16px 20px}
   .modal-body .full{grid-column:1/-1}
-  .field label{
+  .field > label, .field-label{
     display:block; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase;
     color:var(--muted); margin-bottom:5px; font-weight:600;
   }
@@ -405,7 +405,7 @@
     <div class="login-sub">Content Manager</div>
     <h2>Sign in</h2>
     <p>Enter the admin password to manage coffees.</p>
-    <input type="password" id="login-pw" placeholder="Password" autofocus />
+    <input type="password" id="login-pw" placeholder="Password" aria-label="Admin password" autofocus />
     <button id="login-btn">Sign In</button>
     <div class="login-error" id="login-err">Incorrect password.</div>
   </div>
@@ -531,7 +531,7 @@
         <h1>Coffees</h1>
         <span class="subbar-stats" id="stats">0 items</span>
         <div class="subbar-spacer"></div>
-        <input type="text" class="search" id="filter-search" placeholder="Search by name, origin, region..." />
+        <input type="text" class="search" id="filter-search" placeholder="Search by name, origin, region..." aria-label="Search coffees" />
         <select id="filter-origin"><option value="">All Origins</option></select>
         <select id="filter-special">
           <option value="">All Items</option>
@@ -571,37 +571,37 @@
       <button class="close" id="modal-close">&times;</button>
     </div>
     <div class="modal-body">
-      <div class="field"><label>Product Name</label><input id="m-name" type="text" /></div>
-      <div class="field"><label>Origin</label><input id="m-origin" type="text" list="origins-dl" /></div>
-      <div class="field"><label>Region</label><input id="m-region" type="text" /></div>
-      <div class="field"><label>Process</label><input id="m-process" type="text" list="processes-dl" /></div>
-      <div class="field"><label>Grade</label><input id="m-grade" type="text" /></div>
-      <div class="field"><label>Variety</label><input id="m-variety" type="text" /></div>
-      <div class="field"><label>Altitude</label><input id="m-altitude" type="text" placeholder="e.g. 1,500-1,800m" /></div>
-      <div class="field"><label>Bag Weight (lbs)</label><input id="m-bag" type="number" min="1" /></div>
+      <div class="field"><label for="m-name">Product Name</label><input id="m-name" type="text" /></div>
+      <div class="field"><label for="m-origin">Origin</label><input id="m-origin" type="text" list="origins-dl" /></div>
+      <div class="field"><label for="m-region">Region</label><input id="m-region" type="text" /></div>
+      <div class="field"><label for="m-process">Process</label><input id="m-process" type="text" list="processes-dl" /></div>
+      <div class="field"><label for="m-grade">Grade</label><input id="m-grade" type="text" /></div>
+      <div class="field"><label for="m-variety">Variety</label><input id="m-variety" type="text" /></div>
+      <div class="field"><label for="m-altitude">Altitude</label><input id="m-altitude" type="text" placeholder="e.g. 1,500-1,800m" /></div>
+      <div class="field"><label for="m-bag">Bag Weight (lbs)</label><input id="m-bag" type="number" min="1" /></div>
       <div class="field full">
-        <label>Certifications</label>
-        <div class="chk-grid" id="m-certs-grid"></div>
+        <div class="field-label">Certifications</div>
+        <div class="chk-grid" id="m-certs-grid" role="group" aria-label="Certifications"></div>
       </div>
       <div class="field full">
-        <label>Warehouses <span style="color:var(--muted);font-weight:400;font-size:.75rem">(select all that stock this coffee)</span></label>
-        <div class="chk-grid" id="m-whs-grid"></div>
+        <div class="field-label">Warehouses <span style="color:var(--muted);font-weight:400;font-size:.75rem">(select all that stock this coffee)</span></div>
+        <div class="chk-grid" id="m-whs-grid" role="group" aria-label="Warehouses"></div>
       </div>
-      <div class="field full"><label>Tasting Notes</label>
+      <div class="field full"><label for="m-notes">Tasting Notes</label>
         <input id="m-notes" type="text" placeholder="Caramel, Apple, Chocolate" />
       </div>
-      <div class="field full"><label>Description <span style="color:var(--muted);font-weight:400;font-size:.75rem">(short summary — card preview)</span></label>
+      <div class="field full"><label for="m-desc">Description <span style="color:var(--muted);font-weight:400;font-size:.75rem">(short summary — card preview)</span></label>
         <textarea id="m-desc"></textarea>
       </div>
-      <div class="field full"><label>Main Text <span style="color:var(--muted);font-weight:400;font-size:.75rem">(full details shown on the "more info" screen — origin story, producer notes, cupping, etc.)</span></label>
+      <div class="field full"><label for="m-maintext">Main Text <span style="color:var(--muted);font-weight:400;font-size:.75rem">(full details shown on the "more info" screen — origin story, producer notes, cupping, etc.)</span></label>
         <textarea id="m-maintext" rows="8"></textarea>
       </div>
-      <div class="field full"><label>Flag / Image URL</label>
+      <div class="field full"><label for="m-image">Flag / Image URL</label>
         <input id="m-image" type="text" placeholder="https://static.wixstatic.com/media/..." />
       </div>
       <div class="field full">
-        <label>Flags</label>
-        <div class="field-bools">
+        <div class="field-label">Flags</div>
+        <div class="field-bools" role="group" aria-label="Flags">
           <label><input type="checkbox" id="m-available" checked /> Available</label>
           <label><input type="checkbox" id="m-fav" /> ★ R86 Favourite</label>
           <label><input type="checkbox" id="m-sale" /> On Sale</label>
@@ -673,7 +673,7 @@
         Commits the current catalog to <code>js/coffees.js</code> on <strong>main</strong>.
         GitHub Pages will rebuild in ~1&ndash;2 minutes. SEO pages auto-regenerate via GitHub Actions.
       </p>
-      <label style="display:block;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">
+      <label for="gh-token" style="display:block;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">
         GitHub Token <span id="tok-status" style="text-transform:none;letter-spacing:0;color:var(--muted);font-size:.75rem"></span>
       </label>
       <input type="password" id="gh-token" placeholder="github_pat_..." style="width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:4px;font-family:monospace;font-size:.8rem" />
@@ -681,7 +681,7 @@
         One-time setup: create a <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener" style="color:var(--red)">fine-grained PAT</a>
         scoped to <code>onlysems/Root86Coffee</code> with <strong>Contents: Read &amp; write</strong>. Stored only in your browser.
       </p>
-      <label style="display:block;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:14px;margin-bottom:6px">Commit Message</label>
+      <label for="gh-commit-msg" style="display:block;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:14px;margin-bottom:6px">Commit Message</label>
       <input type="text" id="gh-commit-msg" placeholder="Update coffee catalog" style="width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:4px;font-size:.85rem" />
       <div id="publish-log" style="margin-top:14px;font-family:monospace;font-size:.75rem;color:var(--muted);min-height:1.4em;white-space:pre-wrap"></div>
     </div>
