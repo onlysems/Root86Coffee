@@ -31,8 +31,6 @@ const $$ = (s,c=document) => [...c.querySelectorAll(s)];
 
 // ── Init ───────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
-  initCursor();
-  initBeanTrail();
   initHeroCanvas();
   initNav();
   buildFilters();

@@ -1164,12 +1164,10 @@ footer { background: var(--red-deep); padding: 52px 0 32px; border-top: 3px soli
    - Tuck back-to-top button out of content flow
    - Tame tooltips / chips / hero stacking
    ============================================================ */
-@media (hover: none), (pointer: coarse), (max-width: 768px) {
-  /* Kill desktop-only overlays on touch */
-  #cursor, .cursor, .cursor-dot, .cursor-ring { display: none !important; }
-  #bean-trail { display: none !important; }
-  body { cursor: auto !important; }
-}
+/* Custom cursor + bean trail removed at user's request — hide everywhere */
+#cursor, .cursor, .cursor-dot, .cursor-ring { display: none !important; }
+#bean-trail { display: none !important; }
+body { cursor: auto !important; }
 
 @media (max-width: 768px) {
   /* Back-to-top button: smaller, farther from nav/quote bar */
