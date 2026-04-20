@@ -248,7 +248,6 @@ function renderGrid() {
     }));
 
   updateGridButtons();
-  initCardTilt();
 }
 
 function cardHTML(c) {
@@ -707,33 +706,6 @@ function initBeanTrail(){
     ], { duration: 900 + Math.random() * 400, easing: 'cubic-bezier(.4,.1,.6,1)', fill: 'forwards' })
     .onfinish = () => b.remove();
   }
-}
-
-// ================================================
-// 3D TILT FOR COFFEE CARDS
-// ================================================
-function initCardTilt(){
-  // Tilt only on fine pointers; keep touch interfaces flat.
-  if (window.matchMedia('(pointer: coarse)').matches) return;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const MAX = 7; // degrees
-  $$('.ccard').forEach(card => {
-    if (card.dataset.tiltBound) return;
-    card.dataset.tiltBound = '1';
-    card.addEventListener('mousemove', e => {
-      const r = card.getBoundingClientRect();
-      const px = (e.clientX - r.left) / r.width;   // 0..1
-      const py = (e.clientY - r.top)  / r.height;  // 0..1
-      const rx = (0.5 - py) * MAX * 2;
-      const ry = (px - 0.5) * MAX * 2;
-      card.classList.add('tilting');
-      card.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(0)`;
-    });
-    card.addEventListener('mouseleave', () => {
-      card.classList.remove('tilting');
-      card.style.transform = '';
-    });
-  });
 }
 
 // ================================================

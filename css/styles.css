@@ -1085,13 +1085,6 @@ footer { background: var(--red-deep); padding: 52px 0 32px; border-top: 3px soli
 }
 @keyframes tip-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
-/* 3D tilt coffee cards */
-.ccard {
-  transform-style: preserve-3d;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  will-change: transform;
-}
-.ccard.tilting { transition: transform 0.08s linear, box-shadow 0.25s ease; }
 
 /* Fly-to-cart flying bean */
 .fly-bean {
@@ -1163,4 +1156,71 @@ footer { background: var(--red-deep); padding: 52px 0 32px; border-top: 3px soli
   .btb-grid { grid-template-columns: 1fr; gap: 40px; padding: 0 32px; }
   .btb-copy { padding-left: 0; }
   .btb-section { padding: 64px 0; }
+}
+
+/* ============================================================
+   MOBILE-ONLY FIXES
+   - Hide custom cursor + bean trail
+   - Tuck back-to-top button out of content flow
+   - Tame tooltips / chips / hero stacking
+   ============================================================ */
+@media (hover: none), (pointer: coarse), (max-width: 768px) {
+  /* Kill desktop-only overlays on touch */
+  #cursor, .cursor, .cursor-dot, .cursor-ring { display: none !important; }
+  #bean-trail { display: none !important; }
+  body { cursor: auto !important; }
+}
+
+@media (max-width: 768px) {
+  /* Back-to-top button: smaller, farther from nav/quote bar */
+  #back-to-top {
+    right: 14px; bottom: 14px;
+    width: 44px; height: 48px;
+  }
+  .btt-svg { width: 24px; height: 28px; }
+
+  /* Scroll-progress bar: keep thin so it never looks like a nav border */
+  #scroll-progress { height: 2px; }
+
+  /* Cupping-notes tooltip: constrain width + keep inside viewport */
+  .ccard-notes[data-notes]:hover::after {
+    left: 0; right: 0;
+    max-width: none;
+    font-size: 0.72rem;
+    padding: 8px 12px;
+  }
+
+  /* Behind-the-bag: give the video breathing room and shrink padding */
+  .btb-section { padding: 48px 0; }
+  .btb-grid { gap: 28px; padding: 0 20px; }
+  .btb-title { font-size: clamp(28px, 8vw, 42px); margin-bottom: 14px; }
+  .btb-body { font-size: 0.88rem; line-height: 1.7; max-width: none; }
+  .btb-media { aspect-ratio: 16 / 11; border-radius: 6px; }
+
+  /* Filter chip counts — drop parentheses so selects don't overflow */
+  select#filter-origin option,
+  select#filter-process option,
+  select#filter-cert option,
+  select#filter-wh option { font-size: 0.82rem; }
+
+  /* Map popup — don't let it exceed viewport */
+  .leaflet-popup-content-wrapper { max-width: 80vw; }
+
+  /* Leaflet permanent city label — shrink so it doesn't overlap the pin */
+  .leaflet-tooltip.r86-map-label {
+    font-size: 0.56rem; padding: 3px 7px; letter-spacing: 0.12em;
+  }
+
+  /* Stat band: when stat-num animates big numbers, keep contained */
+  .stat-num { font-size: clamp(32px, 9vw, 44px); }
+
+  /* Fly-to-cart bean: start a touch smaller on phones */
+  .fly-bean { width: 11px; height: 14px; }
+}
+
+/* Phones narrower than typical (iPhone SE etc.) */
+@media (max-width: 420px) {
+  #back-to-top { right: 10px; bottom: 10px; width: 40px; height: 44px; }
+  .btt-svg { width: 22px; height: 26px; }
+  .btb-grid { padding: 0 16px; }
 }
