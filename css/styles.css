@@ -873,6 +873,24 @@ footer { background: var(--red-deep); padding: 52px 0 32px; border-top: 3px soli
 }
 .r86-popup-desc { font-size: 0.76rem; color: var(--muted); line-height: 1.75; }
 
+/* Permanent map labels */
+.leaflet-tooltip.r86-map-label {
+  background: rgba(255,255,255,0.96);
+  border: 1px solid rgba(200,16,46,0.25);
+  border-left: 2px solid var(--red);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(26,0,5,0.08);
+  white-space: nowrap;
+}
+.leaflet-tooltip.r86-map-label::before { display: none; }
+
 /* Leaflet attribution small */
 .leaflet-control-attribution {
   font-size: 0.58rem !important; opacity: 0.5;

@@ -573,9 +573,15 @@ function initMap() {
           <p class="r86-popup-desc">${loc.desc}</p>
         </div>`);
 
-    L.marker([loc.lat, loc.lng], { icon: makeIcon(loc.delay) })
+    const marker = L.marker([loc.lat, loc.lng], { icon: makeIcon(loc.delay) })
       .addTo(map)
       .bindPopup(popup);
+    marker.bindTooltip(loc.city, {
+      permanent: true,
+      direction: 'right',
+      offset: [10, 0],
+      className: 'r86-map-label'
+    });
   });
 
   // Fit bounds to show all markers with padding

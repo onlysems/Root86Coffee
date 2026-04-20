@@ -100,6 +100,10 @@
   .dash-wrap{flex:1;overflow-y:auto;padding:28px 32px;background:var(--bg)}
   .dash-hello{font-family:var(--font-serif);font-size:1.6rem;font-weight:600;color:var(--ink);margin-bottom:4px}
   .dash-subtitle{color:var(--muted);font-size:.88rem;margin-bottom:28px}
+  .dash-header{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:24px;flex-wrap:wrap}
+  .dash-header > div:first-child{flex:1;min-width:0}
+  .dash-header .dash-subtitle{margin-bottom:0;margin-top:4px}
+  .dash-greeting{font-family:var(--font-serif);font-size:1.6rem;font-weight:600;color:var(--ink);margin:0;line-height:1.1}
   .dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:28px}
   .dash-card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px 20px}
   .dash-card .k{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:10px}
@@ -605,19 +609,22 @@
 
     <!-- ── ANALYTICS VIEW ── -->
     <div class="view" id="view-analytics">
+      <div class="topbar">
+        <div class="topbar-brand">Analytics</div>
+        <div class="topbar-spacer"></div>
+        <div class="seg" id="an-range-seg" role="tablist" aria-label="Date range">
+          <button class="seg-btn" data-range="7">7D</button>
+          <button class="seg-btn active" data-range="30">30D</button>
+          <button class="seg-btn" data-range="90">90D</button>
+        </div>
+        <button class="topbar-btn" id="an-refresh" title="Refresh data">&#8635; Refresh</button>
+        <button class="topbar-btn" id="an-setkey" title="Change analytics key">Key</button>
+      </div>
+      <div class="dash-wrap">
       <div class="dash-header">
         <div>
           <h1 class="dash-greeting">Site Analytics</h1>
           <div class="dash-subtitle" id="an-subtitle">Traffic &amp; engagement from the live site</div>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <div class="seg" id="an-range-seg" role="tablist" aria-label="Date range">
-            <button class="seg-btn" data-range="7">7D</button>
-            <button class="seg-btn active" data-range="30">30D</button>
-            <button class="seg-btn" data-range="90">90D</button>
-          </div>
-          <button class="topbar-btn" id="an-refresh" title="Refresh data">&#8635; Refresh</button>
-          <button class="topbar-btn" id="an-setkey" title="Change analytics key">Key</button>
         </div>
       </div>
 
@@ -725,17 +732,21 @@
 
       <div id="an-loading" style="display:none;padding:60px;text-align:center;color:var(--muted)">Loading analytics...</div>
       <div id="an-error" style="display:none;padding:40px;text-align:center;color:var(--red)"></div>
+      </div>
     </div>
 
     <!-- ── INBOX VIEW ── -->
     <div class="view" id="view-inbox">
+      <div class="topbar">
+        <div class="topbar-brand">Inbox</div>
+        <div class="topbar-spacer"></div>
+        <button class="topbar-btn" id="inbox-refresh" title="Refresh inbox">&#8635; Refresh</button>
+      </div>
+      <div class="dash-wrap">
       <div class="dash-header">
         <div>
           <h1 class="dash-greeting">Inbox</h1>
           <div class="dash-subtitle">Form submissions from the website</div>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <button class="topbar-btn" id="inbox-refresh" title="Refresh inbox">&#8635; Refresh</button>
         </div>
       </div>
       <div class="inbox-shell">
@@ -761,6 +772,7 @@
             <div class="inbox-detail-empty-sub">Pick a form submission from the list to see the full details here.</div>
           </div>
         </section>
+      </div>
       </div>
     </div>
 
