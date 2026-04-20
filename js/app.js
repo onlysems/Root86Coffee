@@ -207,7 +207,11 @@ function renderGrid() {
   $$('.add-quote-btn', grid).forEach(btn =>
     btn.addEventListener('click', e => { e.stopPropagation(); toggleQuote(parseInt(btn.dataset.id)); }));
   $$('.ccard', grid).forEach(card =>
-    card.addEventListener('click', () => openModal(parseInt(card.dataset.id))));
+    card.addEventListener('click', e => {
+      // Don't open the modal if the user clicked a button inside the card
+      if (e.target.closest('button')) return;
+      openModal(parseInt(card.dataset.id));
+    }));
 
   updateGridButtons();
 }
