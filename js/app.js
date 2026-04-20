@@ -415,6 +415,8 @@ function openModal(id) {
 
   $('#modal-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+
+  if (window.r86Track) window.r86Track('coffee_view', { coffeeId: id });
 }
 function closeModal() {
   $('#modal-overlay')?.classList.remove('open');

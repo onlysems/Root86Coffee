@@ -113,6 +113,13 @@
   .dash-link:hover{background:var(--hover)}
   .dash-link .dash-link-label{flex:1;font-size:.88rem}
   .dash-link .dash-link-sub{font-size:.76rem;color:var(--muted);margin-top:2px}
+  .an-row{display:flex;align-items:center;gap:12px;padding:10px 18px;border-bottom:1px solid var(--line);font-size:.84rem}
+  .an-row:last-child{border-bottom:none}
+  .an-row-label{flex:1;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .an-row-bar{position:relative;width:120px;height:6px;background:rgba(0,0,0,.06);border-radius:3px;overflow:hidden;flex-shrink:0}
+  .an-row-bar span{position:absolute;inset:0;background:var(--red);transform-origin:left;border-radius:3px}
+  .an-row-val{width:50px;text-align:right;font-variant-numeric:tabular-nums;color:var(--muted);font-size:.8rem;flex-shrink:0}
+  .an-empty{padding:28px;text-align:center;color:var(--muted);font-size:.82rem}
   .dash-link .dash-link-arrow{color:var(--muted);font-size:1rem}
 
   .topbar{
@@ -427,7 +434,7 @@
       <button class="sb-item" data-view="coffees"><span class="sb-icon">&#9679;</span> Coffees</button>
       <div class="sb-section">Communications</div>
       <button class="sb-item" data-view="inbox"><span class="sb-icon">&#9993;</span> Inbox <span class="sb-badge" id="sb-inbox-badge" style="display:none">0</span></button>
-      <a class="sb-item" href="https://dash.cloudflare.com/?to=/:account/pages/view/root86coffee/metrics" target="_blank" rel="noopener"><span class="sb-icon">&#9636;</span> Analytics <span style="margin-left:auto;color:rgba(255,255,255,.35);font-size:.8rem">&#8599;</span></a>
+      <button class="sb-item" data-view="analytics"><span class="sb-icon">&#9636;</span> Analytics</button>
     </div>
     <div class="sb-foot">
       <button class="sb-signout" id="btn-logout">Sign Out</button>
@@ -558,6 +565,66 @@
         </table>
         <div class="empty" id="empty" style="display:none;padding:60px;text-align:center;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:6px;margin-top:16px">No coffees match your filters.</div>
       </div>
+    </div>
+
+    <!-- ── ANALYTICS VIEW ── -->
+    <div class="view" id="view-analytics">
+      <div class="dash-header">
+        <div>
+          <h1 class="dash-greeting">Site Analytics</h1>
+          <div class="dash-subtitle" id="an-subtitle">Traffic &amp; engagement from the live site</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <select id="an-range" style="padding:8px 10px;border:1px solid var(--line);background:#fff;border-radius:4px;font-size:.8rem">
+            <option value="7">Last 7 days</option>
+            <option value="30" selected>Last 30 days</option>
+            <option value="90">Last 90 days</option>
+          </select>
+          <button class="topbar-btn" id="an-refresh">Refresh</button>
+          <button class="topbar-btn" id="an-setkey">Set key</button>
+        </div>
+      </div>
+
+      <div id="an-setup" style="display:none;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:24px;margin-top:16px">
+        <div style="font-weight:500;margin-bottom:8px">Connect analytics</div>
+        <div style="color:var(--muted);font-size:.85rem;line-height:1.7;margin-bottom:14px">
+          Paste your <code>ANALYTICS_KEY</code> (the secret you set on the Cloudflare Worker). It's stored only in this browser.
+        </div>
+        <div style="display:flex;gap:8px;max-width:520px">
+          <input type="password" id="an-key-input" placeholder="analytics key" aria-label="Analytics key"
+                 style="flex:1;padding:10px 12px;border:1px solid var(--line);border-radius:4px;font-family:monospace;font-size:.8rem" />
+          <button class="topbar-btn primary" id="an-key-save" style="background:var(--red);color:#fff;border-color:var(--red)">Save</button>
+        </div>
+      </div>
+
+      <div id="an-content" style="display:none">
+        <div class="dash-cards" style="margin-top:16px">
+          <div class="dash-card"><div class="k">Pageviews</div><div class="v" id="an-pv">—</div><div class="sub" id="an-pv-sub">in range</div></div>
+          <div class="dash-card"><div class="k">Quote submits</div><div class="v" id="an-quote">—</div><div class="sub">form completions</div></div>
+          <div class="dash-card"><div class="k">Contact submits</div><div class="v" id="an-contact">—</div><div class="sub">contact messages</div></div>
+          <div class="dash-card"><div class="k">Coffee views</div><div class="v" id="an-coffee-total">—</div><div class="sub">modal opens (all time)</div></div>
+        </div>
+
+        <div class="dash-section" style="margin-top:24px">
+          <h3 style="margin:0 0 12px;font-size:.95rem;font-weight:600">Daily pageviews</h3>
+          <div id="an-chart" style="background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px;min-height:180px"></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px">
+          <div>
+            <h3 style="margin:0 0 12px;font-size:.95rem;font-weight:600">Top coffees (all time)</h3>
+            <div id="an-coffees" style="background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 0"></div>
+          </div>
+          <div>
+            <h3 style="margin:0 0 12px;font-size:.95rem;font-weight:600">Top pages &amp; referrers</h3>
+            <div id="an-paths" style="background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 0;margin-bottom:12px"></div>
+            <div id="an-refs" style="background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 0"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="an-loading" style="display:none;padding:40px;text-align:center;color:var(--muted)">Loading analytics...</div>
+      <div id="an-error" style="display:none;padding:40px;text-align:center;color:var(--red)"></div>
     </div>
 
   </div>
@@ -713,6 +780,9 @@ const GH_BRANCH = 'main';
 const GH_PATH   = 'js/coffees.js';
 const GH_TOKEN_KEY = 'r86_gh_token';
 const INBOX_STATE = { issues: [], filter: 'open', activeNumber: null };
+const AN_KEY_STORAGE = 'r86_analytics_key';
+const WORKER_BASE = (typeof SITE_SETTINGS !== 'undefined' && SITE_SETTINGS.formEndpoint) ? SITE_SETTINGS.formEndpoint.replace(/\/+$/,'') : '';
+const AN_STATE = { data: null, days: 30 };
 
 // Load data: prefer localStorage edits, otherwise the bundled COFFEES
 let DATA = (() => {
@@ -793,6 +863,28 @@ function bind(){
   $('#btn-logout').addEventListener('click', logout);
   $('#btn-export').addEventListener('click', openExport);
   $('#btn-publish').addEventListener('click', openPublish);
+
+  // Analytics
+  const anRange = document.getElementById('an-range');
+  if (anRange) anRange.addEventListener('change', e => { AN_STATE.days = parseInt(e.target.value) || 30; loadAnalytics(); });
+  const anRefresh = document.getElementById('an-refresh');
+  if (anRefresh) anRefresh.addEventListener('click', loadAnalytics);
+  const anSetkey = document.getElementById('an-setkey');
+  if (anSetkey) anSetkey.addEventListener('click', () => {
+    $('#an-content').style.display = 'none';
+    $('#an-error').style.display = 'none';
+    $('#an-setup').style.display = 'block';
+    const cur = localStorage.getItem(AN_KEY_STORAGE) || '';
+    $('#an-key-input').value = cur;
+  });
+  const anSave = document.getElementById('an-key-save');
+  if (anSave) anSave.addEventListener('click', () => {
+    const v = $('#an-key-input').value.trim();
+    if (!v) { toast('Paste the key first', true); return; }
+    localStorage.setItem(AN_KEY_STORAGE, v);
+    toast('Saved');
+    loadAnalytics();
+  });
 
   // Sidebar nav
   document.querySelectorAll('.sb-item[data-view]').forEach(item => {
@@ -941,7 +1033,143 @@ function switchView(view){
     el.classList.toggle('active', el.id === 'view-' + view);
   });
   if (view === 'dashboard') renderDashboard();
+  if (view === 'analytics') openAnalytics();
 }
+
+// ── Analytics ─────────────────────────────────
+function openAnalytics(){
+  const key = localStorage.getItem(AN_KEY_STORAGE) || '';
+  if (!key){
+    $('#an-setup').style.display = 'block';
+    $('#an-content').style.display = 'none';
+    $('#an-loading').style.display = 'none';
+    $('#an-error').style.display = 'none';
+    return;
+  }
+  $('#an-setup').style.display = 'none';
+  loadAnalytics();
+}
+
+async function loadAnalytics(){
+  const key = localStorage.getItem(AN_KEY_STORAGE);
+  if (!key) return openAnalytics();
+  if (!WORKER_BASE){
+    $('#an-error').textContent = 'Worker endpoint is not configured in SITE_SETTINGS.formEndpoint';
+    $('#an-error').style.display = 'block';
+    return;
+  }
+  $('#an-content').style.display = 'none';
+  $('#an-error').style.display = 'none';
+  $('#an-loading').style.display = 'block';
+  const days = AN_STATE.days;
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), 15000);
+  try {
+    const res = await fetch(`${WORKER_BASE}/stats?days=${days}`, {
+      headers: { 'X-Analytics-Key': key },
+      signal: ctrl.signal,
+      cache: 'no-store',
+    });
+    clearTimeout(timer);
+    if (res.status === 401){
+      localStorage.removeItem(AN_KEY_STORAGE);
+      $('#an-loading').style.display = 'none';
+      $('#an-setup').style.display = 'block';
+      toast('Key rejected — paste it again', true);
+      return;
+    }
+    if (!res.ok){
+      const body = await res.json().catch(() => ({}));
+      throw new Error(body.error || (`${res.status} ${res.statusText}`));
+    }
+    AN_STATE.data = await res.json();
+    renderAnalytics();
+  } catch(e){
+    clearTimeout(timer);
+    $('#an-loading').style.display = 'none';
+    $('#an-error').textContent = 'Failed to load: ' + (e.name === 'AbortError' ? 'request timed out' : e.message);
+    $('#an-error').style.display = 'block';
+  }
+}
+
+function renderAnalytics(){
+  const d = AN_STATE.data;
+  if (!d) return;
+  $('#an-loading').style.display = 'none';
+  $('#an-content').style.display = 'block';
+  $('#an-subtitle').textContent = `Traffic & engagement — last ${d.range_days} days`;
+
+  $('#an-pv').textContent = fmt(d.total_pageviews);
+  $('#an-pv-sub').textContent = `${d.range_days} day${d.range_days===1?'':'s'} · avg ${fmt(Math.round(d.total_pageviews / d.range_days))}/day`;
+  $('#an-quote').textContent   = fmt(d.events.quote_submit);
+  $('#an-contact').textContent = fmt(d.events.contact_submit);
+  const coffeeTotal = Object.values(d.coffees || {}).reduce((a,b) => a + b, 0);
+  $('#an-coffee-total').textContent = fmt(coffeeTotal);
+
+  // Daily bar chart (inline SVG)
+  $('#an-chart').innerHTML = renderBarChart(d.daily);
+
+  // Top coffees (lookup names from COFFEES)
+  const coffeeRows = Object.entries(d.coffees || {})
+    .map(([id, count]) => {
+      const c = COFFEES.find(x => String(x.id) === String(id));
+      return { id, name: c ? c.name : `#${id}`, count };
+    })
+    .sort((a,b) => b.count - a.count)
+    .slice(0, 10);
+  $('#an-coffees').innerHTML = renderRankRows(coffeeRows.map(r => ({ label: r.name, value: r.count })));
+
+  // Top paths
+  const pathRows = Object.entries(d.paths || {})
+    .map(([label, value]) => ({ label, value }))
+    .sort((a,b) => b.value - a.value)
+    .slice(0, 6);
+  $('#an-paths').innerHTML = renderRankRows(pathRows, 'No path data yet');
+
+  // Top referrers
+  const refRows = Object.entries(d.referrers || {})
+    .map(([label, value]) => ({ label, value }))
+    .sort((a,b) => b.value - a.value)
+    .slice(0, 6);
+  $('#an-refs').innerHTML = renderRankRows(refRows, 'No referrer data yet');
+}
+
+function renderRankRows(rows, emptyMsg){
+  if (!rows.length) return `<div class="an-empty">${escapeHtml(emptyMsg || 'No data yet')}</div>`;
+  const max = Math.max(...rows.map(r => r.value)) || 1;
+  return rows.map(r => `
+    <div class="an-row">
+      <div class="an-row-label" title="${escapeHtml(r.label)}">${escapeHtml(r.label)}</div>
+      <div class="an-row-bar"><span style="transform:scaleX(${(r.value / max).toFixed(3)})"></span></div>
+      <div class="an-row-val">${fmt(r.value)}</div>
+    </div>`).join('');
+}
+
+function renderBarChart(daily){
+  if (!daily || !daily.length) return '<div class="an-empty">No traffic in range yet</div>';
+  const max = Math.max(1, ...daily.map(x => x.pv));
+  const W = 720, H = 140, pad = 20;
+  const bw = (W - pad*2) / daily.length;
+  const bars = daily.map((d, i) => {
+    const h = (d.pv / max) * (H - pad*2);
+    const x = pad + i * bw;
+    const y = H - pad - h;
+    return `<rect x="${x+1}" y="${y}" width="${bw-2}" height="${h}" fill="#c8102e" opacity="${d.pv ? 0.85 : 0.15}" rx="2">
+              <title>${d.day}: ${d.pv}</title></rect>`;
+  }).join('');
+  const firstLabel = daily[0].day.slice(5);
+  const lastLabel  = daily[daily.length-1].day.slice(5);
+  return `
+    <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:180px;display:block">
+      <line x1="${pad}" y1="${H-pad}" x2="${W-pad}" y2="${H-pad}" stroke="#e5e5e5" />
+      ${bars}
+      <text x="${pad}" y="${H-4}" font-size="10" fill="#888">${firstLabel}</text>
+      <text x="${W-pad}" y="${H-4}" font-size="10" fill="#888" text-anchor="end">${lastLabel}</text>
+      <text x="${pad}" y="14" font-size="10" fill="#888">Peak: ${max}</text>
+    </svg>`;
+}
+
+function fmt(n){ return (n == null) ? '—' : String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
 
 function renderDashboard(){
   const live = DATA.filter(c => !c.hidden);
