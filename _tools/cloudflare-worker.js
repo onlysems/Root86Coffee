@@ -117,13 +117,23 @@ async function handleForm(request, env, cors, corsOrigin) {
   if (items.length) {
     lines.push('---','');
     lines.push(`**Quote items (${items.length}):**`,'');
+    let totalBags = 0;
+    let totalWeight = 0;
     for (const it of items) {
       const nm = md(cap(it.name, 200));
       const qty = Number(it.qty) || 1;
+      const bagW = Number(it.bagWeight) || 0;
       const originStr = md(cap(it.origin, 80));
       const originPart = originStr ? ' (' + originStr + ')' : '';
-      lines.push('- ' + nm + originPart + ' x ' + qty);
+      const bagPart = bagW ? ' @ ' + bagW + ' lbs/bag' : '';
+      const lineW = bagW ? ' = ' + (qty * bagW) + ' lbs' : '';
+      lines.push('- ' + nm + originPart + ' x ' + qty + ' bag' + (qty !== 1 ? 's' : '') + bagPart + lineW);
+      totalBags += qty;
+      totalWeight += qty * bagW;
     }
+    lines.push('');
+    lines.push('**Total bags:** ' + totalBags);
+    if (totalWeight) lines.push('**Total weight:** ' + totalWeight + ' lbs (' + Math.round(totalWeight * 0.453592) + ' kg)');
   }
 
   const body = lines.join('\n');

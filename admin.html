@@ -276,6 +276,10 @@
   .sub-items{list-style:none;padding:0;margin:0;border:1px solid var(--line);border-radius:4px;background:#fafafa}
   .sub-items li{padding:10px 16px;border-bottom:1px solid var(--line);font-size:.85rem}
   .sub-items li:last-child{border-bottom:none}
+  .sub-totals{margin-top:10px;border:1px solid var(--line);border-left:3px solid var(--red);border-radius:4px;background:#fff;padding:10px 14px;display:flex;flex-direction:column;gap:4px}
+  .sub-total-row{display:flex;justify-content:space-between;font-size:.82rem}
+  .sub-total-k{color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-size:.68rem;font-weight:600;align-self:center}
+  .sub-total-v{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
   .inbox-detail-actions{display:flex;gap:8px;margin-top:18px}
   .inbox-back{padding:8px 14px;font-size:.75rem;background:none;border:1px solid var(--line);border-radius:4px;cursor:pointer}
   .inbox-back:hover{background:var(--hover)}
@@ -2165,9 +2169,6 @@ function openIssue(num){
   const replyEmail = emailMatch ? emailMatch[1] : null;
   const replySubj = encodeURIComponent('Re: ' + issue.title);
   const kind = issue.labels.find(l => l.name === 'quote') ? 'quote' : 'contact';
-  const stateLabel = issue.state === 'open'
-    ? `<span class="inbox-tag" style="background:rgba(34,150,80,.1);color:#1e7d43">Open</span>`
-    : `<span class="inbox-tag" style="background:rgba(0,0,0,.06);color:var(--muted)">Handled</span>`;
 
   const parsed = parseSubmissionBody(issue.body || '');
   const curStatus = getStatus(issue);
@@ -2180,7 +2181,7 @@ function openIssue(num){
 
   $('#inbox-detail').innerHTML = `
     <div style="margin-bottom:6px">
-      <span class="inbox-tag ${kind}">${kind}</span>${stateLabel}<span class="stpill ${curStatus}" style="margin-left:6px">${statusMeta(curStatus).label}</span>
+      <span class="inbox-tag ${kind}">${kind}</span><span class="stpill ${curStatus}" style="margin-left:6px">${statusMeta(curStatus).label}</span>
     </div>
     <h3>${escapeHtml(issue.title.replace(/^\[(contact|quote)\]\s*/i, ''))}</h3>
     <div class="meta">Submitted ${when} · <a href="${issue.html_url}" target="_blank" rel="noopener" style="color:var(--red)">View on GitHub &#8599;</a></div>
@@ -2188,15 +2189,8 @@ function openIssue(num){
     ${renderParsedSubmission(parsed)}
     <div class="inbox-detail-actions">
       ${replyEmail ? `<a class="inbox-reply-btn" href="mailto:${replyEmail}?subject=${replySubj}">&#9993; Reply via email</a>` : ''}
-      ${issue.state === 'open'
-        ? `<button class="inbox-close-btn" id="detail-close-issue">Mark as Handled</button>`
-        : `<button class="inbox-reopen-btn" id="detail-reopen-issue">Reopen</button>`}
     </div>
   `;
-  const closeBtn = $('#detail-close-issue');
-  const reopenBtn = $('#detail-reopen-issue');
-  if (closeBtn) closeBtn.addEventListener('click', () => toggleIssueState(num, 'closed'));
-  if (reopenBtn) reopenBtn.addEventListener('click', () => toggleIssueState(num, 'open'));
   document.querySelectorAll('#status-switcher .stsw-btn').forEach(btn => {
     btn.addEventListener('click', () => setStatus(num, btn.dataset.status));
   });
@@ -2240,7 +2234,7 @@ async function toggleIssueState(num, newState){
 // --- separator, and a bullet list of quote items. Parse that into a
 // structured object we can render nicely in the admin UI.
 function parseSubmissionBody(raw){
-  const out = { fields: [], message: '', notes: '', items: [], submittedRaw: '' };
+  const out = { fields: [], message: '', notes: '', items: [], totals: [], submittedRaw: '' };
   if (!raw) return out;
   // Split on the first --- separator to isolate the field header block
   const sections = raw.split(/\n---\n/);
@@ -2269,8 +2263,10 @@ function parseSubmissionBody(raw){
     if (!trimmed) return;
     if (/^\*\*Quote items/i.test(trimmed)) {
       trimmed.split('\n').forEach(line => {
-        const m = line.match(/^-\s+(.+)$/);
-        if (m) out.items.push(m[1].trim());
+        const item = line.match(/^-\s+(.+)$/);
+        if (item) { out.items.push(item[1].trim()); return; }
+        const total = line.match(/^\*\*([^:]+):\*\*\s*(.*)$/);
+        if (total) out.totals.push({ key: total[1].trim(), val: total[2].trim() });
       });
     } else if (/^\*\*Notes:/i.test(trimmed)) {
       out.notes = trimmed.replace(/^\*\*Notes:\*\*\s*/i, '').trim();
@@ -2312,6 +2308,11 @@ function renderParsedSubmission(p){
     html += `<div class="sub-section">Quote items (${p.items.length})</div><ul class="sub-items">`;
     html += p.items.map(it => `<li>${escapeHtml(it)}</li>`).join('');
     html += `</ul>`;
+    if (p.totals && p.totals.length) {
+      html += `<div class="sub-totals">` + p.totals.map(t =>
+        `<div class="sub-total-row"><span class="sub-total-k">${escapeHtml(t.key)}</span><span class="sub-total-v">${escapeHtml(t.val)}</span></div>`
+      ).join('') + `</div>`;
+    }
   }
   return html;
 }
