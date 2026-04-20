@@ -35,6 +35,7 @@ const ALLOWED_ORIGINS = [
   'https://root86coffee.com',
   'https://www.root86coffee.com',
   'https://onlysems.github.io',
+  'https://root86coffee.pages.dev',
   // Add your local dev origin here if you need to test locally, e.g.:
   // 'http://localhost:8080',
 ];
