@@ -273,9 +273,27 @@
   .sub-fields .v a:hover{text-decoration:underline}
   .sub-section{margin:18px 0 8px;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600}
   .sub-message{background:#fff;border:1px solid var(--line);border-left:3px solid var(--red);border-radius:4px;padding:14px 16px;font-size:.9rem;line-height:1.6;white-space:pre-wrap;word-wrap:break-word;color:var(--ink)}
-  .sub-items{list-style:none;padding:0;margin:0;border:1px solid var(--line);border-radius:4px;background:#fafafa}
+  .sub-items{list-style:none;padding:0;margin:0;border:1px solid var(--line);border-radius:4px;background:#fff;overflow:hidden}
   .sub-items li{padding:10px 16px;border-bottom:1px solid var(--line);font-size:.85rem}
   .sub-items li:last-child{border-bottom:none}
+  /* Quote items — structured grid */
+  .qi-table{border:1px solid var(--line);border-radius:4px;overflow:hidden;background:#fff}
+  .qi-head,.qi-row{display:grid;grid-template-columns:1fr 70px 100px 90px;gap:12px;padding:10px 14px;align-items:center;font-size:.82rem}
+  .qi-head{background:#fafafa;border-bottom:1px solid var(--line);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .qi-row{border-bottom:1px solid var(--line)}
+  .qi-row:last-child{border-bottom:none}
+  .qi-row:nth-child(even){background:#fcfcfc}
+  .qi-name{color:var(--ink);font-weight:600;line-height:1.35}
+  .qi-origin{display:block;font-size:.7rem;color:var(--muted);font-weight:400;margin-top:2px;letter-spacing:.02em}
+  .qi-num{font-variant-numeric:tabular-nums;color:var(--ink);text-align:right}
+  .qi-num.muted{color:var(--muted);font-weight:400}
+  .qi-total{font-weight:600}
+  @media(max-width:700px){
+    .qi-head{display:none}
+    .qi-row{grid-template-columns:1fr;gap:4px;padding:12px 14px}
+    .qi-num{text-align:left}
+    .qi-num::before{content:attr(data-k) ': ';color:var(--muted);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600;margin-right:6px}
+  }
   .sub-totals{margin-top:10px;border:1px solid var(--line);border-left:3px solid var(--red);border-radius:4px;background:#fff;padding:10px 14px;display:flex;flex-direction:column;gap:4px}
   .sub-total-row{display:flex;justify-content:space-between;font-size:.82rem}
   .sub-total-k{color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-size:.68rem;font-weight:600;align-self:center}
@@ -2305,9 +2323,8 @@ function renderParsedSubmission(p){
     html += `<div class="sub-section">Notes</div><div class="sub-message">${escapeHtml(p.notes)}</div>`;
   }
   if (p.items.length) {
-    html += `<div class="sub-section">Quote items (${p.items.length})</div><ul class="sub-items">`;
-    html += p.items.map(it => `<li>${escapeHtml(it)}</li>`).join('');
-    html += `</ul>`;
+    html += `<div class="sub-section">Quote items (${p.items.length})</div>`;
+    html += renderQuoteItems(p.items);
     if (p.totals && p.totals.length) {
       html += `<div class="sub-totals">` + p.totals.map(t =>
         `<div class="sub-total-row"><span class="sub-total-k">${escapeHtml(t.key)}</span><span class="sub-total-v">${escapeHtml(t.val)}</span></div>`
@@ -2315,6 +2332,49 @@ function renderParsedSubmission(p){
     }
   }
   return html;
+}
+
+// Turn raw quote-item lines into a structured table.
+// Supported formats (produced by the Worker):
+//   Name (Origin) x 2 bags @ 70 lbs/bag = 140 lbs
+//   Name x 2 bags @ 70 lbs/bag = 140 lbs
+//   Name (Origin) x 2 bags
+//   Name x 2
+function parseQuoteItemLine(raw){
+  const out = { name: raw, origin: '', qty: '', bagSize: '', lineTotal: '' };
+  // Pull off the trailing "= X lbs" total if present
+  let s = raw.replace(/\s*=\s*([\d.]+)\s*lbs\b/i, (_m, n) => { out.lineTotal = n + ' lbs'; return ''; });
+  // Pull off the "@ W lbs/bag" bag size
+  s = s.replace(/\s*@\s*([\d.]+)\s*lbs\/bag\b/i, (_m, n) => { out.bagSize = n + ' lbs'; return ''; });
+  // Pull off " x N bag(s)?" qty
+  s = s.replace(/\s*x\s*(\d+)(?:\s*bags?)?\s*$/i, (_m, n) => { out.qty = n; return ''; });
+  // Whatever's left is "Name" or "Name (Origin)"
+  const m = s.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
+  if (m) { out.name = m[1].trim(); out.origin = m[2].trim(); }
+  else   { out.name = s.trim(); }
+  return out;
+}
+function renderQuoteItems(items){
+  const rows = items.map(raw => {
+    const it = parseQuoteItemLine(raw);
+    return `
+      <div class="qi-row">
+        <div class="qi-name">${escapeHtml(it.name || '—')}${it.origin ? `<span class="qi-origin">${escapeHtml(it.origin)}</span>` : ''}</div>
+        <div class="qi-num" data-k="Bags">${escapeHtml(it.qty || '—')}</div>
+        <div class="qi-num muted" data-k="Bag size">${escapeHtml(it.bagSize || '—')}</div>
+        <div class="qi-num qi-total" data-k="Total">${escapeHtml(it.lineTotal || '—')}</div>
+      </div>`;
+  }).join('');
+  return `
+    <div class="qi-table">
+      <div class="qi-head">
+        <div>Coffee</div>
+        <div style="text-align:right">Bags</div>
+        <div style="text-align:right">Bag size</div>
+        <div style="text-align:right">Line total</div>
+      </div>
+      ${rows}
+    </div>`;
 }
 
 // Auto-load badge on admin load (if token present)
