@@ -5,7 +5,7 @@
 // ── State ──────────────────────────────────────────────────
 const state = {
   quote: [],
-  filters: { origin: '', process: '', certification: '', warehouse: '', search: '' },
+  filters: { origin: '', process: '', certification: '', warehouse: '', special: '', search: '' },
   filteredCoffees: [...COFFEES],
   activeCoffeeId: null,
   panelOpen: false
@@ -15,7 +15,8 @@ const state = {
 const FLAGS = {
   'Brazil':'🇧🇷','Colombia':'🇨🇴','Costa Rica':'🇨🇷','Ethiopia':'🇪🇹',
   'Guatemala':'🇬🇹','Honduras':'🇭🇳','Indonesia':'🇮🇩','Kenya':'🇰🇪',
-  'Mexico':'🇲🇽','Peru':'🇵🇪','Rwanda':'🇷🇼','Tanzania':'🇹🇿',
+  'Mexico':'🇲🇽','Nicaragua':'🇳🇮','Panama':'🇵🇦','Papua New Guinea':'🇵🇬',
+  'Peru':'🇵🇪','Rwanda':'🇷🇼','Tanzania':'🇹🇿',
   'Uganda':'🇺🇬','Blend':'🌍'
 };
 
@@ -162,12 +163,14 @@ function buildFilters() {
 }
 
 function applyFilters() {
-  const { origin, process, certification, warehouse, search } = state.filters;
+  const { origin, process, certification, warehouse, special, search } = state.filters;
   state.filteredCoffees = COFFEES.filter(c => {
     if (origin && c.origin !== origin) return false;
     if (process && c.process !== process) return false;
     if (certification && !c.certifications.includes(certification)) return false;
     if (warehouse && !c.warehouses.includes(warehouse)) return false;
+    if (special === 'favourite' && !c.favourite) return false;
+    if (special === 'onSale' && !c.onSale) return false;
     if (search) {
       const q = search.toLowerCase();
       if (!c.name.toLowerCase().includes(q) &&
@@ -213,11 +216,16 @@ function cardHTML(c) {
   const inQ  = state.quote.some(q => q.id === c.id);
   const certFlags = c.certifications.map(cert =>
     `<span class="cflag ${CERT_CLASS[cert] || ''}">${cert}</span>`).join('');
+  const specialBadges = [
+    c.favourite ? `<span class="cflag cflag-fav">★ R86 Favourite</span>` : '',
+    c.onSale ? `<span class="cflag cflag-sale">On Sale</span>` : ''
+  ].join('');
 
   return `
-    <div class="ccard${!c.available ? ' sold-out' : ''}" data-id="${c.id}">
+    <div class="ccard${!c.available || c.soldOut ? ' sold-out' : ''}" data-id="${c.id}">
       <div class="ccard-flags">
         <span class="cflag cflag-origin">${c.origin}</span>
+        ${specialBadges}
         ${certFlags}
       </div>
       <div class="ccard-name">${flag ? `<span class="ccard-flag">${flag}</span>` : ''}${c.name}</div>
@@ -605,6 +613,7 @@ function bindEvents() {
   $('#filter-process')?.addEventListener('change', e => { state.filters.process = e.target.value; applyFilters(); });
   $('#filter-cert')?.addEventListener('change',    e => { state.filters.certification = e.target.value; applyFilters(); });
   $('#filter-wh')?.addEventListener('change',      e => { state.filters.warehouse = e.target.value; applyFilters(); });
+  $('#filter-special')?.addEventListener('change', e => { state.filters.special = e.target.value; applyFilters(); });
 
   let debounce;
   $('#filter-search')?.addEventListener('input', e => {
@@ -613,7 +622,7 @@ function bindEvents() {
   });
 
   $('#filter-reset')?.addEventListener('click', () => {
-    state.filters = { origin:'', process:'', certification:'', warehouse:'', search:'' };
+    state.filters = { origin:'', process:'', certification:'', warehouse:'', special:'', search:'' };
     $$('.search-select').forEach(s => s.value = '');
     const si = $('#filter-search'); if (si) si.value = '';
     applyFilters();

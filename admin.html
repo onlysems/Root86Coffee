@@ -1,689 +1,744 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Root 86 Coffee — Content Manager</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>" />
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700&display=swap');
-    :root {
-      --espresso:#0C0907;--surface:#1C1410;--surface-2:#26190F;--surface-3:#301F12;
-      --gold:#C8882A;--gold-light:#E8A84A;--gold-dim:#8A5E1C;
-      --cream:#F0E6D3;--cream-dim:#B8A898;--cream-muted:#7A6858;
-      --border:rgba(200,136,42,0.12);--border-hover:rgba(200,136,42,0.35);
-      --red:#E05A4A;--green:#4CAF6E;
-      --radius:10px;--font-serif:'DM Serif Display',serif;--font-sans:'Inter',sans-serif;
-    }
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:var(--font-sans);background:var(--espresso);color:var(--cream);line-height:1.6;-webkit-font-smoothing:antialiased}
-    a{color:var(--gold);text-decoration:none}
-    button{cursor:pointer;font-family:inherit}
-    input,select,textarea{font-family:inherit}
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Root 86 Coffee — Content Manager</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>R</text></svg>" />
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;600&display=swap');
 
-    /* ── Login ── */
-    .login-overlay{position:fixed;inset:0;background:var(--espresso);z-index:999;display:flex;align-items:center;justify-content:center;padding:2rem}
-    .login-box{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:3rem;width:100%;max-width:400px;text-align:center}
-    .login-logo{font-family:var(--font-serif);font-size:2rem;margin-bottom:0.25rem}
-    .login-sub{font-size:0.7rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:2rem}
-    .login-box h2{font-family:var(--font-serif);font-size:1.5rem;margin-bottom:0.5rem}
-    .login-box p{font-size:0.85rem;color:var(--cream-muted);margin-bottom:1.5rem}
-    .login-input{width:100%;background:var(--surface-2);border:1px solid var(--border);color:var(--cream);padding:0.75rem 1rem;border-radius:var(--radius);font-size:0.9rem;outline:none;margin-bottom:1rem}
-    .login-input:focus{border-color:var(--gold-dim)}
-    .login-btn{width:100%;padding:0.8rem;background:var(--gold);color:var(--espresso);font-weight:700;font-size:0.875rem;letter-spacing:0.08em;text-transform:uppercase;border:none;border-radius:var(--radius);cursor:pointer;transition:background 0.2s}
-    .login-btn:hover{background:var(--gold-light)}
-    .login-error{color:var(--red);font-size:0.8rem;margin-top:0.5rem;display:none}
-    .login-hint{font-size:0.72rem;color:var(--cream-muted);margin-top:1rem;opacity:0.6}
+  :root {
+    --bg:#F7F7F8; --panel:#FFFFFF; --ink:#1A0005; --muted:#6B6066;
+    --line:#E6E4E7; --line-strong:#C9C5CC; --hover:#F3F1F4;
+    --red:#C8102E; --red-deep:#3D0008; --gold:#C8882A;
+    --green:#188A4B; --amber:#B7791F; --blue:#1F6FB7;
+    --row-alt:#FAFAFB; --selected:#FFF1F3;
+    --font-sans:'Inter',system-ui,sans-serif;
+    --font-serif:'Cormorant Garamond',Georgia,serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:var(--font-sans); background:var(--bg); color:var(--ink);
+    font-size:14px; -webkit-font-smoothing:antialiased;
+  }
+  button{cursor:pointer;font-family:inherit;border:0;background:transparent;color:inherit}
+  input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+  a{color:var(--red);text-decoration:none}
 
-    /* ── Layout ── */
-    .admin-wrap{display:none;min-height:100vh}
-    .admin-wrap.visible{display:block}
-    .admin-header{background:var(--surface);border-bottom:1px solid var(--border);padding:1rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-    .admin-logo{font-family:var(--font-serif);font-size:1.3rem}
-    .admin-logo span{font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);display:block}
-    .admin-header-right{display:flex;gap:1rem;align-items:center}
-    .admin-badge{font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--cream-muted);border:1px solid var(--border);padding:0.3rem 0.75rem;border-radius:100px}
-    .admin-logout{font-size:0.75rem;color:var(--red);cursor:pointer;border:1px solid rgba(224,90,74,0.3);padding:0.3rem 0.75rem;border-radius:100px;background:none;transition:all 0.2s}
-    .admin-logout:hover{background:rgba(224,90,74,0.1)}
+  /* ── Login ── */
+  .login-overlay{
+    position:fixed; inset:0; background:var(--ink); z-index:1000;
+    display:flex; align-items:center; justify-content:center; padding:2rem;
+  }
+  .login-box{
+    background:var(--panel); padding:48px; width:100%; max-width:420px;
+    box-shadow:0 30px 80px rgba(0,0,0,.4);
+  }
+  .login-brand{
+    font-family:var(--font-serif); font-size:1.4rem; color:var(--red); letter-spacing:.05em;
+    margin-bottom:6px;
+  }
+  .login-sub{
+    font-size:.6rem; letter-spacing:.3em; text-transform:uppercase;
+    color:var(--muted); margin-bottom:32px;
+  }
+  .login-box h2{font-size:1.2rem;font-weight:600;margin-bottom:6px}
+  .login-box p{color:var(--muted);margin-bottom:24px;font-size:.85rem}
+  .login-box input{
+    width:100%; padding:12px 14px; border:1px solid var(--line-strong);
+    background:#fff; margin-bottom:14px; outline:none;
+  }
+  .login-box input:focus{border-color:var(--red)}
+  .login-box button{
+    width:100%; padding:12px 14px; background:var(--ink); color:#fff;
+    font-weight:500; letter-spacing:.15em; text-transform:uppercase; font-size:.7rem;
+  }
+  .login-error{color:var(--red);font-size:.78rem;margin-top:8px;display:none}
 
-    .admin-main{padding:2rem;max-width:1400px;margin:0 auto}
-    .admin-section{background:var(--surface);border:1px solid var(--border);border-radius:16px;margin-bottom:2rem;overflow:hidden}
-    .admin-section-header{padding:1.5rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-    .admin-section-title{font-size:0.75rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold)}
+  /* ── App layout ── */
+  .app{display:none;height:100vh;flex-direction:column;overflow:hidden}
+  .app.show{display:flex}
 
-    /* ── Buttons ── */
-    .btn{padding:0.55rem 1.25rem;border-radius:var(--radius);font-size:0.78rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;border:none;transition:all 0.2s;cursor:pointer}
-    .btn-gold{background:var(--gold);color:var(--espresso)}
-    .btn-gold:hover{background:var(--gold-light)}
-    .btn-outline{background:none;border:1px solid var(--border);color:var(--cream-dim)}
-    .btn-outline:hover{border-color:var(--gold-dim);color:var(--gold)}
-    .btn-danger{background:none;border:1px solid rgba(224,90,74,0.3);color:var(--red)}
-    .btn-danger:hover{background:rgba(224,90,74,0.1)}
-    .btn-sm{padding:0.35rem 0.75rem;font-size:0.7rem}
-    .btn-green{background:rgba(76,175,110,0.15);border:1px solid rgba(76,175,110,0.3);color:var(--green)}
-    .btn-green:hover{background:rgba(76,175,110,0.25)}
+  .topbar{
+    height:54px; background:var(--panel); border-bottom:1px solid var(--line);
+    display:flex; align-items:center; padding:0 20px; gap:18px; flex-shrink:0;
+  }
+  .topbar-brand{
+    font-family:var(--font-serif); font-size:1.1rem; color:var(--red);
+    font-weight:600; letter-spacing:.04em;
+  }
+  .topbar-sep{width:1px;height:24px;background:var(--line)}
+  .topbar-crumbs{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--muted)}
+  .topbar-crumbs strong{color:var(--ink);font-weight:500}
+  .topbar-spacer{flex:1}
+  .topbar-btn{
+    padding:7px 14px; font-size:.78rem; border:1px solid var(--line-strong);
+    background:#fff; color:var(--ink); display:inline-flex; align-items:center; gap:6px;
+    transition:background .15s;
+  }
+  .topbar-btn:hover{background:var(--hover)}
+  .topbar-btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .topbar-btn.primary:hover{background:#000}
+  .topbar-btn.danger{color:var(--red);border-color:rgba(200,16,46,.4)}
+  .topbar-btn.danger:hover{background:rgba(200,16,46,.06)}
 
-    /* ── Coffee Table ── */
-    .coffee-table{width:100%;border-collapse:collapse}
-    .coffee-table th{padding:0.75rem 1.5rem;text-align:left;font-size:0.65rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--border)}
-    .coffee-table td{padding:0.875rem 1.5rem;border-bottom:1px solid var(--border);font-size:0.85rem;vertical-align:middle}
-    .coffee-table tr:last-child td{border-bottom:none}
-    .coffee-table tr:hover td{background:var(--surface-2)}
-    .table-name{font-weight:500;color:var(--cream)}
-    .table-origin{color:var(--cream-dim)}
-    .table-badge{display:inline-flex;padding:0.15rem 0.5rem;border-radius:100px;font-size:0.65rem;font-weight:600;text-transform:uppercase;margin:0.1rem}
-    .table-badge-process{background:rgba(200,136,42,0.1);color:var(--gold);border:1px solid rgba(200,136,42,0.2)}
-    .table-badge-cert{background:rgba(240,230,211,0.07);color:var(--cream-dim);border:1px solid rgba(240,230,211,0.12)}
-    .table-avail{display:inline-flex;align-items:center;gap:0.35rem;font-size:0.75rem}
-    .table-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-    .dot-green{background:var(--green);box-shadow:0 0 4px rgba(76,175,110,0.5)}
-    .dot-red{background:var(--red);box-shadow:0 0 4px rgba(224,90,74,0.4)}
-    .table-actions{display:flex;gap:0.5rem;flex-wrap:wrap}
+  /* ── Subbar ── */
+  .subbar{
+    background:var(--panel); border-bottom:1px solid var(--line);
+    padding:14px 20px; display:flex; align-items:center; gap:16px; flex-shrink:0;
+  }
+  .subbar h1{font-size:1.05rem;font-weight:600;letter-spacing:-.01em}
+  .subbar-stats{font-size:.78rem;color:var(--muted)}
+  .subbar-spacer{flex:1}
+  .subbar input.search{
+    width:280px; padding:8px 12px; border:1px solid var(--line-strong);
+    background:#fff; outline:none; font-size:.84rem;
+  }
+  .subbar input.search:focus{border-color:var(--red)}
+  .subbar select{
+    padding:8px 28px 8px 12px; border:1px solid var(--line-strong); background:#fff;
+    font-size:.82rem; appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236B6066' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 10px center;
+  }
 
-    /* ── Add/Edit Form ── */
-    .form-panel{padding:2rem;background:var(--surface-2)}
-    .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:1rem}
-    .form-group{display:flex;flex-direction:column;gap:0.4rem}
-    .form-label{font-size:0.65rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold)}
-    .form-label .req{color:var(--red)}
-    .form-input,.form-select,.form-textarea{background:var(--surface);border:1px solid var(--border);color:var(--cream);padding:0.6rem 0.875rem;border-radius:var(--radius);font-size:0.875rem;outline:none;transition:border-color 0.2s;width:100%}
-    .form-select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C8882A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.9rem center;padding-right:2.5rem}
-    .form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--gold-dim)}
-    .form-input::placeholder,.form-textarea::placeholder{color:var(--cream-muted);opacity:0.5}
-    .form-textarea{resize:vertical;min-height:80px}
-    .form-select option{background:var(--surface)}
-    .form-full{grid-column:1/-1}
-    .form-actions{display:flex;gap:0.75rem;flex-wrap:wrap;margin-top:1rem}
+  /* ── Table area ── */
+  .table-wrap{flex:1;overflow:auto;background:var(--panel)}
+  table.cms{
+    width:100%; border-collapse:collapse; font-size:.82rem;
+    background:var(--panel);
+  }
+  table.cms thead th{
+    position:sticky; top:0; z-index:10;
+    background:#F2F0F4; border-bottom:1px solid var(--line-strong); border-right:1px solid var(--line);
+    text-align:left; padding:10px 12px; font-weight:600;
+    font-size:.7rem; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--muted); white-space:nowrap; user-select:none; cursor:pointer;
+  }
+  table.cms thead th:hover{background:#EAE7EE}
+  table.cms thead th.sorted::after{content:" \2193";color:var(--red)}
+  table.cms thead th.sorted-asc::after{content:" \2191";color:var(--red)}
+  table.cms thead th .col-icon{margin-right:6px;opacity:.5}
 
-    /* ── Checkboxes for certifications ── */
-    .cert-checks{display:flex;flex-wrap:wrap;gap:0.5rem}
-    .cert-check-label{display:flex;align-items:center;gap:0.4rem;font-size:0.8rem;color:var(--cream-dim);cursor:pointer;padding:0.3rem 0.75rem;border:1px solid var(--border);border-radius:100px;transition:all 0.2s}
-    .cert-check-label:has(input:checked){border-color:var(--gold-dim);color:var(--gold);background:rgba(200,136,42,0.1)}
-    .cert-check-label input{accent-color:var(--gold)}
-    .wh-checks{display:flex;flex-wrap:wrap;gap:0.5rem}
-    .wh-check-label{display:flex;align-items:center;gap:0.4rem;font-size:0.8rem;color:var(--cream-dim);cursor:pointer;padding:0.3rem 0.75rem;border:1px solid var(--border);border-radius:100px;transition:all 0.2s}
-    .wh-check-label:has(input:checked){border-color:var(--gold-dim);color:var(--gold);background:rgba(200,136,42,0.1)}
+  table.cms tbody td{
+    border-bottom:1px solid var(--line); border-right:1px solid var(--line);
+    padding:8px 12px; vertical-align:middle; max-width:300px;
+  }
+  table.cms tbody tr{transition:background .1s}
+  table.cms tbody tr:nth-child(even){background:var(--row-alt)}
+  table.cms tbody tr:hover{background:var(--hover)}
+  table.cms tbody tr.editing{background:var(--selected) !important}
 
-    /* ── Export ── */
-    .export-panel{padding:2rem}
-    .export-textarea{width:100%;background:var(--espresso);border:1px solid var(--border);color:var(--cream-muted);padding:1rem;border-radius:var(--radius);font-family:monospace;font-size:0.75rem;line-height:1.5;min-height:200px;resize:vertical;outline:none}
-    .export-instructions{font-size:0.85rem;color:var(--cream-dim);line-height:1.7;margin-bottom:1rem}
-    .export-steps{margin-top:1rem;padding:1rem 1.5rem;background:var(--surface-2);border-radius:var(--radius);font-size:0.82rem;color:var(--cream-muted);line-height:1.8}
-    .export-steps li{margin-left:1rem;list-style:decimal}
+  td.col-check{width:34px;text-align:center}
+  td.col-actions{width:90px;white-space:nowrap}
+  td.col-num{width:50px;color:var(--muted);font-variant-numeric:tabular-nums}
 
-    /* ── Toast ── */
-    .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:0.875rem 1.25rem;font-size:0.85rem;color:var(--cream);z-index:2000;box-shadow:0 8px 30px rgba(0,0,0,0.4);transform:translateX(120%);opacity:0;transition:all 0.3s cubic-bezier(0.34,1.56,0.64,1);display:flex;align-items:center;gap:0.5rem}
-    .toast.show{transform:translateX(0);opacity:1}
-    .toast.success{border-color:rgba(76,175,110,0.4)}
-    .toast.error{border-color:rgba(224,90,74,0.4)}
+  .row-btn{
+    padding:4px 8px; font-size:.7rem; border:1px solid var(--line-strong);
+    background:#fff; margin-right:4px;
+  }
+  .row-btn:hover{background:var(--hover)}
+  .row-btn.danger{color:var(--red);border-color:rgba(200,16,46,.3)}
+  .row-btn.danger:hover{background:rgba(200,16,46,.06)}
 
-    /* ── Availability toggle ── */
-    .toggle-switch{position:relative;display:inline-flex;align-items:center;gap:0.5rem;cursor:pointer}
-    .toggle-switch input{opacity:0;width:0;height:0;position:absolute}
-    .toggle-track{width:36px;height:20px;background:var(--surface-3);border:1px solid var(--border);border-radius:100px;position:relative;transition:background 0.2s}
-    .toggle-track::after{content:'';position:absolute;width:14px;height:14px;background:var(--cream-muted);border-radius:50%;top:2px;left:2px;transition:all 0.2s}
-    .toggle-switch input:checked + .toggle-track{background:rgba(76,175,110,0.2);border-color:rgba(76,175,110,0.5)}
-    .toggle-switch input:checked + .toggle-track::after{transform:translateX(16px);background:var(--green)}
-    .toggle-label{font-size:0.78rem;color:var(--cream-muted)}
+  /* tag pills */
+  .pill{
+    display:inline-block; padding:2px 8px; margin:1px 3px 1px 0;
+    font-size:.68rem; font-weight:500; background:#EAE7EE; color:#3A2A35;
+    border-radius:2px; white-space:nowrap;
+  }
+  .pill.cert-organic{background:#E2F2E5;color:#1f6f38}
+  .pill.cert-ft{background:#E1ECF7;color:#1f5d96}
+  .pill.cert-rfa{background:#EAE0F4;color:#5d3a8a}
+  .pill.cert-womens{background:#F7E0EC;color:#9c2861}
+  .pill.cert-decaf{background:#EFE5DC;color:#5b3e1e}
+  .pill.wh{background:#FFF1E3;color:#8a5320}
 
-    @media(max-width:768px){.admin-main{padding:1rem}.form-grid{grid-template-columns:1fr}.coffee-table{display:block;overflow-x:auto}}
-  </style>
+  /* boolean */
+  .toggle{
+    width:34px;height:20px;background:#D3CFD7;position:relative;cursor:pointer;
+    display:inline-block;transition:background .15s;
+  }
+  .toggle::after{
+    content:""; position:absolute; left:2px; top:2px; width:16px; height:16px;
+    background:#fff; transition:left .15s; box-shadow:0 1px 2px rgba(0,0,0,.2);
+  }
+  .toggle.on{background:var(--green)}
+  .toggle.on::after{left:16px}
+  .toggle.fav.on{background:var(--red)}
+  .toggle.sale.on{background:var(--amber)}
+  .toggle.sold.on{background:#777}
+
+  /* Inline-edit cells */
+  td[contenteditable=true]{outline:2px solid var(--red);outline-offset:-2px;background:#fff !important}
+
+  /* ── Modal ── */
+  .modal-bg{
+    position:fixed; inset:0; background:rgba(20,12,18,.55); z-index:200;
+    display:none; align-items:center; justify-content:center; padding:24px;
+  }
+  .modal-bg.open{display:flex}
+  .modal{
+    background:#fff; width:100%; max-width:780px; max-height:90vh;
+    overflow-y:auto; box-shadow:0 30px 80px rgba(0,0,0,.4);
+  }
+  .modal-head{
+    padding:20px 28px; border-bottom:1px solid var(--line);
+    display:flex; align-items:center; gap:14px;
+  }
+  .modal-head h3{font-size:1.05rem;font-weight:600}
+  .modal-head .close{margin-left:auto;font-size:1.2rem;color:var(--muted);padding:4px 10px}
+  .modal-body{padding:24px 28px;display:grid;grid-template-columns:1fr 1fr;gap:16px 20px}
+  .modal-body .full{grid-column:1/-1}
+  .field label{
+    display:block; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--muted); margin-bottom:5px; font-weight:600;
+  }
+  .field input,.field select,.field textarea{
+    width:100%; padding:9px 11px; border:1px solid var(--line-strong); background:#fff;
+    outline:none; font-size:.85rem;
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--red)}
+  .field textarea{min-height:88px;resize:vertical;font-family:inherit;line-height:1.5}
+  .field-bools{display:flex;gap:18px;align-items:center}
+  .field-bools label{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:.82rem;color:var(--ink);text-transform:none;letter-spacing:0;font-weight:400}
+  .modal-foot{
+    padding:16px 28px; border-top:1px solid var(--line);
+    display:flex; gap:10px; justify-content:flex-end; background:#FAFAFB;
+  }
+  .modal-foot button{
+    padding:9px 20px; font-size:.78rem; border:1px solid var(--line-strong); background:#fff;
+  }
+  .modal-foot button.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .modal-foot button.primary:hover{background:#000}
+
+  /* Export modal */
+  .export-pre{
+    width:100%; height:50vh; padding:14px; font-family:'SF Mono','Consolas',monospace;
+    font-size:.78rem; border:1px solid var(--line-strong); background:#1A0005; color:#F0E6D3;
+    overflow:auto; white-space:pre; resize:none;
+  }
+
+  /* Toast */
+  .toast{
+    position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(40px);
+    background:var(--ink); color:#fff; padding:12px 22px; font-size:.82rem;
+    box-shadow:0 10px 30px rgba(0,0,0,.3); z-index:300; opacity:0;
+    transition:transform .25s,opacity .25s;
+  }
+  .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+  .toast.error{background:var(--red)}
+
+  /* Misc */
+  .empty{padding:60px;text-align:center;color:var(--muted)}
+  .icon{display:inline-block;width:14px;height:14px;vertical-align:-2px}
+
+  @media(max-width:780px){
+    .modal-body{grid-template-columns:1fr}
+    .subbar{flex-wrap:wrap}
+    .subbar input.search{width:100%}
+  }
+</style>
 </head>
 <body>
 
-<!-- ── Login Gate ── -->
-<div class="login-overlay" id="login-overlay">
+<!-- ── Login ── -->
+<div class="login-overlay" id="login">
   <div class="login-box">
-    <div class="login-logo">ROOT 86</div>
+    <div class="login-brand">Root 86 Coffee</div>
     <div class="login-sub">Content Manager</div>
-    <h2>Admin Access</h2>
-    <p>Enter the admin password to manage your coffee catalogue</p>
-    <input class="login-input" type="password" id="login-pw" placeholder="Password" autocomplete="current-password" />
-    <button class="login-btn" id="login-btn">Enter</button>
-    <div class="login-error" id="login-error">Incorrect password. Try again.</div>
-    <p class="login-hint">Default password: root86admin<br>Change it in admin.html line ~245</p>
+    <h2>Sign in</h2>
+    <p>Enter the admin password to manage coffees.</p>
+    <input type="password" id="login-pw" placeholder="Password" autofocus />
+    <button id="login-btn">Sign In</button>
+    <div class="login-error" id="login-err">Incorrect password.</div>
   </div>
 </div>
 
-<!-- ── Admin Panel ── -->
-<div class="admin-wrap" id="admin-wrap">
-
-  <!-- Header -->
-  <div class="admin-header">
-    <div class="admin-logo">ROOT 86 <span>Content Manager</span></div>
-    <div class="admin-header-right">
-      <span class="admin-badge">☕ Coffee Catalogue</span>
-      <button class="admin-logout" id="logout-btn">Log Out</button>
+<!-- ── App ── -->
+<div class="app" id="app">
+  <div class="topbar">
+    <div class="topbar-brand">Root 86 Coffee</div>
+    <div class="topbar-sep"></div>
+    <div class="topbar-crumbs">
+      Content &nbsp;/&nbsp; <strong>Coffees</strong>
     </div>
+    <div class="topbar-spacer"></div>
+    <button class="topbar-btn" id="btn-export">Export Updated File</button>
+    <button class="topbar-btn primary" id="btn-add">+ Add Item</button>
+    <button class="topbar-btn danger" id="btn-logout">Sign Out</button>
   </div>
 
-  <div class="admin-main">
+  <div class="subbar">
+    <h1>Coffees</h1>
+    <span class="subbar-stats" id="stats">0 items</span>
+    <div class="subbar-spacer"></div>
+    <input type="text" class="search" id="filter-search" placeholder="Search by name, origin, region..." />
+    <select id="filter-origin"><option value="">All Origins</option></select>
+    <select id="filter-special">
+      <option value="">All Items</option>
+      <option value="favourite">★ Favourites</option>
+      <option value="onSale">On Sale</option>
+      <option value="soldOut">Sold Out</option>
+    </select>
+  </div>
 
-    <!-- ── Add New Coffee ── -->
-    <div class="admin-section">
-      <div class="admin-section-header">
-        <span class="admin-section-title">➕ Add New Coffee</span>
-        <button class="btn btn-gold" id="toggle-add-form">Open Form</button>
+  <div class="table-wrap">
+    <table class="cms" id="cms-table">
+      <thead>
+        <tr>
+          <th data-sort="id" class="col-num">#</th>
+          <th data-sort="name">Product Name</th>
+          <th data-sort="origin">Origin</th>
+          <th>Certifications</th>
+          <th data-sort="process">Process</th>
+          <th data-sort="favourite" style="text-align:center">★ Fav</th>
+          <th data-sort="onSale" style="text-align:center">Sale</th>
+          <th data-sort="soldOut" style="text-align:center">Sold Out</th>
+          <th>Warehouses</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="cms-body"></tbody>
+    </table>
+    <div class="empty" id="empty" style="display:none">No coffees match your filters.</div>
+  </div>
+</div>
+
+<!-- ── Edit modal ── -->
+<div class="modal-bg" id="edit-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="modal-title">Edit Coffee</h3>
+      <button class="close" id="modal-close">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="field"><label>Product Name</label><input id="m-name" type="text" /></div>
+      <div class="field"><label>Origin</label><input id="m-origin" type="text" list="origins-dl" /></div>
+      <div class="field"><label>Region</label><input id="m-region" type="text" /></div>
+      <div class="field"><label>Process</label><input id="m-process" type="text" list="processes-dl" /></div>
+      <div class="field"><label>Grade</label><input id="m-grade" type="text" /></div>
+      <div class="field"><label>Variety</label><input id="m-variety" type="text" /></div>
+      <div class="field"><label>Altitude</label><input id="m-altitude" type="text" placeholder="e.g. 1,500-1,800m" /></div>
+      <div class="field"><label>Bag Weight (lbs)</label><input id="m-bag" type="number" min="1" /></div>
+      <div class="field full"><label>Certifications (comma-separated)</label>
+        <input id="m-certs" type="text" placeholder="Organic, Fair Trade, Rainforest Alliance, Women's Lot, Decaf" />
       </div>
-      <div id="add-form-wrap" style="display:none">
-        <div class="form-panel">
-          <div class="form-grid">
-            <div class="form-group">
-              <label class="form-label">Coffee Name <span class="req">*</span></label>
-              <input class="form-input" id="add-name" placeholder="e.g. Ethiopia Yirgacheffe Koke G2 Natural" />
-            </div>
-            <div class="form-group">
-              <label class="form-label">Origin <span class="req">*</span></label>
-              <select class="form-select" id="add-origin">
-                <option value="">Select origin…</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Region</label>
-              <input class="form-input" id="add-region" placeholder="e.g. Yirgacheffe, Gedeo" />
-            </div>
-            <div class="form-group">
-              <label class="form-label">Process <span class="req">*</span></label>
-              <select class="form-select" id="add-process">
-                <option value="">Select process…</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Grade</label>
-              <input class="form-input" id="add-grade" placeholder="e.g. Grade 2, SHB, AA" />
-            </div>
-            <div class="form-group">
-              <label class="form-label">Variety</label>
-              <input class="form-input" id="add-variety" placeholder="e.g. Caturra, Bourbon" />
-            </div>
-            <div class="form-group">
-              <label class="form-label">Altitude</label>
-              <input class="form-input" id="add-altitude" placeholder="e.g. 1,800–2,200m" />
-            </div>
-            <div class="form-group">
-              <label class="form-label">Bag Weight (lbs) <span class="req">*</span></label>
-              <input class="form-input" type="number" id="add-weight" placeholder="e.g. 132" />
-            </div>
-            <div class="form-group">
-              <label class="form-label">Tasting Notes <span class="req">*</span></label>
-              <input class="form-input" id="add-tasting" placeholder="e.g. Blueberry, Dark Chocolate, Rose" />
-            </div>
-            <div class="form-group form-full">
-              <label class="form-label">Description</label>
-              <textarea class="form-textarea" id="add-description" placeholder="A short paragraph describing the coffee's origin story, processing, and what makes it special…"></textarea>
-            </div>
-            <div class="form-group form-full">
-              <label class="form-label">Certifications</label>
-              <div class="cert-checks" id="add-certs">
-                <label class="cert-check-label"><input type="checkbox" value="Organic"> Organic</label>
-                <label class="cert-check-label"><input type="checkbox" value="Fair Trade"> Fair Trade</label>
-                <label class="cert-check-label"><input type="checkbox" value="Rainforest Alliance"> Rainforest Alliance</label>
-                <label class="cert-check-label"><input type="checkbox" value="Women's Lot"> Women's Lot</label>
-                <label class="cert-check-label"><input type="checkbox" value="Decaf"> Decaf</label>
-              </div>
-            </div>
-            <div class="form-group form-full">
-              <label class="form-label">Warehouse Availability</label>
-              <div class="wh-checks" id="add-warehouses">
-                <label class="wh-check-label"><input type="checkbox" value="Vancouver, BC"> 📦 Vancouver, BC</label>
-                <label class="wh-check-label"><input type="checkbox" value="Lévis, QC"> 📦 Lévis, QC</label>
-                <label class="wh-check-label"><input type="checkbox" value="Parksville, BC"> 📦 Parksville, BC</label>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Available for Order</label>
-              <label class="toggle-switch">
-                <input type="checkbox" id="add-available" checked />
-                <div class="toggle-track"></div>
-                <span class="toggle-label" id="add-available-label">Yes — In Stock</span>
-              </label>
-            </div>
-          </div>
-          <div class="form-actions">
-            <button class="btn btn-gold" id="save-new-btn">Add Coffee to Catalogue</button>
-            <button class="btn btn-outline" id="cancel-add-btn">Cancel</button>
-          </div>
+      <div class="field full"><label>Warehouses (comma-separated)</label>
+        <input id="m-whs" type="text" placeholder="Vancouver, BC, Lévis, QC, Parksville, BC" />
+      </div>
+      <div class="field full"><label>Tasting Notes</label>
+        <input id="m-notes" type="text" placeholder="Caramel, Apple, Chocolate" />
+      </div>
+      <div class="field full"><label>Description</label>
+        <textarea id="m-desc"></textarea>
+      </div>
+      <div class="field full">
+        <label>Flags</label>
+        <div class="field-bools">
+          <label><input type="checkbox" id="m-available" checked /> Available</label>
+          <label><input type="checkbox" id="m-fav" /> ★ R86 Favourite</label>
+          <label><input type="checkbox" id="m-sale" /> On Sale</label>
+          <label><input type="checkbox" id="m-sold" /> Sold Out</label>
         </div>
       </div>
     </div>
-
-    <!-- ── Coffee List ── -->
-    <div class="admin-section">
-      <div class="admin-section-header">
-        <span class="admin-section-title">☕ Coffee Catalogue (<span id="table-count">0</span>)</span>
-        <div style="display:flex;gap:0.5rem">
-          <input style="background:var(--surface-2);border:1px solid var(--border);color:var(--cream);padding:0.45rem 0.875rem;border-radius:var(--radius);font-size:0.8rem;outline:none;width:200px" type="text" id="table-search" placeholder="Search coffees…" />
-        </div>
-      </div>
-      <div style="overflow-x:auto">
-        <table class="coffee-table">
-          <thead>
-            <tr>
-              <th>Coffee</th>
-              <th>Origin</th>
-              <th>Process</th>
-              <th>Certifications</th>
-              <th>Weight</th>
-              <th>Warehouses</th>
-              <th>Available</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="coffee-table-body"></tbody>
-        </table>
-      </div>
+    <div class="modal-foot">
+      <button id="modal-cancel">Cancel</button>
+      <button class="primary" id="modal-save">Save</button>
     </div>
+  </div>
+</div>
 
-    <!-- ── Edit form (inline) ── -->
-    <div class="admin-section" id="edit-section" style="display:none">
-      <div class="admin-section-header">
-        <span class="admin-section-title">✏️ Editing: <span id="edit-section-name"></span></span>
-        <button class="btn btn-outline btn-sm" id="cancel-edit-btn">Cancel</button>
-      </div>
-      <div class="form-panel">
-        <div class="form-grid">
-          <div class="form-group">
-            <label class="form-label">Coffee Name <span class="req">*</span></label>
-            <input class="form-input" id="edit-name" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Origin</label>
-            <select class="form-select" id="edit-origin"></select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Region</label>
-            <input class="form-input" id="edit-region" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Process</label>
-            <select class="form-select" id="edit-process"></select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Grade</label>
-            <input class="form-input" id="edit-grade" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Variety</label>
-            <input class="form-input" id="edit-variety" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Altitude</label>
-            <input class="form-input" id="edit-altitude" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Bag Weight (lbs)</label>
-            <input class="form-input" type="number" id="edit-weight" />
-          </div>
-          <div class="form-group">
-            <label class="form-label">Tasting Notes</label>
-            <input class="form-input" id="edit-tasting" />
-          </div>
-          <div class="form-group form-full">
-            <label class="form-label">Description</label>
-            <textarea class="form-textarea" id="edit-description"></textarea>
-          </div>
-          <div class="form-group form-full">
-            <label class="form-label">Certifications</label>
-            <div class="cert-checks" id="edit-certs">
-              <label class="cert-check-label"><input type="checkbox" value="Organic"> Organic</label>
-              <label class="cert-check-label"><input type="checkbox" value="Fair Trade"> Fair Trade</label>
-              <label class="cert-check-label"><input type="checkbox" value="Rainforest Alliance"> Rainforest Alliance</label>
-              <label class="cert-check-label"><input type="checkbox" value="Women's Lot"> Women's Lot</label>
-              <label class="cert-check-label"><input type="checkbox" value="Decaf"> Decaf</label>
-            </div>
-          </div>
-          <div class="form-group form-full">
-            <label class="form-label">Warehouse Availability</label>
-            <div class="wh-checks" id="edit-warehouses">
-              <label class="wh-check-label"><input type="checkbox" value="Vancouver, BC"> 📦 Vancouver, BC</label>
-              <label class="wh-check-label"><input type="checkbox" value="Lévis, QC"> 📦 Lévis, QC</label>
-              <label class="wh-check-label"><input type="checkbox" value="Parksville, BC"> 📦 Parksville, BC</label>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Available for Order</label>
-            <label class="toggle-switch">
-              <input type="checkbox" id="edit-available" />
-              <div class="toggle-track"></div>
-              <span class="toggle-label" id="edit-available-label">Yes — In Stock</span>
-            </label>
-          </div>
-        </div>
-        <div class="form-actions">
-          <button class="btn btn-gold" id="save-edit-btn">Save Changes</button>
-          <button class="btn btn-danger" id="delete-coffee-btn">🗑 Delete Coffee</button>
-          <button class="btn btn-outline" id="cancel-edit-btn-2">Cancel</button>
-        </div>
-      </div>
+<!-- ── Export modal ── -->
+<div class="modal-bg" id="export-modal">
+  <div class="modal" style="max-width:880px">
+    <div class="modal-head">
+      <h3>Export Updated coffees.js</h3>
+      <button class="close" id="export-close">&times;</button>
     </div>
-
-    <!-- ── Export ── -->
-    <div class="admin-section">
-      <div class="admin-section-header">
-        <span class="admin-section-title">📤 Export & Save Changes</span>
-        <div style="display:flex;gap:0.5rem">
-          <button class="btn btn-green btn-sm" id="copy-btn">Copy to Clipboard</button>
-          <button class="btn btn-gold btn-sm" id="export-btn">Generate Export</button>
-        </div>
-      </div>
-      <div class="export-panel">
-        <p class="export-instructions">
-          After making changes, click <strong style="color:var(--gold)">Generate Export</strong> to get the updated <code style="background:var(--surface-2);padding:0.1rem 0.4rem;border-radius:4px;font-size:0.85em">coffees.js</code> file content, then follow the steps below to publish your changes to GitHub.
-        </p>
-        <textarea class="export-textarea" id="export-output" readonly placeholder="Click 'Generate Export' to see the updated coffees.js content here…"></textarea>
-        <div class="export-steps">
-          <strong style="color:var(--cream);display:block;margin-bottom:0.5rem">How to publish your changes:</strong>
-          <ol>
-            <li>Click <strong>Generate Export</strong> then <strong>Copy to Clipboard</strong></li>
-            <li>Go to your GitHub repository page</li>
-            <li>Open the file <code>js/coffees.js</code></li>
-            <li>Click the pencil ✏️ icon to edit it</li>
-            <li>Select all the existing content (Ctrl+A) and paste your copied content</li>
-            <li>Scroll down and click <strong>Commit changes</strong></li>
-            <li>Your website will update within 1–2 minutes!</li>
-          </ol>
-        </div>
-      </div>
+    <div class="modal-body" style="display:block">
+      <p style="color:var(--muted);margin-bottom:12px;font-size:.82rem">
+        Replace the contents of <code>js/coffees.js</code> with the text below, then commit and push to publish.
+      </p>
+      <textarea class="export-pre" id="export-text" readonly></textarea>
     </div>
+    <div class="modal-foot">
+      <button id="export-copy" class="primary">Copy to Clipboard</button>
+      <button id="export-download">Download coffees.js</button>
+    </div>
+  </div>
+</div>
 
-  </div><!-- /admin-main -->
-</div><!-- /admin-wrap -->
+<datalist id="origins-dl"></datalist>
+<datalist id="processes-dl"></datalist>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script src="js/coffees.js"></script>
 <script>
-/* ── Password ── (change 'root86admin' to your preferred password) ── */
-const ADMIN_PASSWORD = 'root86admin';
+/* ============================================================
+   ROOT 86 COFFEE - Admin CMS
+   ============================================================ */
+const ADMIN_PW = 'root86admin';
+const STORAGE_KEY = 'r86_admin_data_v2';
 
-/* ── State ── */
-let adminCoffees = JSON.parse(JSON.stringify(COFFEES)); // deep copy
-let editingId = null;
+// Load data: prefer localStorage edits, otherwise the bundled COFFEES
+let DATA = (() => {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) return JSON.parse(saved);
+  } catch(e){}
+  return JSON.parse(JSON.stringify(COFFEES));
+})();
 
-/* ── Login ── */
-document.getElementById('login-btn').addEventListener('click', tryLogin);
-document.getElementById('login-pw').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+let SORT = { key:'id', dir:'asc' };
+let FILTER = { search:'', origin:'', special:'' };
+let EDITING_ID = null;
 
-function tryLogin() {
-  if (document.getElementById('login-pw').value === ADMIN_PASSWORD) {
-    document.getElementById('login-overlay').style.display = 'none';
-    document.getElementById('admin-wrap').classList.add('visible');
-    initAdmin();
+const $ = s => document.querySelector(s);
+
+// ── Auth ─────────────────────────────────
+function doLogin(){
+  const pw = $('#login-pw').value;
+  if (pw === ADMIN_PW) {
+    sessionStorage.setItem('r86_admin_auth','1');
+    showApp();
   } else {
-    document.getElementById('login-error').style.display = 'block';
-    document.getElementById('login-pw').value = '';
-    document.getElementById('login-pw').focus();
+    $('#login-err').style.display='block';
   }
 }
+function showApp(){
+  $('#login').style.display='none';
+  $('#app').classList.add('show');
+  init();
+}
+function logout(){
+  sessionStorage.removeItem('r86_admin_auth');
+  location.reload();
+}
+$('#login-btn').addEventListener('click', doLogin);
+$('#login-pw').addEventListener('keydown', e => { if (e.key==='Enter') doLogin(); });
+if (sessionStorage.getItem('r86_admin_auth')==='1') showApp();
 
-document.getElementById('logout-btn').addEventListener('click', () => {
-  document.getElementById('login-overlay').style.display = 'flex';
-  document.getElementById('admin-wrap').classList.remove('visible');
-  document.getElementById('login-pw').value = '';
-});
-
-/* ── Init ── */
-function initAdmin() {
-  populateSelectOptions('add-origin', FILTER_OPTIONS.origins);
-  populateSelectOptions('add-process', FILTER_OPTIONS.processes);
-  populateSelectOptions('edit-origin', FILTER_OPTIONS.origins);
-  populateSelectOptions('edit-process', FILTER_OPTIONS.processes);
-  renderTable();
-
-  // Add available toggle label
-  document.getElementById('add-available').addEventListener('change', e => {
-    document.getElementById('add-available-label').textContent = e.target.checked ? 'Yes — In Stock' : 'No — Out of Stock';
+// ── Init ─────────────────────────────────
+function init(){
+  // populate filter dropdowns
+  const origins = [...new Set(DATA.map(c => c.origin))].sort();
+  origins.forEach(o => {
+    const opt = document.createElement('option'); opt.value=o; opt.textContent=o;
+    $('#filter-origin').appendChild(opt);
   });
-  document.getElementById('edit-available').addEventListener('change', e => {
-    document.getElementById('edit-available-label').textContent = e.target.checked ? 'Yes — In Stock' : 'No — Out of Stock';
+  // datalists
+  const dl = (id, arr) => arr.forEach(v => {
+    const o = document.createElement('option'); o.value=v; document.getElementById(id).appendChild(o);
   });
+  dl('origins-dl', FILTER_OPTIONS.origins);
+  dl('processes-dl', FILTER_OPTIONS.processes);
 
-  // Add form toggle
-  document.getElementById('toggle-add-form').addEventListener('click', () => {
-    const wrap = document.getElementById('add-form-wrap');
-    const btn = document.getElementById('toggle-add-form');
-    const open = wrap.style.display === 'none';
-    wrap.style.display = open ? 'block' : 'none';
-    btn.textContent = open ? 'Close Form' : 'Open Form';
-  });
-  document.getElementById('cancel-add-btn').addEventListener('click', () => {
-    document.getElementById('add-form-wrap').style.display = 'none';
-    document.getElementById('toggle-add-form').textContent = 'Open Form';
-  });
-
-  // Save new
-  document.getElementById('save-new-btn').addEventListener('click', saveNewCoffee);
-
-  // Edit actions
-  document.getElementById('cancel-edit-btn').addEventListener('click', closeEdit);
-  document.getElementById('cancel-edit-btn-2').addEventListener('click', closeEdit);
-  document.getElementById('save-edit-btn').addEventListener('click', saveEdit);
-  document.getElementById('delete-coffee-btn').addEventListener('click', deleteCoffee);
-
-  // Table search
-  document.getElementById('table-search').addEventListener('input', e => {
-    renderTable(e.target.value);
-  });
-
-  // Export
-  document.getElementById('export-btn').addEventListener('click', generateExport);
-  document.getElementById('copy-btn').addEventListener('click', copyExport);
+  bind();
+  render();
 }
 
-function populateSelectOptions(id, options) {
-  const sel = document.getElementById(id);
-  options.forEach(opt => {
-    const el = document.createElement('option');
-    el.value = opt; el.textContent = opt;
-    sel.appendChild(el);
+function bind(){
+  $('#filter-search').addEventListener('input', e => { FILTER.search=e.target.value.toLowerCase(); render(); });
+  $('#filter-origin').addEventListener('change', e => { FILTER.origin=e.target.value; render(); });
+  $('#filter-special').addEventListener('change', e => { FILTER.special=e.target.value; render(); });
+
+  document.querySelectorAll('th[data-sort]').forEach(th => {
+    th.addEventListener('click', () => {
+      const k = th.dataset.sort;
+      if (SORT.key===k) SORT.dir = SORT.dir==='asc' ? 'desc' : 'asc';
+      else { SORT.key=k; SORT.dir='asc'; }
+      render();
+    });
+  });
+
+  $('#btn-add').addEventListener('click', () => openEdit(null));
+  $('#btn-logout').addEventListener('click', logout);
+  $('#btn-export').addEventListener('click', openExport);
+
+  $('#modal-close').addEventListener('click', closeEdit);
+  $('#modal-cancel').addEventListener('click', closeEdit);
+  $('#modal-save').addEventListener('click', saveEdit);
+
+  $('#export-close').addEventListener('click', () => $('#export-modal').classList.remove('open'));
+  $('#export-copy').addEventListener('click', copyExport);
+  $('#export-download').addEventListener('click', downloadExport);
+
+  document.addEventListener('keydown', e => {
+    if (e.key==='Escape') { closeEdit(); $('#export-modal').classList.remove('open'); }
   });
 }
 
-/* ── Table render ── */
-function renderTable(search = '') {
-  const tbody = document.getElementById('coffee-table-body');
-  const countEl = document.getElementById('table-count');
-  const filtered = search
-    ? adminCoffees.filter(c => c.name.toLowerCase().includes(search.toLowerCase()) || c.origin.toLowerCase().includes(search.toLowerCase()))
-    : adminCoffees;
-  countEl.textContent = adminCoffees.length;
-
-  if (filtered.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:3rem;color:var(--cream-muted)">No coffees found</td></tr>`;
-    return;
-  }
-
-  tbody.innerHTML = filtered.map(c => `
-    <tr data-id="${c.id}">
-      <td class="table-name">${c.name}</td>
-      <td class="table-origin">${c.origin}</td>
-      <td><span class="table-badge table-badge-process">${c.process}</span></td>
-      <td>${c.certifications.map(cert => `<span class="table-badge table-badge-cert">${cert}</span>`).join('') || '<span style="color:var(--cream-muted);font-size:0.75rem">None</span>'}</td>
-      <td style="color:var(--cream-dim)">${c.bagWeight} lbs</td>
-      <td style="font-size:0.75rem;color:var(--cream-dim)">${c.warehouses.join('<br>')}</td>
-      <td>
-        <span class="table-avail">
-          <span class="table-dot ${c.available ? 'dot-green' : 'dot-red'}"></span>
-          ${c.available ? 'In Stock' : 'Out of Stock'}
-        </span>
-      </td>
-      <td>
-        <div class="table-actions">
-          <button class="btn btn-outline btn-sm edit-btn" data-id="${c.id}">✏️ Edit</button>
-          <button class="btn btn-danger btn-sm quick-delete-btn" data-id="${c.id}">🗑</button>
-        </div>
-      </td>
-    </tr>`).join('');
-
-  tbody.querySelectorAll('.edit-btn').forEach(btn => btn.addEventListener('click', () => openEdit(parseInt(btn.dataset.id))));
-  tbody.querySelectorAll('.quick-delete-btn').forEach(btn => btn.addEventListener('click', () => {
-    if (confirm('Delete this coffee from the catalogue?')) {
-      adminCoffees = adminCoffees.filter(c => c.id !== parseInt(btn.dataset.id));
-      renderTable();
-      showToast('Coffee deleted', 'error');
+// ── Render ─────────────────────────────────
+function applyFilterSort(){
+  let rows = DATA.filter(c => {
+    if (FILTER.origin && c.origin !== FILTER.origin) return false;
+    if (FILTER.special==='favourite' && !c.favourite) return false;
+    if (FILTER.special==='onSale' && !c.onSale) return false;
+    if (FILTER.special==='soldOut' && !c.soldOut && c.available) return false;
+    if (FILTER.search) {
+      const q = FILTER.search;
+      const blob = `${c.name} ${c.origin} ${c.region} ${c.process} ${c.tastingNotes||''}`.toLowerCase();
+      if (!blob.includes(q)) return false;
     }
-  }));
+    return true;
+  });
+  rows.sort((a,b) => {
+    const av = a[SORT.key] ?? ''; const bv = b[SORT.key] ?? '';
+    let r = (typeof av==='number' && typeof bv==='number') ? (av-bv) : String(av).localeCompare(String(bv));
+    return SORT.dir==='asc' ? r : -r;
+  });
+  return rows;
 }
 
-/* ── Add new coffee ── */
-function saveNewCoffee() {
-  const name = document.getElementById('add-name').value.trim();
-  const origin = document.getElementById('add-origin').value;
-  const process = document.getElementById('add-process').value;
-  const weight = parseInt(document.getElementById('add-weight').value);
+function render(){
+  const rows = applyFilterSort();
+  $('#stats').textContent = `${rows.length} item${rows.length!==1?'s':''} (of ${DATA.length})`;
 
-  if (!name || !origin || !process || !weight) {
-    showToast('Please fill in all required fields', 'error');
-    return;
-  }
-
-  const certs = [...document.querySelectorAll('#add-certs input:checked')].map(i => i.value);
-  const warehouses = [...document.querySelectorAll('#add-warehouses input:checked')].map(i => i.value);
-  const available = document.getElementById('add-available').checked;
-
-  const newId = Math.max(...adminCoffees.map(c => c.id), 0) + 1;
-  adminCoffees.push({
-    id: newId,
-    name,
-    origin,
-    region: document.getElementById('add-region').value.trim(),
-    process,
-    certifications: certs,
-    bagWeight: weight,
-    warehouses,
-    available,
-    grade: document.getElementById('add-grade').value.trim(),
-    variety: document.getElementById('add-variety').value.trim(),
-    altitude: document.getElementById('add-altitude').value.trim(),
-    tastingNotes: document.getElementById('add-tasting').value.trim(),
-    description: document.getElementById('add-description').value.trim()
+  // sort indicators
+  document.querySelectorAll('th[data-sort]').forEach(th => {
+    th.classList.remove('sorted','sorted-asc');
+    if (th.dataset.sort===SORT.key) th.classList.add(SORT.dir==='asc' ? 'sorted-asc' : 'sorted');
   });
 
-  // Reset form
-  document.getElementById('add-name').value = '';
-  document.getElementById('add-region').value = '';
-  document.getElementById('add-grade').value = '';
-  document.getElementById('add-variety').value = '';
-  document.getElementById('add-altitude').value = '';
-  document.getElementById('add-tasting').value = '';
-  document.getElementById('add-description').value = '';
-  document.getElementById('add-weight').value = '';
-  document.getElementById('add-origin').value = '';
-  document.getElementById('add-process').value = '';
-  document.querySelectorAll('#add-certs input').forEach(i => i.checked = false);
-  document.querySelectorAll('#add-warehouses input').forEach(i => i.checked = false);
-  document.getElementById('add-available').checked = true;
+  const body = $('#cms-body');
+  $('#empty').style.display = rows.length===0 ? 'block' : 'none';
+  if (rows.length===0) { body.innerHTML=''; return; }
 
-  renderTable();
-  showToast('Coffee added! Remember to export & publish.', 'success');
+  body.innerHTML = rows.map(c => {
+    const certs = (c.certifications||[]).map(cert => {
+      const cls = ({'Organic':'cert-organic','Fair Trade':'cert-ft','Rainforest Alliance':'cert-rfa',"Women's Lot":'cert-womens','Decaf':'cert-decaf'})[cert] || '';
+      return `<span class="pill ${cls}">${cert}</span>`;
+    }).join('') || '<span style="color:#aaa">—</span>';
+    const whs = (c.warehouses||[]).map(w => `<span class="pill wh">${w}</span>`).join('') || '<span style="color:#aaa">—</span>';
+    return `
+      <tr data-id="${c.id}">
+        <td class="col-num">${c.id}</td>
+        <td><strong>${escapeHtml(c.name)}</strong><div style="color:var(--muted);font-size:.74rem;margin-top:2px">${escapeHtml(c.region||'')}</div></td>
+        <td>${escapeHtml(c.origin)}</td>
+        <td>${certs}</td>
+        <td>${escapeHtml(c.process||'')}</td>
+        <td style="text-align:center"><span class="toggle fav ${c.favourite?'on':''}" data-toggle="favourite" data-id="${c.id}"></span></td>
+        <td style="text-align:center"><span class="toggle sale ${c.onSale?'on':''}" data-toggle="onSale" data-id="${c.id}"></span></td>
+        <td style="text-align:center"><span class="toggle sold ${c.soldOut||!c.available?'on':''}" data-toggle="soldOut" data-id="${c.id}"></span></td>
+        <td>${whs}</td>
+        <td class="col-actions">
+          <button class="row-btn" data-edit="${c.id}">Edit</button>
+          <button class="row-btn danger" data-del="${c.id}">Delete</button>
+        </td>
+      </tr>`;
+  }).join('');
+
+  body.querySelectorAll('[data-edit]').forEach(b =>
+    b.addEventListener('click', () => openEdit(parseInt(b.dataset.edit))));
+  body.querySelectorAll('[data-del]').forEach(b =>
+    b.addEventListener('click', () => deleteRow(parseInt(b.dataset.del))));
+  body.querySelectorAll('[data-toggle]').forEach(b =>
+    b.addEventListener('click', () => toggleFlag(parseInt(b.dataset.id), b.dataset.toggle)));
 }
 
-/* ── Edit coffee ── */
-function openEdit(id) {
-  const c = adminCoffees.find(x => x.id === id);
+function escapeHtml(s){
+  return String(s||'').replace(/[&<>"']/g, ch =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[ch]);
+}
+
+function toggleFlag(id, key){
+  const c = DATA.find(x => x.id===id);
   if (!c) return;
-  editingId = id;
-
-  document.getElementById('edit-section').style.display = 'block';
-  document.getElementById('edit-section-name').textContent = c.name;
-  document.getElementById('edit-name').value = c.name;
-  document.getElementById('edit-origin').value = c.origin;
-  document.getElementById('edit-region').value = c.region;
-  document.getElementById('edit-process').value = c.process;
-  document.getElementById('edit-grade').value = c.grade;
-  document.getElementById('edit-variety').value = c.variety;
-  document.getElementById('edit-altitude').value = c.altitude;
-  document.getElementById('edit-weight').value = c.bagWeight;
-  document.getElementById('edit-tasting').value = c.tastingNotes;
-  document.getElementById('edit-description').value = c.description;
-  document.getElementById('edit-available').checked = c.available;
-  document.getElementById('edit-available-label').textContent = c.available ? 'Yes — In Stock' : 'No — Out of Stock';
-
-  document.querySelectorAll('#edit-certs input').forEach(i => { i.checked = c.certifications.includes(i.value); });
-  document.querySelectorAll('#edit-warehouses input').forEach(i => { i.checked = c.warehouses.includes(i.value); });
-
-  document.getElementById('edit-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (key==='soldOut') {
+    c.soldOut = !c.soldOut;
+    c.available = !c.soldOut;
+  } else {
+    c[key] = !c[key];
+  }
+  persist(); render();
+  toast(`Updated ${c.name.split(' ').slice(0,2).join(' ')}`);
 }
 
-function saveEdit() {
-  if (!editingId) return;
-  const idx = adminCoffees.findIndex(c => c.id === editingId);
-  if (idx === -1) return;
+function deleteRow(id){
+  const c = DATA.find(x => x.id===id);
+  if (!c) return;
+  if (!confirm(`Delete "${c.name}"? This cannot be undone (until you re-import).`)) return;
+  DATA = DATA.filter(x => x.id!==id);
+  persist(); render(); toast('Deleted', true);
+}
 
-  adminCoffees[idx] = {
-    ...adminCoffees[idx],
-    name: document.getElementById('edit-name').value.trim(),
-    origin: document.getElementById('edit-origin').value,
-    region: document.getElementById('edit-region').value.trim(),
-    process: document.getElementById('edit-process').value,
-    grade: document.getElementById('edit-grade').value.trim(),
-    variety: document.getElementById('edit-variety').value.trim(),
-    altitude: document.getElementById('edit-altitude').value.trim(),
-    bagWeight: parseInt(document.getElementById('edit-weight').value),
-    tastingNotes: document.getElementById('edit-tasting').value.trim(),
-    description: document.getElementById('edit-description').value.trim(),
-    available: document.getElementById('edit-available').checked,
-    certifications: [...document.querySelectorAll('#edit-certs input:checked')].map(i => i.value),
-    warehouses: [...document.querySelectorAll('#edit-warehouses input:checked')].map(i => i.value)
+// ── Edit modal ─────────────────────────────
+function openEdit(id){
+  EDITING_ID = id;
+  const c = id ? DATA.find(x => x.id===id) : {
+    id: nextId(), name:'', origin:'', region:'', process:'Washed',
+    grade:'', variety:'', altitude:'', bagWeight:152,
+    certifications:[], warehouses:['Vancouver, BC'], tastingNotes:'', description:'',
+    available:true, favourite:false, onSale:false, soldOut:false
   };
+  $('#modal-title').textContent = id ? 'Edit Coffee' : 'Add New Coffee';
+  $('#m-name').value = c.name||'';
+  $('#m-origin').value = c.origin||'';
+  $('#m-region').value = c.region||'';
+  $('#m-process').value = c.process||'';
+  $('#m-grade').value = c.grade||'';
+  $('#m-variety').value = c.variety||'';
+  $('#m-altitude').value = c.altitude||'';
+  $('#m-bag').value = c.bagWeight||152;
+  $('#m-certs').value = (c.certifications||[]).join(', ');
+  $('#m-whs').value = (c.warehouses||[]).join(', ');
+  $('#m-notes').value = c.tastingNotes||'';
+  $('#m-desc').value = c.description||'';
+  $('#m-available').checked = c.available!==false;
+  $('#m-fav').checked = !!c.favourite;
+  $('#m-sale').checked = !!c.onSale;
+  $('#m-sold').checked = !!c.soldOut;
+  $('#edit-modal').classList.add('open');
+}
+function closeEdit(){ $('#edit-modal').classList.remove('open'); EDITING_ID=null; }
 
-  renderTable();
-  closeEdit();
-  showToast('Changes saved! Remember to export & publish.', 'success');
+function saveEdit(){
+  const data = {
+    name: $('#m-name').value.trim(),
+    origin: $('#m-origin').value.trim(),
+    region: $('#m-region').value.trim(),
+    process: $('#m-process').value.trim(),
+    grade: $('#m-grade').value.trim(),
+    variety: $('#m-variety').value.trim(),
+    altitude: $('#m-altitude').value.trim(),
+    bagWeight: parseInt($('#m-bag').value)||152,
+    certifications: splitTags($('#m-certs').value),
+    warehouses: splitWarehouses($('#m-whs').value),
+    tastingNotes: $('#m-notes').value.trim(),
+    description: $('#m-desc').value.trim(),
+    available: $('#m-available').checked,
+    favourite: $('#m-fav').checked,
+    onSale: $('#m-sale').checked,
+    soldOut: $('#m-sold').checked
+  };
+  if (!data.name) { toast('Name is required', true); return; }
+  if (data.soldOut) data.available = false;
+
+  if (EDITING_ID) {
+    const c = DATA.find(x => x.id===EDITING_ID);
+    Object.assign(c, data);
+    toast('Saved');
+  } else {
+    DATA.push({ id: nextId(), ...data });
+    toast('Created');
+  }
+  persist(); render(); closeEdit();
 }
 
-function deleteCoffee() {
-  if (!editingId) return;
-  if (!confirm('Are you sure you want to delete this coffee? This cannot be undone.')) return;
-  adminCoffees = adminCoffees.filter(c => c.id !== editingId);
-  renderTable();
-  closeEdit();
-  showToast('Coffee deleted', 'error');
+function splitTags(s){
+  return s.split(',').map(x => x.trim()).filter(Boolean);
+}
+// Warehouses contain commas in their names ("Vancouver, BC"); rejoin pairs
+function splitWarehouses(s){
+  const parts = s.split(',').map(x => x.trim()).filter(Boolean);
+  const result = [];
+  for (let i=0;i<parts.length;i++){
+    if (i+1 < parts.length && /^[A-Z]{2}$/.test(parts[i+1])) {
+      result.push(`${parts[i]}, ${parts[i+1]}`); i++;
+    } else result.push(parts[i]);
+  }
+  return result;
 }
 
-function closeEdit() {
-  editingId = null;
-  document.getElementById('edit-section').style.display = 'none';
+function nextId(){
+  return DATA.length ? Math.max(...DATA.map(c => c.id))+1 : 1;
 }
 
-/* ── Export ── */
-function generateExport() {
-  const js = `// ============================================================
-//  ROOT 86 COFFEE — Coffee Data File
-//  Edit this file to add, update, or remove coffees.
+// ── Persist ─────────────────────────────────
+function persist(){
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA)); } catch(e){}
+}
+
+// ── Export ─────────────────────────────────
+function buildExportText(){
+  const sorted = [...DATA].sort((a,b) => a.id-b.id);
+  const items = sorted.map(c => {
+    const props = [];
+    props.push(`    id: ${c.id}`);
+    props.push(`    name: ${JSON.stringify(c.name)}`);
+    props.push(`    origin: ${JSON.stringify(c.origin)}`);
+    props.push(`    region: ${JSON.stringify(c.region||'')}`);
+    props.push(`    process: ${JSON.stringify(c.process||'')}`);
+    props.push(`    certifications: ${JSON.stringify(c.certifications||[])}`);
+    props.push(`    bagWeight: ${c.bagWeight||152}`);
+    props.push(`    warehouses: ${JSON.stringify(c.warehouses||[])}`);
+    props.push(`    available: ${c.available!==false}`);
+    props.push(`    grade: ${JSON.stringify(c.grade||'')}`);
+    props.push(`    variety: ${JSON.stringify(c.variety||'')}`);
+    props.push(`    altitude: ${JSON.stringify(c.altitude||'')}`);
+    props.push(`    tastingNotes: ${JSON.stringify(c.tastingNotes||'')}`);
+    props.push(`    description: ${JSON.stringify(c.description||'')}`);
+    if (c.favourite) props.push(`    favourite: true`);
+    if (c.onSale) props.push(`    onSale: true`);
+    if (c.soldOut) props.push(`    soldOut: true`);
+    return `  {\n${props.join(',\n')}\n  }`;
+  }).join(',\n');
+
+  const origins = [...new Set(sorted.map(c => c.origin))].sort();
+  const processes = [...new Set(sorted.map(c => c.process))].filter(Boolean).sort();
+  const certs = [...new Set(sorted.flatMap(c => c.certifications||[]))].sort();
+  const whs = [...new Set(sorted.flatMap(c => c.warehouses||[]))].sort();
+
+  return `// ============================================================
+//  ROOT 86 COFFEE - Coffee Data File
+//  Edit via admin.html or directly here.
+//  Generated: ${new Date().toISOString().slice(0,10)}
 // ============================================================
 
-const COFFEES = ${JSON.stringify(adminCoffees, null, 2)};
+const COFFEES = [
+${items}
+];
 
 // ============================================================
 //  FILTER OPTIONS
 // ============================================================
 
-const FILTER_OPTIONS = ${JSON.stringify(FILTER_OPTIONS, null, 2)};
+const FILTER_OPTIONS = {
+  origins: ${JSON.stringify(origins)},
+  processes: ${JSON.stringify(processes)},
+  certifications: ${JSON.stringify(certs)},
+  warehouses: ${JSON.stringify(whs)}
+};
 
 // ============================================================
 //  SITE SETTINGS
 // ============================================================
 
-const SITE_SETTINGS = ${JSON.stringify(SITE_SETTINGS, null, 2)};
+const SITE_SETTINGS = ${JSON.stringify(typeof SITE_SETTINGS!=='undefined' ? SITE_SETTINGS : {}, null, 2)};
 `;
-  document.getElementById('export-output').value = js;
-  showToast('Export generated! Copy it and update coffees.js on GitHub.', 'success');
 }
 
-function copyExport() {
-  const text = document.getElementById('export-output').value;
-  if (!text) { showToast('Generate the export first!', 'error'); return; }
-  navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard!', 'success'));
+function openExport(){
+  $('#export-text').value = buildExportText();
+  $('#export-modal').classList.add('open');
+}
+function copyExport(){
+  $('#export-text').select();
+  navigator.clipboard.writeText($('#export-text').value)
+    .then(() => toast('Copied to clipboard'))
+    .catch(() => { document.execCommand('copy'); toast('Copied'); });
+}
+function downloadExport(){
+  const blob = new Blob([$('#export-text').value], { type:'text/javascript' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'coffees.js'; a.click();
+  URL.revokeObjectURL(url);
+  toast('Downloaded');
 }
 
-/* ── Toast ── */
-function showToast(msg, type = 'success') {
-  const t = document.getElementById('toast');
-  t.textContent = (type === 'success' ? '✓ ' : '✕ ') + msg;
-  t.className = `toast ${type} show`;
-  setTimeout(() => t.classList.remove('show'), 3500);
+// ── Toast ─────────────────────────────────
+function toast(msg, isErr=false){
+  const t = $('#toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isErr?' error':'');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 2400);
 }
 </script>
 </body>

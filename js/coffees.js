@@ -19,7 +19,8 @@ const COFFEES = [
     variety: "Catuai, Mundo Novo",
     altitude: "900-1,100m",
     tastingNotes: "Dark Chocolate, Hazelnut, Caramel",
-    description: "A classic Brazilian natural from the Alta Mogiana plateau, celebrated for its full body, low acidity, and rich confectionary sweetness. The 17/18 screen size ensures large, uniform beans ideal for blending or single-origin espresso."
+    description: "A classic Brazilian natural from the Alta Mogiana plateau, celebrated for its full body, low acidity, and rich confectionary sweetness. The 17/18 screen size ensures large, uniform beans ideal for blending or single-origin espresso.",
+    favourite: true
   },
   {
     id: 2,
@@ -51,7 +52,8 @@ const COFFEES = [
     variety: "Castillo, Caturra",
     altitude: "1,400-1,800m",
     tastingNotes: "Red Apple, Caramel, Milk Chocolate",
-    description: "Rainforest Alliance certified, this Cundinamarca Excelso is fully washed and precisely graded European Preparation and Good Preparation, ensuring exceptional cup cleanliness. Grown on small family farms in Colombia's classic central cordillera."
+    description: "Rainforest Alliance certified, this Cundinamarca Excelso is fully washed and precisely graded European Preparation and Good Preparation, ensuring exceptional cup cleanliness. Grown on small family farms in Colombia's classic central cordillera.",
+    favourite: true
   },
   {
     id: 4,
@@ -83,7 +85,9 @@ const COFFEES = [
     variety: "Caturra, Colombia",
     altitude: "1,600-2,000m",
     tastingNotes: "Blackcurrant, Jasmine, Brown Sugar",
-    description: "Certified organic from the high-altitude microclimates of Huila, Colombia's premier specialty origin. The volcanic soils and cool temperatures produce a coffee of remarkable complexity: floral, fruited, and clean with lingering sweetness."
+    description: "Certified organic from the high-altitude microclimates of Huila, Colombia's premier specialty origin. The volcanic soils and cool temperatures produce a coffee of remarkable complexity: floral, fruited, and clean with lingering sweetness.",
+    favourite: true,
+    onSale: true
   },
   {
     id: 6,
@@ -243,7 +247,8 @@ const COFFEES = [
     variety: "Ethiopia Heirloom",
     altitude: "1,800-2,200m",
     tastingNotes: "Jasmine, Bergamot, Lemon, Peach",
-    description: "The Gersi washing station in Gedeo, Yirgacheffe is legendary. Its meticulous washed processing reveals the full aromatic potential of Ethiopia's ancient heirloom varieties: extraordinary florals, vibrant citrus acidity, and tea-like delicacy. A specialty benchmark."
+    description: "The Gersi washing station in Gedeo, Yirgacheffe is legendary. Its meticulous washed processing reveals the full aromatic potential of Ethiopia's ancient heirloom varieties: extraordinary florals, vibrant citrus acidity, and tea-like delicacy. A specialty benchmark.",
+    favourite: true
   },
   {
     id: 16,
@@ -259,7 +264,8 @@ const COFFEES = [
     variety: "Ethiopia Heirloom",
     altitude: "1,800-2,200m",
     tastingNotes: "Blueberry, Strawberry, Dark Chocolate, Rose",
-    description: "The Koke station natural is one of Ethiopia's most celebrated coffees. Slow-dried on raised beds under the Yirgacheffe sun, the cherries develop intense berry fruit and floral complexity. An unmistakable, unforgettable natural process experience."
+    description: "The Koke station natural is one of Ethiopia's most celebrated coffees. Slow-dried on raised beds under the Yirgacheffe sun, the cherries develop intense berry fruit and floral complexity. An unmistakable, unforgettable natural process experience.",
+    favourite: true
   },
   {
     id: 17,
@@ -291,7 +297,8 @@ const COFFEES = [
     variety: "SL28, SL34, Ruiru 11",
     altitude: "1,700-1,900m",
     tastingNotes: "Blackcurrant, Tomato, Grapefruit, Dark Berry",
-    description: "Kenyan AB Plus from the Sondhi mill exemplifies Kenya's distinctive savory-fruited cup profile. The double-washed fermentation and meticulous grading produce a wine-like complexity rarely found elsewhere. Bold, bright, and uncompromising, truly a roaster's coffee."
+    description: "Kenyan AB Plus from the Sondhi mill exemplifies Kenya's distinctive savory-fruited cup profile. The double-washed fermentation and meticulous grading produce a wine-like complexity rarely found elsewhere. Bold, bright, and uncompromising, truly a roaster's coffee.",
+    favourite: true
   },
   {
     id: 19,
@@ -307,7 +314,9 @@ const COFFEES = [
     variety: "Red Bourbon",
     altitude: "1,700-2,000m",
     tastingNotes: "Raspberry, Plum, Caramel, Rose",
-    description: "Nyampinga, meaning 'beautiful girl' in Kinyarwanda, celebrates the female members of this organic-certified cooperative. Rwanda's iconic Bourbon variety on volcanic soil yields a deeply fruited, florally elegant cup with exceptional clarity and sweetness."
+    description: "Nyampinga, meaning 'beautiful girl' in Kinyarwanda, celebrates the female members of this organic-certified cooperative. Rwanda's iconic Bourbon variety on volcanic soil yields a deeply fruited, florally elegant cup with exceptional clarity and sweetness.",
+    favourite: true,
+    onSale: true
   },
   {
     id: 20,
@@ -371,7 +380,8 @@ const COFFEES = [
     variety: "Tim Tim, Ateng, Bourbon",
     altitude: "1,000-1,500m",
     tastingNotes: "Dark Chocolate, Tobacco, Earth, Cedar",
-    description: "The quintessential Sumatran. Giling Basah (wet-hulling) processing creates Mandheling's iconic low-acidity, full-body, and complex earthy-herbal character. Grade 1 ensures the cleanest possible expression of this bold, deeply satisfying origin. A cornerstone blend component."
+    description: "The quintessential Sumatran. Giling Basah (wet-hulling) processing creates Mandheling's iconic low-acidity, full-body, and complex earthy-herbal character. Grade 1 ensures the cleanest possible expression of this bold, deeply satisfying origin. A cornerstone blend component.",
+    favourite: true
   },
   {
     id: 24,
@@ -483,7 +493,8 @@ const COFFEES = [
     variety: "Catuai, Mundo Novo",
     altitude: "900-1,100m",
     tastingNotes: "Dark Chocolate, Walnut, Brown Sugar",
-    description: "Swiss Water Process decaffeination preserves the natural sweetness and body of this Brazilian natural. 99.9% caffeine-free and entirely chemical-free, the SWP Brazil Decaf is a roaster's favourite: smooth, chocolatey, and genuinely enjoyable as a standalone decaf or in blends."
+    description: "Swiss Water Process decaffeination preserves the natural sweetness and body of this Brazilian natural. 99.9% caffeine-free and entirely chemical-free, the SWP Brazil Decaf is a roaster's favourite: smooth, chocolatey, and genuinely enjoyable as a standalone decaf or in blends.",
+    favourite: true
   },
   {
     id: 31,
@@ -516,6 +527,73 @@ const COFFEES = [
     altitude: "Varies",
     tastingNotes: "Dark Chocolate, Toffee, Crema Body",
     description: "Purpose-crafted for espresso, this premium Swiss Water Process blend is engineered for thick crema, deep body, and rich chocolatey sweetness, all without caffeine. Ideal for cafes seeking a decaf espresso that genuinely satisfies. Swiss Water certified 99.9% caffeine-free."
+  },
+  {
+    id: 33,
+    name: "Nicaragua Jinotega FT Organic",
+    origin: "Nicaragua",
+    region: "Jinotega",
+    process: "Washed",
+    certifications: ["Organic", "Fair Trade"],
+    bagWeight: 152,
+    warehouses: ["Vancouver, BC", "Lévis, QC"],
+    available: true,
+    grade: "SHG",
+    variety: "Caturra, Bourbon",
+    altitude: "1,200-1,600m",
+    tastingNotes: "Milk Chocolate, Almond, Apple, Caramel",
+    description: "Certified Fair Trade and Organic from the highland Jinotega region of Nicaragua, where small cooperative producers grow shade-coffee under native canopy. Smooth, balanced, and approachable: a clean, sweet cup with warm chocolate and gentle fruit.",
+    favourite: true
+  },
+  {
+    id: 34,
+    name: "Panama Boquete Finca La Santa Catuai",
+    origin: "Panama",
+    region: "Boquete",
+    process: "Washed",
+    certifications: [],
+    bagWeight: 60,
+    warehouses: ["Vancouver, BC"],
+    available: true,
+    grade: "Specialty",
+    variety: "Catuai",
+    altitude: "1,500-1,700m",
+    tastingNotes: "Honey, Orange Blossom, Stone Fruit, Brown Sugar",
+    description: "From the legendary Finca La Santa in Boquete, Panama: a single-variety Catuai lot grown at high altitude on volcanic soils. Refined, nuanced, and floral, with the elegant balance Panama is famous for.",
+    favourite: true
+  },
+  {
+    id: 35,
+    name: "Papua New Guinea PSC Simbu",
+    origin: "Papua New Guinea",
+    region: "Simbu",
+    process: "Washed",
+    certifications: [],
+    bagWeight: 60,
+    warehouses: ["Vancouver, BC", "Lévis, QC"],
+    available: true,
+    grade: "PSC",
+    variety: "Arusha, Bourbon, Typica",
+    altitude: "1,500-1,800m",
+    tastingNotes: "Tropical Fruit, Cocoa, Black Tea, Sweet Spice",
+    description: "PSC (Premium Smallholder Coffee) from the remote Simbu Highlands of Papua New Guinea. Smallholder gardens cultivate heritage varieties at high altitude, producing a uniquely complex cup: tropical fruit, cocoa, and gentle spice with a lingering sweetness.",
+    onSale: true
+  },
+  {
+    id: 36,
+    name: "SWP Honduras Decaf Organic",
+    origin: "Honduras",
+    region: "Marcala",
+    process: "Swiss Water Process (Decaf)",
+    certifications: ["Organic", "Decaf"],
+    bagWeight: 132,
+    warehouses: ["Vancouver, BC", "Lévis, QC"],
+    available: true,
+    grade: "SHG",
+    variety: "Bourbon, Catuai, Lempira",
+    altitude: "1,300-1,600m",
+    tastingNotes: "Caramel, Milk Chocolate, Red Apple, Honey",
+    description: "Certified organic Honduran SHG from Marcala, decaffeinated using the chemical-free Swiss Water Process. Retains exceptional sweetness, body, and clarity. A specialty-grade decaf that drinks like a great Central American washed coffee."
   }
 ];
 
@@ -526,8 +604,8 @@ const COFFEES = [
 const FILTER_OPTIONS = {
   origins: [
     "Brazil", "Colombia", "Costa Rica", "Ethiopia", "Guatemala",
-    "Honduras", "Indonesia", "Kenya", "Mexico", "Peru",
-    "Rwanda", "Tanzania", "Uganda", "Blend"
+    "Honduras", "Indonesia", "Kenya", "Mexico", "Nicaragua", "Panama",
+    "Papua New Guinea", "Peru", "Rwanda", "Tanzania", "Uganda", "Blend"
   ],
   processes: [
     "Washed", "Natural", "Honey", "Wet-Hulled",
