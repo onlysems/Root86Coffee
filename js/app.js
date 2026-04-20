@@ -388,6 +388,15 @@ function openModal(id) {
   $('#modal-weight').textContent   = `${c.bagWeight} lbs`;
   $('#modal-desc').textContent     = c.description;
 
+  const mtWrap = $('#modal-maintext-wrap');
+  const mt = (c.mainText || '').trim();
+  if (mt) {
+    $('#modal-maintext').textContent = mt;
+    mtWrap.hidden = false;
+  } else {
+    mtWrap.hidden = true;
+  }
+
   $('#modal-badges').innerHTML = [
     `<span class="cflag cflag-origin">${c.origin}</span>`,
     ...c.certifications.map(cert => `<span class="cflag ${CERT_CLASS[cert] || ''}">${cert}</span>`)

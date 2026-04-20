@@ -590,8 +590,11 @@
       <div class="field full"><label>Tasting Notes</label>
         <input id="m-notes" type="text" placeholder="Caramel, Apple, Chocolate" />
       </div>
-      <div class="field full"><label>Description</label>
+      <div class="field full"><label>Description <span style="color:var(--muted);font-weight:400;font-size:.75rem">(short summary — card preview)</span></label>
         <textarea id="m-desc"></textarea>
+      </div>
+      <div class="field full"><label>Main Text <span style="color:var(--muted);font-weight:400;font-size:.75rem">(full details shown on the "more info" screen — origin story, producer notes, cupping, etc.)</span></label>
+        <textarea id="m-maintext" rows="8"></textarea>
       </div>
       <div class="field full"><label>Flag / Image URL</label>
         <input id="m-image" type="text" placeholder="https://static.wixstatic.com/media/..." />
@@ -1104,7 +1107,7 @@ function openEdit(id){
   const c = id ? DATA.find(x => x.id===id) : {
     id: nextId(), name:'', origin:'', region:'', process:'Washed',
     grade:'', variety:'', altitude:'', bagWeight:152,
-    certifications:[], warehouses:['Vancouver, BC'], tastingNotes:'', description:'', image:'',
+    certifications:[], warehouses:['Vancouver, BC'], tastingNotes:'', description:'', mainText:'', image:'',
     available:true, favourite:false, onSale:false, soldOut:false, hidden:false
   };
   $('#modal-title').textContent = id ? 'Edit Coffee' : 'Add New Coffee';
@@ -1120,6 +1123,7 @@ function openEdit(id){
   renderChkGrid('m-whs-grid',   FILTER_OPTIONS.warehouses,     c.warehouses    || []);
   $('#m-notes').value = c.tastingNotes||'';
   $('#m-desc').value = c.description||'';
+  $('#m-maintext').value = c.mainText||'';
   $('#m-image').value = c.image||'';
   $('#m-available').checked = c.available!==false;
   $('#m-fav').checked = !!c.favourite;
@@ -1144,6 +1148,7 @@ function saveEdit(){
     warehouses:     readChkGrid('m-whs-grid'),
     tastingNotes: $('#m-notes').value.trim(),
     description: $('#m-desc').value.trim(),
+    mainText: $('#m-maintext').value.trim(),
     image: $('#m-image').value.trim(),
     available: $('#m-available').checked,
     favourite: $('#m-fav').checked,
@@ -1209,6 +1214,7 @@ function buildExportText(){
     props.push(`    altitude: ${JSON.stringify(c.altitude||'')}`);
     props.push(`    tastingNotes: ${JSON.stringify(c.tastingNotes||'')}`);
     props.push(`    description: ${JSON.stringify(c.description||'')}`);
+    if (c.mainText) props.push(`    mainText: ${JSON.stringify(c.mainText)}`);
     props.push(`    image: ${JSON.stringify(c.image||'')}`);
     if (c.favourite) props.push(`    favourite: true`);
     if (c.onSale) props.push(`    onSale: true`);

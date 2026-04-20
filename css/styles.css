@@ -501,6 +501,15 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
 
 .modal-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.9; margin-bottom: 20px; }
 
+.modal-maintext-wrap { margin-bottom: 24px; padding: 16px 18px; background: #faf7f4; border-left: 3px solid var(--red); border-radius: 2px; }
+.modal-maintext-title {
+  font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--red); margin-bottom: 10px; font-weight: 600;
+}
+.modal-maintext {
+  font-size: 0.85rem; color: var(--ink); line-height: 1.75; white-space: pre-wrap;
+}
+
 .modal-warehouses-title {
   font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase;
   color: var(--red); margin-bottom: 10px;
