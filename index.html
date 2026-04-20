@@ -675,7 +675,7 @@
 <script src="js/app.js"></script>
 <script src="js/track.js" defer></script>
 <script>
-  if (typeof emailjs !== 'undefined' && SITE_SETTINGS.emailjsPublicKey !== 'YOUR_PUBLIC_KEY') {
+  if (typeof emailjs !== 'undefined' && typeof SITE_SETTINGS !== 'undefined' && SITE_SETTINGS.emailjsPublicKey && SITE_SETTINGS.emailjsPublicKey !== 'YOUR_PUBLIC_KEY') {
     emailjs.init(SITE_SETTINGS.emailjsPublicKey);
   }
 </script>
