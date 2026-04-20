@@ -239,7 +239,7 @@ function cardHTML(c) {
       <div class="ccard-footer">
         <div>
           <button class="more-info-btn" data-id="${c.id}">More Info</button>
-          <span class="avail-badge ${c.available ? 'avail-yes' : 'avail-no'}">${c.available ? 'In Stock' : 'Out of Stock'}</span>
+          <span class="avail-badge ${c.available ? 'avail-yes' : 'avail-no'}" title="${c.available && c.warehouses && c.warehouses.length ? 'Available at: ' + c.warehouses.join(', ') : ''}">${c.available ? (c.warehouses && c.warehouses.length ? 'In: ' + c.warehouses.map(w => w.split(',')[0]).join(' &middot; ') : 'In Stock') : 'Out of Stock'}</span>
         </div>
         <button class="add-quote-btn${inQ ? ' added' : ''}${!c.available ? '' : ''}" data-id="${c.id}"
           ${!c.available ? 'disabled' : ''}>

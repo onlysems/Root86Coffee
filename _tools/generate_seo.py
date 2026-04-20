@@ -321,7 +321,13 @@ def build_coffee_page(c, all_coffees):
                   'loading="lazy" style="max-width:280px; height:auto; margin-bottom:24px;" '
                   'onerror="this.style.display=\'none\'" />' if image else "")
 
-    status = "In stock" if available else "Currently out of stock - contact us for similar lots"
+    if available:
+        if whs:
+            status = "In stock at " + ", ".join(whs)
+        else:
+            status = "In stock"
+    else:
+        status = "Currently out of stock - contact us for similar lots"
 
     # Split description into paragraphs, skip if empty
     desc_html = ""
