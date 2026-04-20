@@ -58,8 +58,62 @@
   .login-error{color:var(--red);font-size:.78rem;margin-top:8px;display:none}
 
   /* ── App layout ── */
-  .app{display:none;height:100vh;flex-direction:column;overflow:hidden}
+  .app{display:none;height:100vh;flex-direction:row;overflow:hidden}
   .app.show{display:flex}
+  .main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+
+  /* ── Sidebar ── */
+  .sidebar{
+    width:220px; flex-shrink:0; background:var(--ink); color:#fff;
+    display:flex; flex-direction:column; overflow:hidden;
+  }
+  .sb-brand{
+    padding:22px 22px 18px; border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .sb-brand-name{font-family:var(--font-serif);font-size:1.15rem;color:#fff;font-weight:600;letter-spacing:.04em}
+  .sb-brand-sub{font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-top:4px}
+  .sb-section{padding:18px 14px 4px;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.35);font-weight:600}
+  .sb-nav{flex:1;overflow-y:auto;padding:4px 0 20px}
+  .sb-item{
+    display:flex; align-items:center; gap:10px; padding:10px 22px; font-size:.84rem;
+    color:rgba(255,255,255,.75); cursor:pointer; border:none; background:none; width:100%;
+    text-align:left; transition:background .15s, color .15s; text-decoration:none; font-family:inherit;
+  }
+  .sb-item:hover{background:rgba(255,255,255,.05);color:#fff}
+  .sb-item.active{background:rgba(200,16,46,.15);color:#fff;border-left:3px solid var(--red);padding-left:19px}
+  .sb-item .sb-icon{width:16px;flex-shrink:0;opacity:.7;font-size:.9rem}
+  .sb-item.active .sb-icon{opacity:1}
+  .sb-badge{margin-left:auto;background:var(--red);color:#fff;border-radius:10px;padding:1px 8px;font-size:.65rem;font-weight:500}
+  .sb-foot{padding:14px 18px;border-top:1px solid rgba(255,255,255,.08)}
+  .sb-signout{
+    width:100%; padding:8px 12px; font-size:.75rem; background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.12); color:rgba(255,255,255,.75); cursor:pointer;
+    transition:background .15s;
+  }
+  .sb-signout:hover{background:rgba(200,16,46,.15);color:#fff;border-color:rgba(200,16,46,.5)}
+
+  /* ── Views ── */
+  .view{display:none;flex-direction:column;flex:1;overflow:hidden;min-height:0}
+  .view.active{display:flex}
+
+  /* ── Dashboard ── */
+  .dash-wrap{flex:1;overflow-y:auto;padding:28px 32px;background:var(--bg)}
+  .dash-hello{font-family:var(--font-serif);font-size:1.6rem;font-weight:600;color:var(--ink);margin-bottom:4px}
+  .dash-subtitle{color:var(--muted);font-size:.88rem;margin-bottom:28px}
+  .dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:28px}
+  .dash-card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px 20px}
+  .dash-card .k{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:10px}
+  .dash-card .v{font-size:1.8rem;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1}
+  .dash-card .sub{font-size:.78rem;color:var(--muted);margin-top:6px}
+  .dash-card.accent{border-left:3px solid var(--red)}
+  .dash-section-title{font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:20px 0 12px}
+  .dash-links{background:var(--panel);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+  .dash-link{display:flex;align-items:center;gap:14px;padding:12px 18px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink);transition:background .15s}
+  .dash-link:last-child{border-bottom:none}
+  .dash-link:hover{background:var(--hover)}
+  .dash-link .dash-link-label{flex:1;font-size:.88rem}
+  .dash-link .dash-link-sub{font-size:.76rem;color:var(--muted);margin-top:2px}
+  .dash-link .dash-link-arrow{color:var(--muted);font-size:1rem}
 
   .topbar{
     height:54px; background:var(--panel); border-bottom:1px solid var(--line);
@@ -316,58 +370,155 @@
 
 <!-- ── App ── -->
 <div class="app" id="app">
-  <div class="topbar">
-    <div class="topbar-brand">Root 86 Coffee</div>
-    <div class="topbar-sep"></div>
-    <div class="topbar-crumbs">
-      Content &nbsp;/&nbsp; <strong>Coffees</strong>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="sb-brand-name">Root 86</div>
+      <div class="sb-brand-sub">Admin</div>
     </div>
-    <div class="topbar-spacer"></div>
-    <button class="topbar-btn" id="btn-inbox">Inbox <span class="inbox-badge" id="inbox-badge" style="display:none">0</span></button>
-    <a class="topbar-btn" id="btn-analytics" href="https://dash.cloudflare.com/?to=/:account/pages/view/root86coffee/metrics" target="_blank" rel="noopener">Analytics &#8599;</a>
-    <button class="topbar-btn" id="btn-reset">Discard Drafts</button>
-    <button class="topbar-btn" id="btn-export">Export</button>
-    <button class="topbar-btn primary" id="btn-publish">Publish to GitHub</button>
-    <button class="topbar-btn" id="btn-add">+ Add Item</button>
-    <button class="topbar-btn danger" id="btn-logout">Sign Out</button>
-  </div>
+    <div class="sb-section">Overview</div>
+    <div class="sb-nav">
+      <button class="sb-item active" data-view="dashboard"><span class="sb-icon">&#9632;</span> Dashboard</button>
+      <div class="sb-section">Content</div>
+      <button class="sb-item" data-view="coffees"><span class="sb-icon">&#9679;</span> Coffees</button>
+      <div class="sb-section">Communications</div>
+      <button class="sb-item" data-view="inbox"><span class="sb-icon">&#9993;</span> Inbox <span class="sb-badge" id="sb-inbox-badge" style="display:none">0</span></button>
+      <a class="sb-item" href="https://dash.cloudflare.com/?to=/:account/pages/view/root86coffee/metrics" target="_blank" rel="noopener"><span class="sb-icon">&#9636;</span> Analytics <span style="margin-left:auto;color:rgba(255,255,255,.35);font-size:.8rem">&#8599;</span></a>
+    </div>
+    <div class="sb-foot">
+      <button class="sb-signout" id="btn-logout">Sign Out</button>
+    </div>
+  </aside>
 
-  <div class="subbar">
-    <h1>Coffees</h1>
-    <span class="subbar-stats" id="stats">0 items</span>
-    <div class="subbar-spacer"></div>
-    <input type="text" class="search" id="filter-search" placeholder="Search by name, origin, region..." />
-    <select id="filter-origin"><option value="">All Origins</option></select>
-    <select id="filter-special">
-      <option value="">All Items</option>
-      <option value="favourite">★ Favourites</option>
-      <option value="onSale">On Sale</option>
-      <option value="soldOut">Sold Out</option>
-      <option value="hidden">Hidden (drafts)</option>
-      <option value="visible">Visible only</option>
-    </select>
-  </div>
+  <!-- Main area -->
+  <div class="main-area">
 
-  <div class="table-wrap">
-    <table class="cms" id="cms-table">
-      <thead>
-        <tr>
-          <th data-sort="id" class="col-num">#</th>
-          <th data-sort="name">Product Name</th>
-          <th data-sort="origin">Origin</th>
-          <th>Certifications</th>
-          <th data-sort="process">Process</th>
-          <th data-sort="favourite" style="text-align:center">★ Fav</th>
-          <th data-sort="onSale" style="text-align:center">Sale</th>
-          <th data-sort="soldOut" style="text-align:center">Sold Out</th>
-          <th data-sort="hidden" style="text-align:center">Hidden</th>
-          <th>Warehouses</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody id="cms-body"></tbody>
-    </table>
-    <div class="empty" id="empty" style="display:none">No coffees match your filters.</div>
+    <!-- Dashboard view -->
+    <div class="view active" id="view-dashboard">
+      <div class="topbar">
+        <div class="topbar-brand">Dashboard</div>
+        <div class="topbar-spacer"></div>
+        <button class="topbar-btn" id="dash-refresh">Refresh</button>
+      </div>
+      <div class="dash-wrap">
+        <div class="dash-hello" id="dash-hello">Welcome back</div>
+        <div class="dash-subtitle" id="dash-subtitle">Here's what's happening with Root 86 Coffee today.</div>
+
+        <div class="dash-grid">
+          <div class="dash-card accent">
+            <div class="k">Coffees Live</div>
+            <div class="v" id="dash-coffees">—</div>
+            <div class="sub" id="dash-coffees-sub">Visible on the public catalogue</div>
+          </div>
+          <div class="dash-card">
+            <div class="k">In Stock</div>
+            <div class="v" id="dash-instock">—</div>
+            <div class="sub" id="dash-instock-sub">Available to ship</div>
+          </div>
+          <div class="dash-card">
+            <div class="k">Sold Out</div>
+            <div class="v" id="dash-soldout">—</div>
+            <div class="sub">Marked as sold out or out of stock</div>
+          </div>
+          <div class="dash-card">
+            <div class="k">Hidden Drafts</div>
+            <div class="v" id="dash-hidden">—</div>
+            <div class="sub">Not shown publicly yet</div>
+          </div>
+          <div class="dash-card accent">
+            <div class="k">Open Submissions</div>
+            <div class="v" id="dash-inbox-open">—</div>
+            <div class="sub" id="dash-inbox-sub">Form replies awaiting action</div>
+          </div>
+          <div class="dash-card">
+            <div class="k">Unsaved Drafts</div>
+            <div class="v" id="dash-drafts">—</div>
+            <div class="sub">Edits that haven't been published</div>
+          </div>
+        </div>
+
+        <div class="dash-section-title">Quick Links</div>
+        <div class="dash-links">
+          <a class="dash-link" href="https://root86coffee.pages.dev/" target="_blank" rel="noopener">
+            <div style="flex:1">
+              <div class="dash-link-label">View Live Site</div>
+              <div class="dash-link-sub">root86coffee.pages.dev</div>
+            </div>
+            <span class="dash-link-arrow">&#8599;</span>
+          </a>
+          <a class="dash-link" href="https://root86coffee.pages.dev/contact.html" target="_blank" rel="noopener">
+            <div style="flex:1">
+              <div class="dash-link-label">Contact Page</div>
+              <div class="dash-link-sub">Test the contact form</div>
+            </div>
+            <span class="dash-link-arrow">&#8599;</span>
+          </a>
+          <a class="dash-link" href="https://github.com/onlysems/Root86Coffee/issues" target="_blank" rel="noopener">
+            <div style="flex:1">
+              <div class="dash-link-label">All Submissions on GitHub</div>
+              <div class="dash-link-sub">Backup view of every inquiry</div>
+            </div>
+            <span class="dash-link-arrow">&#8599;</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Coffees view -->
+    <div class="view" id="view-coffees">
+      <div class="topbar">
+        <div class="topbar-brand">Coffees</div>
+        <div class="topbar-sep"></div>
+        <div class="topbar-crumbs">
+          Content &nbsp;/&nbsp; <strong>Coffees</strong>
+        </div>
+        <div class="topbar-spacer"></div>
+        <button class="topbar-btn" id="btn-reset">Discard Drafts</button>
+        <button class="topbar-btn" id="btn-export">Export</button>
+        <button class="topbar-btn primary" id="btn-publish">Publish to GitHub</button>
+        <button class="topbar-btn" id="btn-add">+ Add Item</button>
+      </div>
+
+      <div class="subbar">
+        <h1>Coffees</h1>
+        <span class="subbar-stats" id="stats">0 items</span>
+        <div class="subbar-spacer"></div>
+        <input type="text" class="search" id="filter-search" placeholder="Search by name, origin, region..." />
+        <select id="filter-origin"><option value="">All Origins</option></select>
+        <select id="filter-special">
+          <option value="">All Items</option>
+          <option value="favourite">★ Favourites</option>
+          <option value="onSale">On Sale</option>
+          <option value="soldOut">Sold Out</option>
+          <option value="hidden">Hidden (drafts)</option>
+          <option value="visible">Visible only</option>
+        </select>
+      </div>
+
+      <div class="table-wrap">
+        <table class="cms" id="cms-table">
+          <thead>
+            <tr>
+              <th data-sort="id" class="col-num">#</th>
+              <th data-sort="name">Product Name</th>
+              <th data-sort="origin">Origin</th>
+              <th>Certifications</th>
+              <th data-sort="process">Process</th>
+              <th data-sort="favourite" style="text-align:center">★ Fav</th>
+              <th data-sort="onSale" style="text-align:center">Sale</th>
+              <th data-sort="soldOut" style="text-align:center">Sold Out</th>
+              <th data-sort="hidden" style="text-align:center">Hidden</th>
+              <th>Warehouses</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="cms-body"></tbody>
+        </table>
+        <div class="empty" id="empty" style="display:none">No coffees match your filters.</div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -563,6 +714,7 @@ function init(){
 
   bind();
   render();
+  renderDashboard();
 }
 
 function bind(){
@@ -583,7 +735,14 @@ function bind(){
   $('#btn-logout').addEventListener('click', logout);
   $('#btn-export').addEventListener('click', openExport);
   $('#btn-publish').addEventListener('click', openPublish);
-  $('#btn-inbox').addEventListener('click', openInbox);
+
+  // Sidebar nav
+  document.querySelectorAll('.sb-item[data-view]').forEach(item => {
+    item.addEventListener('click', () => switchView(item.dataset.view));
+  });
+  const dashRefresh = $('#dash-refresh');
+  if (dashRefresh) dashRefresh.addEventListener('click', () => { renderDashboard(); loadInbox().catch(()=>{}); });
+
   $('#inbox-close').addEventListener('click', closeInbox);
   $('#inbox-refresh').addEventListener('click', () => loadInbox(true));
   document.querySelectorAll('.inbox-tab').forEach(tab => {
@@ -643,6 +802,62 @@ function applyFilterSort(){
     return SORT.dir==='asc' ? r : -r;
   });
   return rows;
+}
+
+// ── View switching + Dashboard ───────────────
+function switchView(view){
+  // Special case: Inbox opens the existing overlay instead of being a standalone view
+  if (view === 'inbox'){
+    openInbox();
+    return;
+  }
+  document.querySelectorAll('.sb-item[data-view]').forEach(el => {
+    el.classList.toggle('active', el.dataset.view === view);
+  });
+  document.querySelectorAll('.view').forEach(el => {
+    el.classList.toggle('active', el.id === 'view-' + view);
+  });
+  if (view === 'dashboard') renderDashboard();
+}
+
+function renderDashboard(){
+  const live = DATA.filter(c => !c.hidden);
+  const inStock = DATA.filter(c => c.available && !c.soldOut && !c.hidden).length;
+  const soldOut = DATA.filter(c => (c.soldOut || !c.available) && !c.hidden).length;
+  const hiddenCount = DATA.filter(c => c.hidden).length;
+  const openCount = INBOX_STATE && INBOX_STATE.issues
+    ? INBOX_STATE.issues.filter(i => i.state === 'open').length
+    : 0;
+
+  // Detect drafts by comparing localStorage against the original
+  let draftCount = 0;
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored){
+      const saved = JSON.parse(stored);
+      const original = (typeof COFFEES !== 'undefined') ? COFFEES : [];
+      if (Array.isArray(saved) && Array.isArray(original)){
+        const byId = new Map(original.map(c => [c.id, c]));
+        saved.forEach(c => {
+          const o = byId.get(c.id);
+          if (!o || JSON.stringify(o) !== JSON.stringify(c)) draftCount++;
+        });
+      }
+    }
+  } catch {}
+
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set('dash-coffees', live.length);
+  set('dash-instock', inStock);
+  set('dash-soldout', soldOut);
+  set('dash-hidden', hiddenCount);
+  set('dash-inbox-open', openCount);
+  set('dash-drafts', draftCount);
+
+  // Greeting based on hour of day
+  const h = new Date().getHours();
+  const hello = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+  set('dash-hello', hello);
 }
 
 function render(){
@@ -1014,10 +1229,17 @@ async function loadInbox(force){
 
 function updateInboxBadge(){
   const openCount = INBOX_STATE.issues.filter(i => i.state === 'open').length;
-  const badge = $('#inbox-badge');
-  badge.textContent = openCount;
-  badge.style.display = openCount > 0 ? 'inline-block' : 'none';
-  $('#tab-open-count').textContent = openCount ? ` (${openCount})` : '';
+  const badges = [document.getElementById('inbox-badge'), document.getElementById('sb-inbox-badge')];
+  badges.forEach(badge => {
+    if (!badge) return;
+    badge.textContent = openCount;
+    badge.style.display = openCount > 0 ? 'inline-block' : 'none';
+  });
+  const tabCount = document.getElementById('tab-open-count');
+  if (tabCount) tabCount.textContent = openCount ? ` (${openCount})` : '';
+  // Also refresh the dashboard number if it's visible
+  const dashInbox = document.getElementById('dash-inbox-open');
+  if (dashInbox) dashInbox.textContent = openCount;
 }
 
 function renderInboxList(){
