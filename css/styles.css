@@ -990,3 +990,177 @@ footer { background: var(--red-deep); padding: 52px 0 32px; border-top: 3px soli
   .fb-sub { max-width: none; }
   .fb-feed { min-height: auto; }
 }
+
+/* ============================================================
+   INTERACTIVE ENHANCEMENTS
+   Scroll progress, back-to-top cup, bean trail, tooltips,
+   3D tilt cards, fly-to-cart, behind-the-bag video
+   ============================================================ */
+
+/* Scroll progress bar */
+#scroll-progress {
+  position: fixed; top: 0; left: 0;
+  height: 3px; width: 0;
+  background: linear-gradient(90deg, var(--red), var(--red-dark));
+  z-index: 9998; pointer-events: none;
+  transition: width 0.08s linear;
+  box-shadow: 0 0 8px rgba(200,16,46,0.4);
+}
+
+/* Back to top coffee cup */
+#back-to-top {
+  position: fixed; right: 26px; bottom: 26px;
+  width: 52px; height: 56px;
+  background: var(--white); border: 1px solid rgba(26,0,5,0.08);
+  border-radius: 50%; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer !important;
+  opacity: 0; transform: translateY(20px) scale(0.8); pointer-events: none;
+  transition: opacity .35s, transform .35s, box-shadow .2s;
+  box-shadow: 0 4px 14px rgba(26,0,5,0.10);
+  z-index: 9990;
+}
+#back-to-top.show { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+#back-to-top:hover { box-shadow: 0 8px 24px rgba(200,16,46,0.25); }
+#back-to-top:hover .btt-steam { animation-duration: 1.4s; }
+.btt-svg { width: 30px; height: 34px; overflow: visible; }
+.btt-cup { fill: var(--white); stroke: var(--ink); stroke-width: 1.5; }
+.btt-handle { fill: none; stroke: var(--ink); stroke-width: 1.5; }
+.btt-fill { fill: var(--red); transition: height .25s, y .25s; }
+.btt-steam {
+  fill: none; stroke: var(--red); stroke-width: 1.2; stroke-linecap: round;
+  opacity: 0; animation: btt-steam 2.4s ease-in-out infinite;
+}
+.btt-steam:nth-of-type(2) { animation-delay: 0.4s; }
+.btt-steam:nth-of-type(3) { animation-delay: 0.8s; }
+@keyframes btt-steam {
+  0%   { opacity: 0; transform: translateY(4px); }
+  40%  { opacity: 0.7; }
+  100% { opacity: 0; transform: translateY(-4px); }
+}
+
+/* Coffee bean cursor trail */
+#bean-trail { position: fixed; inset: 0; pointer-events: none; z-index: 9995; }
+.bean {
+  position: absolute;
+  width: 8px; height: 10px;
+  background: radial-gradient(ellipse at 40% 40%, #5a2d1a, #2a1108 80%);
+  border-radius: 50% / 55%;
+  box-shadow: inset 0 0 0 0.5px rgba(255,255,255,0.1);
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+.bean::after {
+  content: ''; position: absolute; inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(0deg, transparent 45%, rgba(255,220,180,0.18) 47%, rgba(255,220,180,0.18) 53%, transparent 55%);
+}
+
+/* Custom cupping-notes tooltip */
+.ccard-notes { position: relative; cursor: help; }
+.ccard-notes[data-notes]:hover::after {
+  content: attr(data-notes);
+  position: absolute;
+  bottom: calc(100% + 8px); left: 0; right: 0;
+  background: var(--ink); color: var(--white);
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 0.75rem; line-height: 1.55;
+  letter-spacing: 0.02em; text-transform: none;
+  white-space: normal; word-wrap: break-word;
+  box-shadow: 0 6px 20px rgba(26,0,5,0.25);
+  z-index: 50;
+  pointer-events: none;
+  animation: tip-in 0.18s ease-out both;
+  max-width: 300px;
+}
+.ccard-notes[data-notes]:hover::before {
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 2px); left: 24px;
+  border: 6px solid transparent;
+  border-top-color: var(--ink);
+  z-index: 50;
+  animation: tip-in 0.18s ease-out both;
+}
+@keyframes tip-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* 3D tilt coffee cards */
+.ccard {
+  transform-style: preserve-3d;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  will-change: transform;
+}
+.ccard.tilting { transition: transform 0.08s linear, box-shadow 0.25s ease; }
+
+/* Fly-to-cart flying bean */
+.fly-bean {
+  position: fixed;
+  width: 14px; height: 17px;
+  background: radial-gradient(ellipse at 40% 40%, #5a2d1a, #2a1108 80%);
+  border-radius: 50% / 55%;
+  z-index: 9996; pointer-events: none;
+  box-shadow: 0 2px 10px rgba(200,16,46,0.35);
+}
+.fly-bean::after {
+  content: ''; position: absolute; inset: 0; border-radius: inherit;
+  background: linear-gradient(0deg, transparent 45%, rgba(255,220,180,0.22) 47%, rgba(255,220,180,0.22) 53%, transparent 55%);
+}
+.nav-quote-btn.cart-pulse { animation: cart-pulse 0.5s ease-out; }
+@keyframes cart-pulse {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.12); box-shadow: 0 0 0 8px rgba(200,16,46,0.2); }
+  100% { transform: scale(1); }
+}
+
+/* Behind the Bag video section */
+.btb-section {
+  padding: 100px 0;
+  background: var(--off-white);
+  overflow: hidden;
+}
+.btb-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 80px;
+  align-items: center;
+}
+.btb-copy { padding-left: 24px; }
+.btb-eyebrow {
+  font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--red); display: block; margin-bottom: 18px; font-weight: 500;
+}
+.btb-title {
+  font-family: var(--font-serif); font-size: clamp(38px, 4vw, 58px);
+  font-weight: 300; line-height: 1.05; color: var(--ink); margin-bottom: 24px;
+}
+.btb-title em { font-style: italic; color: var(--red); }
+.btb-body {
+  font-size: 0.95rem; line-height: 1.8; color: var(--muted);
+  max-width: 440px;
+}
+.btb-media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 30px 60px -20px rgba(26,0,5,0.35);
+}
+.btb-media video {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.btb-frame {
+  position: absolute; inset: 0;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 6px rgba(26,0,5,0.04);
+}
+@media (max-width: 900px) {
+  .btb-grid { grid-template-columns: 1fr; gap: 40px; padding: 0 32px; }
+  .btb-copy { padding-left: 0; }
+  .btb-section { padding: 64px 0; }
+}

@@ -32,13 +32,17 @@ const $$ = (s,c=document) => [...c.querySelectorAll(s)];
 // ── Init ───────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   initCursor();
+  initBeanTrail();
   initHeroCanvas();
   initNav();
   buildFilters();
   renderGrid();
   renderQuoteItems();
   bindEvents();
-  animateNumbers();
+  initScrollProgress();
+  initBackToTop();
+  initStatCounters();
+  initBtbVideo();
   initMap();
 });
 
@@ -152,14 +156,37 @@ function initNav() {
 // FILTERS
 // ================================================
 function buildFilters() {
-  const add = (id, opts) => {
-    const sel = $(id); if (!sel) return;
-    opts.forEach(o => { const el = document.createElement('option'); el.value = o; el.textContent = o; sel.appendChild(el); });
+  // Count how many catalogue coffees match each filter value
+  const visible = COFFEES.filter(c => !c.hidden);
+  const countIn = (picker) => {
+    const out = {};
+    visible.forEach(c => {
+      const val = picker(c);
+      if (Array.isArray(val)) val.forEach(v => { if (v) out[v] = (out[v]||0) + 1; });
+      else if (val) out[val] = (out[val]||0) + 1;
+    });
+    return out;
   };
-  add('#filter-origin',  FILTER_OPTIONS.origins);
-  add('#filter-process', FILTER_OPTIONS.processes);
-  add('#filter-cert',    FILTER_OPTIONS.certifications);
-  add('#filter-wh',      FILTER_OPTIONS.warehouses);
+  const counts = {
+    origin:  countIn(c => c.origin),
+    process: countIn(c => c.process),
+    cert:    countIn(c => c.certifications || []),
+    wh:      countIn(c => c.warehouses || [])
+  };
+  const add = (id, opts, key) => {
+    const sel = $(id); if (!sel) return;
+    opts.forEach(o => {
+      const n = counts[key][o] || 0;
+      const el = document.createElement('option');
+      el.value = o;
+      el.textContent = n ? `${o} (${n})` : o;
+      sel.appendChild(el);
+    });
+  };
+  add('#filter-origin',  FILTER_OPTIONS.origins,        'origin');
+  add('#filter-process', FILTER_OPTIONS.processes,      'process');
+  add('#filter-cert',    FILTER_OPTIONS.certifications, 'cert');
+  add('#filter-wh',      FILTER_OPTIONS.warehouses,     'wh');
 }
 
 function applyFilters() {
@@ -205,7 +232,14 @@ function renderGrid() {
   $$('.more-info-btn', grid).forEach(btn =>
     btn.addEventListener('click', e => { e.stopPropagation(); openModal(parseInt(btn.dataset.id)); }));
   $$('.add-quote-btn', grid).forEach(btn =>
-    btn.addEventListener('click', e => { e.stopPropagation(); toggleQuote(parseInt(btn.dataset.id)); }));
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const id = parseInt(btn.dataset.id);
+      const wasIn = state.quote.some(q => q.id === id);
+      toggleQuote(id, btn);
+      // Fly-to-cart animation only when ADDING (not removing / not on incompat)
+      if (!wasIn && state.quote.some(q => q.id === id)) flyToCart(btn);
+    }));
   $$('.ccard', grid).forEach(card =>
     card.addEventListener('click', e => {
       // Don't open the modal if the user clicked a button inside the card
@@ -214,6 +248,7 @@ function renderGrid() {
     }));
 
   updateGridButtons();
+  initCardTilt();
 }
 
 function cardHTML(c) {
@@ -239,7 +274,7 @@ function cardHTML(c) {
         <div class="ccard-detail"><strong>Process:</strong> ${fallback(c.process)}</div>
         <div class="ccard-detail"><strong>Region:</strong> ${fallback(c.region)}</div>
         <div class="ccard-detail"><strong>Bag Weight:</strong> ${c.bagWeight ? c.bagWeight + ' lbs' : '<span class="ccard-na">N/A</span>'}</div>
-        <div class="ccard-detail ccard-notes" title="${(c.tastingNotes||'').replace(/"/g,'&quot;')}">${fallback(c.tastingNotes)}</div>
+        <div class="ccard-detail ccard-notes" data-notes="${(c.tastingNotes||'').replace(/"/g,'&quot;')}">${fallback(c.tastingNotes)}</div>
       </div>
       <div class="ccard-stock${c.available ? '' : ' out'}">
         ${c.available
@@ -473,7 +508,11 @@ function openModal(id) {
   const addBtn = $('#modal-add-btn');
   addBtn.classList.toggle('added', inQ);
   addBtn.textContent = inQ ? 'In Quote - Remove' : 'Add to Quote';
-  addBtn.onclick = () => { toggleQuote(id); };
+  addBtn.onclick = () => {
+    const wasIn = state.quote.some(q => q.id === id);
+    toggleQuote(id);
+    if (!wasIn && state.quote.some(q => q.id === id)) flyToCart(addBtn);
+  };
 
   $('#modal-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -552,19 +591,198 @@ function showToast(msg, isRemove = false) {
 // ================================================
 // NUMBER ANIMATION
 // ================================================
-function animateNumbers() {
-  $$('[data-target]').forEach(el => {
+function animateNumbers(scope) {
+  const nodes = (scope || document).querySelectorAll('[data-target]');
+  nodes.forEach(el => {
+    if (el.dataset.ran === '1') return;
+    el.dataset.ran = '1';
     const target = parseInt(el.dataset.target);
     const suffix = el.dataset.suffix || '';
     if (isNaN(target)) return;
     let cur = 0;
-    const step = Math.ceil(target / 40);
+    const step = Math.max(1, Math.ceil(target / 40));
     const timer = setInterval(() => {
       cur = Math.min(cur + step, target);
       el.textContent = cur + suffix;
       if (cur >= target) clearInterval(timer);
     }, 35);
   });
+}
+function initStatCounters(){
+  // Scroll-trigger the counters when they enter the viewport, not on load.
+  const band = document.querySelector('.stat-band');
+  if (!band || !('IntersectionObserver' in window)) { animateNumbers(); return; }
+  const io = new IntersectionObserver((entries, obs) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { animateNumbers(e.target); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.4 });
+  io.observe(band);
+}
+
+// ================================================
+// SCROLL PROGRESS BAR
+// ================================================
+function initScrollProgress(){
+  const bar = document.getElementById('scroll-progress');
+  if (!bar) return;
+  let ticking = false;
+  function update(){
+    const h = document.documentElement;
+    const max = h.scrollHeight - h.clientHeight;
+    const pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+    bar.style.width = pct + '%';
+    ticking = false;
+  }
+  window.addEventListener('scroll', () => {
+    if (!ticking) { requestAnimationFrame(update); ticking = true; }
+  }, { passive: true });
+  update();
+}
+
+// ================================================
+// BACK TO TOP COFFEE CUP
+// ================================================
+function initBackToTop(){
+  const btn = document.getElementById('back-to-top');
+  const fill = document.getElementById('btt-fill');
+  if (!btn || !fill) return;
+  // Cup interior bounds (from SVG): top ~ y=13, bottom ~ y=38 => height 25
+  const CUP_TOP = 13, CUP_BOTTOM = 38, CUP_HEIGHT = CUP_BOTTOM - CUP_TOP;
+  let ticking = false;
+  function update(){
+    const h = document.documentElement;
+    const max = h.scrollHeight - h.clientHeight;
+    const pct = max > 0 ? window.scrollY / max : 0;
+    // Show once the user has scrolled past ~400px
+    btn.classList.toggle('show', window.scrollY > 400);
+    const fillH = Math.max(0, Math.min(CUP_HEIGHT, pct * CUP_HEIGHT));
+    fill.setAttribute('height', String(fillH));
+    fill.setAttribute('y', String(CUP_BOTTOM - fillH));
+    ticking = false;
+  }
+  window.addEventListener('scroll', () => {
+    if (!ticking) { requestAnimationFrame(update); ticking = true; }
+  }, { passive: true });
+  btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  update();
+}
+
+// ================================================
+// COFFEE BEAN CURSOR TRAIL
+// ================================================
+function initBeanTrail(){
+  const wrap = document.getElementById('bean-trail');
+  if (!wrap) return;
+  // Disable on touch devices and on reduced-motion preference
+  if (window.matchMedia('(pointer: coarse)').matches) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  let lastSpawn = 0;
+  let lx = 0, ly = 0;
+  document.addEventListener('mousemove', e => {
+    const now = performance.now();
+    const dx = e.clientX - lx, dy = e.clientY - ly;
+    const moved = Math.hypot(dx, dy);
+    if (now - lastSpawn < 80 || moved < 14) return;
+    lastSpawn = now; lx = e.clientX; ly = e.clientY;
+    spawnBean(e.clientX, e.clientY);
+  }, { passive: true });
+
+  function spawnBean(x, y){
+    const b = document.createElement('div');
+    b.className = 'bean';
+    const size = 6 + Math.random() * 5;
+    b.style.width = size + 'px';
+    b.style.height = (size * 1.25) + 'px';
+    b.style.left = (x - size/2) + 'px';
+    b.style.top  = (y - size/2) + 'px';
+    b.style.transform = `rotate(${Math.random() * 360}deg)`;
+    wrap.appendChild(b);
+    const driftX = (Math.random() - 0.5) * 40;
+    const driftY = 30 + Math.random() * 30;
+    const rot = (Math.random() - 0.5) * 180;
+    b.animate([
+      { transform: `translate(0,0) rotate(0deg)`, opacity: 0.7 },
+      { transform: `translate(${driftX}px, ${driftY}px) rotate(${rot}deg)`, opacity: 0 }
+    ], { duration: 900 + Math.random() * 400, easing: 'cubic-bezier(.4,.1,.6,1)', fill: 'forwards' })
+    .onfinish = () => b.remove();
+  }
+}
+
+// ================================================
+// 3D TILT FOR COFFEE CARDS
+// ================================================
+function initCardTilt(){
+  // Tilt only on fine pointers; keep touch interfaces flat.
+  if (window.matchMedia('(pointer: coarse)').matches) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const MAX = 7; // degrees
+  $$('.ccard').forEach(card => {
+    if (card.dataset.tiltBound) return;
+    card.dataset.tiltBound = '1';
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width;   // 0..1
+      const py = (e.clientY - r.top)  / r.height;  // 0..1
+      const rx = (0.5 - py) * MAX * 2;
+      const ry = (px - 0.5) * MAX * 2;
+      card.classList.add('tilting');
+      card.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(0)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.classList.remove('tilting');
+      card.style.transform = '';
+    });
+  });
+}
+
+// ================================================
+// FLY-TO-CART MINI ANIMATION
+// ================================================
+function flyToCart(sourceEl){
+  const target = document.getElementById('nav-quote-count')
+             || document.getElementById('nav-quote-btn');
+  if (!target || !sourceEl) return;
+  const s = sourceEl.getBoundingClientRect();
+  const t = target.getBoundingClientRect();
+  const bean = document.createElement('div');
+  bean.className = 'fly-bean';
+  bean.style.left = (s.left + s.width/2 - 7) + 'px';
+  bean.style.top  = (s.top  + s.height/2 - 9) + 'px';
+  document.body.appendChild(bean);
+  const dx = (t.left + t.width/2) - (s.left + s.width/2);
+  const dy = (t.top  + t.height/2) - (s.top  + s.height/2);
+  // Arc via two-stage keyframe
+  const midX = dx * 0.5, midY = Math.min(dy, 0) - 120;
+  const anim = bean.animate([
+    { transform: 'translate(0,0) scale(1)',        opacity: 1, offset: 0 },
+    { transform: `translate(${midX}px, ${midY}px) scale(1.1)`, opacity: 1, offset: 0.6 },
+    { transform: `translate(${dx}px, ${dy}px) scale(0.5)`,     opacity: 0.2, offset: 1 }
+  ], { duration: 720, easing: 'cubic-bezier(.45,.05,.55,.95)', fill: 'forwards' });
+  anim.onfinish = () => {
+    bean.remove();
+    const btn = document.getElementById('nav-quote-btn');
+    if (btn) {
+      btn.classList.remove('cart-pulse');
+      void btn.offsetWidth; // restart animation
+      btn.classList.add('cart-pulse');
+    }
+  };
+}
+
+// ================================================
+// BEHIND-THE-BAG VIDEO (auto-hides if src missing)
+// ================================================
+function initBtbVideo(){
+  const sec = document.getElementById('btb-section');
+  const vid = document.getElementById('btb-video');
+  if (!sec || !vid) return;
+  const source = vid.querySelector('source');
+  if (!source) return;
+  // Probe the file — reveal section only on successful load
+  fetch(source.src, { method: 'HEAD' })
+    .then(r => { if (r.ok) { sec.hidden = false; vid.load(); } })
+    .catch(() => { /* stay hidden */ });
 }
 
 // ================================================
