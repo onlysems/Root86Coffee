@@ -272,8 +272,9 @@
     </div>
     <div class="topbar-spacer"></div>
     <button class="topbar-btn" id="btn-reset">Discard Drafts</button>
-    <button class="topbar-btn" id="btn-export">Export Updated File</button>
-    <button class="topbar-btn primary" id="btn-add">+ Add Item</button>
+    <button class="topbar-btn" id="btn-export">Export</button>
+    <button class="topbar-btn primary" id="btn-publish">Publish to GitHub</button>
+    <button class="topbar-btn" id="btn-add">+ Add Item</button>
     <button class="topbar-btn danger" id="btn-logout">Sign Out</button>
   </div>
 
@@ -385,6 +386,37 @@
   </div>
 </div>
 
+<!-- Publish-to-GitHub modal -->
+<div class="modal-bg" id="publish-modal">
+  <div class="modal" style="max-width:620px">
+    <div class="modal-head">
+      <h3>Publish to GitHub</h3>
+      <button class="close" id="publish-close">&times;</button>
+    </div>
+    <div class="modal-body" style="display:block">
+      <p style="color:var(--muted);margin-bottom:14px;font-size:.85rem;line-height:1.6">
+        Commits the current catalog to <code>js/coffees.js</code> on <strong>main</strong>.
+        GitHub Pages will rebuild in ~1&ndash;2 minutes. SEO pages auto-regenerate via GitHub Actions.
+      </p>
+      <label style="display:block;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">
+        GitHub Token <span id="tok-status" style="text-transform:none;letter-spacing:0;color:var(--muted);font-size:.75rem"></span>
+      </label>
+      <input type="password" id="gh-token" placeholder="github_pat_..." style="width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:4px;font-family:monospace;font-size:.8rem" />
+      <p style="color:var(--muted);margin-top:8px;font-size:.72rem;line-height:1.6">
+        One-time setup: create a <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener" style="color:var(--red)">fine-grained PAT</a>
+        scoped to <code>onlysems/Root86Coffee</code> with <strong>Contents: Read &amp; write</strong>. Stored only in your browser.
+      </p>
+      <label style="display:block;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:14px;margin-bottom:6px">Commit Message</label>
+      <input type="text" id="gh-commit-msg" placeholder="Update coffee catalog" style="width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:4px;font-size:.85rem" />
+      <div id="publish-log" style="margin-top:14px;font-family:monospace;font-size:.75rem;color:var(--muted);min-height:1.4em;white-space:pre-wrap"></div>
+    </div>
+    <div class="modal-foot">
+      <button id="gh-forget" style="color:var(--red)">Forget Token</button>
+      <button id="gh-publish-go" class="primary">Publish</button>
+    </div>
+  </div>
+</div>
+
 <datalist id="origins-dl"></datalist>
 <datalist id="processes-dl"></datalist>
 
@@ -472,6 +504,15 @@ function bind(){
   $('#btn-add').addEventListener('click', () => openEdit(null));
   $('#btn-logout').addEventListener('click', logout);
   $('#btn-export').addEventListener('click', openExport);
+  $('#btn-publish').addEventListener('click', openPublish);
+  $('#publish-close').addEventListener('click', () => $('#publish-modal').classList.remove('open'));
+  $('#gh-publish-go').addEventListener('click', publishToGitHub);
+  $('#gh-forget').addEventListener('click', () => {
+    localStorage.removeItem('r86_gh_token');
+    $('#gh-token').value = '';
+    $('#tok-status').textContent = '— cleared';
+    toast('Token cleared');
+  });
   $('#btn-reset').addEventListener('click', () => {
     if (!confirm('Discard all unpublished draft edits and revert to what is on the live site?')) return;
     localStorage.removeItem(STORAGE_KEY);
@@ -487,7 +528,7 @@ function bind(){
   $('#export-download').addEventListener('click', downloadExport);
 
   document.addEventListener('keydown', e => {
-    if (e.key==='Escape') { closeEdit(); $('#export-modal').classList.remove('open'); }
+    if (e.key==='Escape') { closeEdit(); $('#export-modal').classList.remove('open'); $('#publish-modal').classList.remove('open'); }
   });
 }
 
@@ -757,6 +798,87 @@ function downloadExport(){
   a.href = url; a.download = 'coffees.js'; a.click();
   URL.revokeObjectURL(url);
   toast('Downloaded');
+}
+
+// ── Publish to GitHub ─────────────────────────────────
+const GH_OWNER  = 'onlysems';
+const GH_REPO   = 'Root86Coffee';
+const GH_BRANCH = 'main';
+const GH_PATH   = 'js/coffees.js';
+const GH_TOKEN_KEY = 'r86_gh_token';
+
+function openPublish(){
+  const saved = localStorage.getItem(GH_TOKEN_KEY) || '';
+  $('#gh-token').value = saved;
+  $('#tok-status').textContent = saved ? '— saved in this browser' : '— not set';
+  $('#gh-commit-msg').value = `Update coffee catalog (${DATA.length} items)`;
+  $('#publish-log').textContent = '';
+  $('#publish-modal').classList.add('open');
+}
+
+function logPublish(msg){
+  $('#publish-log').textContent += (msg + '\n');
+}
+
+// UTF-8 safe base64
+function b64encode(str){
+  return btoa(unescape(encodeURIComponent(str)));
+}
+
+async function publishToGitHub(){
+  const token = $('#gh-token').value.trim();
+  if (!token) { toast('Enter a GitHub token first', true); return; }
+  localStorage.setItem(GH_TOKEN_KEY, token);
+
+  const commitMsg = $('#gh-commit-msg').value.trim() || 'Update coffee catalog';
+  const content = buildExportText();
+  const btn = $('#gh-publish-go');
+  btn.disabled = true;
+  $('#publish-log').textContent = '';
+
+  const apiUrl = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_PATH}?ref=${GH_BRANCH}`;
+  const headers = {
+    'Authorization': `Bearer ${token}`,
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28'
+  };
+
+  try {
+    logPublish('→ Fetching current file SHA...');
+    const getRes = await fetch(apiUrl, { headers });
+    if (!getRes.ok) {
+      const err = await getRes.json().catch(()=>({}));
+      throw new Error(`GET failed (${getRes.status}): ${err.message || getRes.statusText}`);
+    }
+    const current = await getRes.json();
+    logPublish(`   sha: ${current.sha.slice(0,10)}...`);
+
+    logPublish('→ Committing new content...');
+    const putRes = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_PATH}`, {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify({
+        message: commitMsg,
+        content: b64encode(content),
+        sha: current.sha,
+        branch: GH_BRANCH
+      })
+    });
+    if (!putRes.ok) {
+      const err = await putRes.json().catch(()=>({}));
+      throw new Error(`PUT failed (${putRes.status}): ${err.message || putRes.statusText}`);
+    }
+    const result = await putRes.json();
+    logPublish(`✓ Committed: ${result.commit.sha.slice(0,10)}`);
+    logPublish(`✓ GitHub Pages will rebuild in ~1-2 min`);
+    logPublish(`✓ SEO pages auto-regenerate via Actions`);
+    toast('Published to GitHub!');
+  } catch (e) {
+    logPublish(`✗ ${e.message}`);
+    toast('Publish failed — see log', true);
+  } finally {
+    btn.disabled = false;
+  }
 }
 
 // ── Toast ─────────────────────────────────
