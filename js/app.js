@@ -174,33 +174,52 @@ function initCursor(){
 
 // ================================================
 // BEHIND-THE-BAG IMAGE CAROUSEL
-// Cycles through unique coffee lot images from COFFEES.
+// Cycles through origin-story photos from /wix images/.
 // ================================================
+const BTB_IMAGES = [
+  { file: 'Abakundakawa2.jpg',                             caption: 'Abakundakawa cooperative, Rwanda' },
+  { file: 'Brazil Mogiana.jpg',                            caption: 'Mogiana region, Brazil' },
+  { file: 'Brazil Mogiana natural.jpg',                    caption: 'Natural process, Mogiana · Brazil' },
+  { file: 'Brazil Pocos de Caldas.jpg',                    caption: 'Poços de Caldas, Sul de Minas · Brazil' },
+  { file: 'Pocos de Caldas.jpg',                           caption: 'Poços de Caldas · Brazil' },
+  { file: 'Sitio do Campo.png',                            caption: 'Sítio do Campo estate · Brazil' },
+  { file: 'cafe capucas hon2.jpg',                         caption: 'Café Capucas · Honduras' },
+  { file: 'Ethiopia natural drying bed.jpg',               caption: 'Natural drying beds · Ethiopia' },
+  { file: 'Shakiso washed 2.jpg',                          caption: 'Shakiso washing station · Ethiopia' },
+  { file: 'Sidama.jpg',                                    caption: 'Sidama region · Ethiopia' },
+  { file: 'Yirgacheffe.jpg',                               caption: 'Yirgacheffe · Ethiopia' },
+  { file: 'Guatemala_NuevaGranada.webp',                   caption: 'Nueva Granada · Guatemala' },
+  { file: 'Ketiara1_edited.jpg',                           caption: 'Ketiara cooperative · Sumatra' },
+  { file: 'Sumatra-Picker.jpg',                            caption: 'Coffee picker · Sumatra' },
+  { file: 'Mexico Chiapas cherry picking.jpg',             caption: 'Cherry picking, Chiapas · Mexico' },
+  { file: 'Mexico Chiapas coffee milling.jpg',             caption: 'Coffee milling, Chiapas · Mexico' },
+  { file: 'moyobamba2.jpg',                                caption: 'Moyobamba · Peru' },
+  { file: 'Uganda coffee pickers.jpg',                     caption: 'Coffee pickers · Uganda' },
+  { file: 'sipi_falls_mount_elgon_national_park uganda.jpg', caption: 'Sipi Falls, Mount Elgon · Uganda' },
+  { file: 'V&G10.jpg',                                     caption: 'Producer partner visit' },
+  { file: '20140410_141343.jpg',                           caption: 'Origin trip · 2014' },
+  { file: '_edited.jpg',                                   caption: 'On the farm' },
+  { file: 'Screen Shot 2022-11-01 at 2.26.47 PM.png',      caption: 'From the cupping table' }
+];
+
 function initBtbCarousel(){
   const wrap = document.getElementById('btb-carousel');
   const dotsWrap = document.getElementById('btb-dots');
-  if (!wrap || typeof COFFEES === 'undefined') return;
+  if (!wrap) return;
 
-  // Collect unique image URLs (dedupe since some coffees share one)
-  const seen = new Set();
-  const images = [];
-  for (const c of COFFEES) {
-    if (!c.image || seen.has(c.image)) continue;
-    seen.add(c.image);
-    images.push({ src: c.image, name: c.name || '', origin: c.origin || '' });
-    if (images.length >= 12) break; // cap for perf
-  }
-  if (!images.length) { const sec = document.getElementById('btb-section'); if (sec) sec.hidden = true; return; }
+  // Shuffle so the order varies each load (but seed by day so it's stable for repeat visitors same day)
+  const images = BTB_IMAGES.slice();
+  const dayOffset = new Date().getUTCDate() % images.length;
+  const ordered = images.slice(dayOffset).concat(images.slice(0, dayOffset));
 
-  // Build slides
-  images.forEach((img, i) => {
+  ordered.forEach((img, i) => {
+    const src = 'wix%20images/' + encodeURIComponent(img.file);
     const slide = document.createElement('div');
     slide.className = 'btb-slide' + (i === 0 ? ' active' : '');
     slide.innerHTML = `
-      <img src="${img.src}" alt="${img.name}" loading="lazy" onerror="this.parentElement.classList.add('broken')" />
+      <img src="${src}" alt="${img.caption}" loading="${i === 0 ? 'eager' : 'lazy'}" onerror="this.parentElement.classList.add('broken')" />
       <div class="btb-slide-label">
-        <span class="btb-slide-origin">${img.origin}</span>
-        <span class="btb-slide-name">${img.name}</span>
+        <span class="btb-slide-name">${img.caption}</span>
       </div>`;
     wrap.appendChild(slide);
 

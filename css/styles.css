@@ -1224,14 +1224,11 @@ footer { background: var(--red-deep); padding: 52px 0 32px; border-top: 3px soli
   display: flex; flex-direction: column; gap: 4px;
   pointer-events: none;
 }
-.btb-slide-origin {
-  font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase;
-  color: rgba(255,255,255,0.82);
-  font-weight: 500;
-}
 .btb-slide-name {
   font-family: var(--font-serif); font-size: 1.2rem; font-weight: 400;
-  line-height: 1.25;
+  line-height: 1.3;
+  font-style: italic;
+  color: #fff;
 }
 .btb-dots {
   position: absolute; right: 14px; top: 14px;
