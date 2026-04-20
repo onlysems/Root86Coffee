@@ -464,7 +464,7 @@ function cardHTML(c) {
         <div class="spec"><dt>Bag</dt><dd>${c.bagWeight ? c.bagWeight + ' lbs' : na}</dd></div>
       </dl>
       ${certFlags ? `<div class="ccard-certs">${certFlags}</div>` : ''}
-      <footer class="ccard-foot">
+      <div class="ccard-foot">
         <div class="ccard-stock${c.available ? '' : ' out'}">${stockLine}</div>
         <div class="ccard-actions">
           <button class="more-info-btn" data-id="${c.id}">Details</button>
@@ -472,7 +472,7 @@ function cardHTML(c) {
             ${inQ ? '✓ Added' : 'Add to Quote'}
           </button>
         </div>
-      </footer>
+      </div>
     </article>`;
 }
 
