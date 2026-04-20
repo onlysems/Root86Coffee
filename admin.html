@@ -210,45 +210,68 @@
     background-repeat:no-repeat; background-position:right 10px center;
   }
 
-  /* ── Table area ── */
-  .table-wrap{flex:1;overflow:auto;background:var(--panel)}
+  /* ── Coffee list (redesigned) ── */
+  .table-wrap{flex:1;overflow:auto;background:var(--bg);padding:16px 20px 60px}
   table.cms{
-    width:100%; border-collapse:collapse; font-size:.82rem;
-    background:var(--panel);
+    width:100%; border-collapse:separate; border-spacing:0 8px; font-size:.85rem;
   }
   table.cms thead th{
     position:sticky; top:0; z-index:10;
-    background:#F2F0F4; border-bottom:1px solid var(--line-strong); border-right:1px solid var(--line);
-    text-align:left; padding:10px 12px; font-weight:600;
-    font-size:.7rem; letter-spacing:.05em; text-transform:uppercase;
+    background:var(--bg);
+    text-align:left; padding:4px 14px 10px; font-weight:600;
+    font-size:.65rem; letter-spacing:.12em; text-transform:uppercase;
     color:var(--muted); white-space:nowrap; user-select:none; cursor:pointer;
+    border-bottom:1px solid var(--line);
   }
-  table.cms thead th:hover{background:#EAE7EE}
+  table.cms thead th:hover{color:var(--ink)}
   table.cms thead th.sorted::after{content:" \2193";color:var(--red)}
   table.cms thead th.sorted-asc::after{content:" \2191";color:var(--red)}
-  table.cms thead th .col-icon{margin-right:6px;opacity:.5}
 
   table.cms tbody td{
-    border-bottom:1px solid var(--line); border-right:1px solid var(--line);
-    padding:8px 12px; vertical-align:middle; max-width:300px;
+    background:var(--panel);
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    padding:14px 14px; vertical-align:middle;
   }
-  table.cms tbody tr{transition:background .1s}
-  table.cms tbody tr:nth-child(even){background:var(--row-alt)}
-  table.cms tbody tr:hover{background:var(--hover)}
-  table.cms tbody tr.editing{background:var(--selected) !important}
-  table.cms tbody tr.hidden-row td{opacity:.45}
+  table.cms tbody td:first-child{border-left:1px solid var(--line);border-radius:6px 0 0 6px}
+  table.cms tbody td:last-child{border-right:1px solid var(--line);border-radius:0 6px 6px 0}
+  table.cms tbody tr{transition:transform .1s, box-shadow .15s}
+  table.cms tbody tr:hover td{background:#fdfcfd}
+  table.cms tbody tr:hover{box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  table.cms tbody tr.editing td{background:var(--selected) !important}
+  table.cms tbody tr.hidden-row td{opacity:.55}
+
+  .coffee-cell{display:flex;align-items:center;gap:12px;min-width:0}
+  .coffee-cell .num{font-size:.7rem;color:var(--muted);font-variant-numeric:tabular-nums;min-width:32px}
+  .coffee-cell .info{min-width:0;flex:1}
+  .coffee-cell .title{font-weight:600;font-size:.92rem;color:var(--ink);line-height:1.3;display:flex;align-items:center;gap:6px}
+  .coffee-cell .title .fav-star{color:var(--red);font-size:.85rem}
+  .coffee-cell .sub{color:var(--muted);font-size:.76rem;margin-top:3px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .thumb{
-    display:inline-block;width:28px;height:28px;background:#EEE;vertical-align:middle;
-    margin-right:10px;object-fit:cover;border:1px solid var(--line);
+    display:inline-block;width:36px;height:36px;background:#EEE;
+    object-fit:cover;border:1px solid var(--line);border-radius:4px;flex-shrink:0;
+  }
+  .thumb-placeholder{
+    width:36px;height:36px;border:1px dashed var(--line);border-radius:4px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.65rem;
+    font-family:var(--font-serif);font-style:italic;
   }
 
-  td.col-check{width:34px;text-align:center}
-  td.col-actions{width:90px;white-space:nowrap}
-  td.col-num{width:50px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .status-cell{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+  .status-chip{
+    display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:3px;
+    font-size:.65rem;letter-spacing:.04em;text-transform:uppercase;font-weight:600;
+    cursor:pointer;user-select:none;transition:background .15s,opacity .15s;border:1px solid transparent;
+  }
+  .status-chip.off{background:#F2F1F4;color:#9A939B;opacity:.7}
+  .status-chip.off:hover{opacity:1}
+  .status-chip.on.fav{background:rgba(200,16,46,.12);color:var(--red);border-color:rgba(200,16,46,.2)}
+  .status-chip.on.sale{background:rgba(183,121,31,.14);color:#8a5320;border-color:rgba(183,121,31,.25)}
+  .status-chip.on.sold{background:rgba(100,100,100,.12);color:#555;border-color:rgba(100,100,100,.25)}
+  .status-chip.on.hidden{background:rgba(31,111,183,.12);color:#1f5d96;border-color:rgba(31,111,183,.25)}
 
   .row-btn{
-    padding:4px 8px; font-size:.7rem; border:1px solid var(--line-strong);
-    background:#fff; margin-right:4px;
+    padding:5px 10px; font-size:.7rem; border:1px solid var(--line-strong);
+    background:#fff; border-radius:4px; margin-right:4px;
   }
   .row-btn:hover{background:var(--hover)}
   .row-btn.danger{color:var(--red);border-color:rgba(200,16,46,.3)}
@@ -256,9 +279,9 @@
 
   /* tag pills */
   .pill{
-    display:inline-block; padding:2px 8px; margin:1px 3px 1px 0;
+    display:inline-block; padding:3px 9px; margin:2px 4px 2px 0;
     font-size:.68rem; font-weight:500; background:#EAE7EE; color:#3A2A35;
-    border-radius:2px; white-space:nowrap;
+    border-radius:3px; white-space:nowrap;
   }
   .pill.cert-organic{background:#E2F2E5;color:#1f6f38}
   .pill.cert-ft{background:#E1ECF7;color:#1f5d96}
@@ -266,6 +289,7 @@
   .pill.cert-womens{background:#F7E0EC;color:#9c2861}
   .pill.cert-decaf{background:#EFE5DC;color:#5b3e1e}
   .pill.wh{background:#FFF1E3;color:#8a5320}
+  .pill-muted{color:#c0bcc2;font-size:.72rem;font-style:italic}
 
   /* boolean */
   .toggle{
@@ -500,22 +524,16 @@
         <table class="cms" id="cms-table">
           <thead>
             <tr>
-              <th data-sort="id" class="col-num">#</th>
-              <th data-sort="name">Product Name</th>
-              <th data-sort="origin">Origin</th>
+              <th data-sort="name">Coffee</th>
               <th>Certifications</th>
-              <th data-sort="process">Process</th>
-              <th data-sort="favourite" style="text-align:center">★ Fav</th>
-              <th data-sort="onSale" style="text-align:center">Sale</th>
-              <th data-sort="soldOut" style="text-align:center">Sold Out</th>
-              <th data-sort="hidden" style="text-align:center">Hidden</th>
               <th>Warehouses</th>
-              <th>Actions</th>
+              <th style="width:320px">Status</th>
+              <th style="width:140px;text-align:right">Actions</th>
             </tr>
           </thead>
           <tbody id="cms-body"></tbody>
         </table>
-        <div class="empty" id="empty" style="display:none">No coffees match your filters.</div>
+        <div class="empty" id="empty" style="display:none;padding:60px;text-align:center;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:6px;margin-top:16px">No coffees match your filters.</div>
       </div>
     </div>
 
@@ -877,22 +895,47 @@ function render(){
   body.innerHTML = rows.map(c => {
     const certs = (c.certifications||[]).map(cert => {
       const cls = ({'Organic':'cert-organic','Fair Trade':'cert-ft','Rainforest Alliance':'cert-rfa',"Women's Lot":'cert-womens','Decaf':'cert-decaf'})[cert] || '';
-      return `<span class="pill ${cls}">${cert}</span>`;
-    }).join('') || '<span style="color:#aaa">—</span>';
-    const whs = (c.warehouses||[]).map(w => `<span class="pill wh">${w}</span>`).join('') || '<span style="color:#aaa">—</span>';
+      return `<span class="pill ${cls}">${escapeHtml(cert)}</span>`;
+    }).join('') || '<span class="pill-muted">None</span>';
+    const whs = (c.warehouses||[]).map(w => `<span class="pill wh">${escapeHtml(w)}</span>`).join('') || '<span class="pill-muted">Not stocked</span>';
+
+    // Subtitle: Origin · Region · Process (skip empties cleanly)
+    const subParts = [c.origin, c.region, c.process].filter(Boolean).map(escapeHtml);
+    const subtitle = subParts.join(' &middot; ');
+
+    const thumb = c.image
+      ? `<img class="thumb" src="${escapeHtml(c.image)}" alt="" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'thumb-placeholder',textContent:'r86'}))" />`
+      : `<div class="thumb-placeholder">r86</div>`;
+
+    const favStar = c.favourite ? '<span class="fav-star" title="R86 Favourite">&#9733;</span>' : '';
+
+    // Status chips: click to toggle
+    const statusChip = (key, activeClass, label, on) =>
+      `<span class="status-chip ${on ? 'on ' + activeClass : 'off'}" data-toggle="${key}" data-id="${c.id}" title="Click to toggle">${label}</span>`;
+
+    const statusCell = `
+      ${statusChip('favourite', 'fav', '&#9733; Favourite', !!c.favourite)}
+      ${statusChip('onSale',    'sale', 'On Sale',          !!c.onSale)}
+      ${statusChip('soldOut',   'sold', 'Sold Out',         !!(c.soldOut || !c.available))}
+      ${statusChip('hidden',    'hidden', 'Hidden',         !!c.hidden)}
+    `;
+
     return `
       <tr data-id="${c.id}" class="${c.hidden?'hidden-row':''}">
-        <td class="col-num">${c.id}</td>
-        <td>${c.image?`<img class="thumb" src="${escapeHtml(c.image)}" alt="" onerror="this.style.display='none'" />`:''}<strong>${escapeHtml(c.name)}</strong><div style="color:var(--muted);font-size:.74rem;margin-top:2px">${escapeHtml(c.region||'')}</div></td>
-        <td>${escapeHtml(c.origin)}</td>
+        <td>
+          <div class="coffee-cell">
+            <span class="num">#${c.id}</span>
+            ${thumb}
+            <div class="info">
+              <div class="title">${favStar} ${escapeHtml(c.name)}</div>
+              <div class="sub">${subtitle || '<span class="pill-muted">No origin set</span>'}</div>
+            </div>
+          </div>
+        </td>
         <td>${certs}</td>
-        <td>${escapeHtml(c.process||'')}</td>
-        <td style="text-align:center"><span class="toggle fav ${c.favourite?'on':''}" data-toggle="favourite" data-id="${c.id}"></span></td>
-        <td style="text-align:center"><span class="toggle sale ${c.onSale?'on':''}" data-toggle="onSale" data-id="${c.id}"></span></td>
-        <td style="text-align:center"><span class="toggle sold ${c.soldOut||!c.available?'on':''}" data-toggle="soldOut" data-id="${c.id}"></span></td>
-        <td style="text-align:center"><span class="toggle ${c.hidden?'on':''}" data-toggle="hidden" data-id="${c.id}"></span></td>
         <td>${whs}</td>
-        <td class="col-actions">
+        <td><div class="status-cell">${statusCell}</div></td>
+        <td style="text-align:right;white-space:nowrap">
           <button class="row-btn" data-edit="${c.id}">Edit</button>
           <button class="row-btn danger" data-del="${c.id}">Delete</button>
         </td>
