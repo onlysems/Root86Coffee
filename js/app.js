@@ -257,29 +257,87 @@ function cardHTML(c) {
 }
 
 function updateGridButtons() {
+  const compat = quoteCompatibleZones();
+  const hasQuote = state.quote.length > 0;
   $$('.add-quote-btn').forEach(btn => {
     const id = parseInt(btn.dataset.id);
+    const coffee = COFFEES.find(c => c.id === id);
     const inQ = state.quote.some(q => q.id === id);
+    const zones = coffee ? coffeeZones(coffee) : new Set();
+    const compatible = !hasQuote || inQ || [...zones].some(z => compat.has(z));
     btn.classList.toggle('added', inQ);
-    btn.textContent = inQ ? 'Added' : 'Add to Quote';
+    btn.classList.toggle('incompatible', !compatible);
+    if (inQ) btn.textContent = 'Added';
+    else if (!compatible) btn.textContent = 'Different warehouse';
+    else btn.textContent = 'Add to Quote';
+    // Keep clickable so the toast can explain — but visually dimmed
+    btn.title = compatible ? '' :
+      `Your quote ships from ${[...compat].map(zoneLabel).join(' or ')}; this coffee is at ${[...zones].map(zoneLabel).join(' or ') || 'no matching warehouse'}.`;
   });
   // Modal button
   const mb = $('#modal-add-btn');
   if (mb && state.activeCoffeeId) {
+    const coffee = COFFEES.find(c => c.id === state.activeCoffeeId);
     const inQ = state.quote.some(q => q.id === state.activeCoffeeId);
+    const zones = coffee ? coffeeZones(coffee) : new Set();
+    const compatible = !hasQuote || inQ || [...zones].some(z => compat.has(z));
     mb.classList.toggle('added', inQ);
-    mb.textContent = inQ ? 'In Quote - Remove' : 'Add to Quote';
+    mb.classList.toggle('incompatible', !compatible);
+    if (inQ) mb.textContent = 'In Quote - Remove';
+    else if (!compatible) mb.textContent = 'Different warehouse';
+    else mb.textContent = 'Add to Quote';
+    mb.title = compatible ? '' :
+      `Your quote ships from ${[...compat].map(zoneLabel).join(' or ')}; this coffee is at ${[...zones].map(zoneLabel).join(' or ') || 'no matching warehouse'}.`;
   }
 }
 
 // ================================================
 // QUOTE
 // ================================================
+// Warehouse-zone compatibility: a quote must resolve to a SINGLE
+// shipping origin. Vancouver + Parksville are interchangeable
+// (both BC); Lévis/Quebec is separate.
+function coffeeZones(coffee){
+  const zones = new Set();
+  (coffee.warehouses || []).forEach(w => {
+    const s = (w || '').toLowerCase();
+    if (s.indexOf('vancouver') !== -1 || s.indexOf('parksville') !== -1) zones.add('west');
+    if (s.indexOf('lévis') !== -1 || s.indexOf('levis') !== -1 || s.indexOf('qc') !== -1 || s.indexOf('quebec') !== -1) zones.add('east');
+  });
+  return zones;
+}
+function quoteCompatibleZones(){
+  // Intersection of zones across everything currently in the quote
+  if (!state.quote.length) return new Set(['west','east']);
+  let inter = null;
+  for (const c of state.quote) {
+    const z = coffeeZones(c);
+    if (inter === null) inter = new Set(z);
+    else inter = new Set([...inter].filter(x => z.has(x)));
+  }
+  return inter || new Set();
+}
+function zoneLabel(z){
+  if (z === 'west') return 'BC (Vancouver / Parksville)';
+  if (z === 'east') return 'Quebec (Lévis)';
+  return z;
+}
+
 function toggleQuote(id) {
   const coffee = COFFEES.find(c => c.id === id);
   if (!coffee) return;
   const idx = state.quote.findIndex(q => q.id === id);
   if (idx === -1) {
+    // Check warehouse compatibility before adding
+    const currentZones = quoteCompatibleZones();
+    const newZones = coffeeZones(coffee);
+    const inter = new Set([...currentZones].filter(x => newZones.has(x)));
+    if (state.quote.length && inter.size === 0) {
+      const currentLabel = [...currentZones].map(zoneLabel).join(' or ');
+      const newLabel = [...newZones].map(zoneLabel).join(' or ') || 'no shared warehouse';
+      showToast(`Can't mix warehouses — your quote ships from ${currentLabel}, but this coffee is only at ${newLabel}.`, true);
+      return;
+    }
     state.quote.push({ ...coffee, qty: 1 });
     showToast(coffee.name.split(' ').slice(0,3).join(' ') + ' added to quote');
   } else {

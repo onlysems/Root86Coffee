@@ -430,6 +430,11 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
 .add-quote-btn:hover { background: var(--red-dark); }
 .add-quote-btn:disabled { background: rgba(26,0,5,0.12); color: var(--muted); }
 .add-quote-btn.added { background: var(--red-dark); }
+.add-quote-btn.incompatible {
+  background: rgba(26,0,5,0.08); color: var(--muted);
+  cursor: not-allowed;
+}
+.add-quote-btn.incompatible:hover { background: rgba(26,0,5,0.12); }
 
 .more-info-btn {
   font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase;
