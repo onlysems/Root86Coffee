@@ -1176,6 +1176,31 @@ footer { background: var(--red-deep); padding: 52px 0 32px; border-top: 3px soli
 /* Custom cursor + bean trail removed at user's request — hide everywhere */
 #bean-trail { display: none !important; }
 
+/* ── Custom animated cursor (red dot + trailing ring) ───────── */
+.cursor { position: fixed; top: 0; left: 0; z-index: 9999; pointer-events: none; }
+.cursor-dot {
+  position: fixed; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--red); transform: translate(-50%,-50%);
+  pointer-events: none; z-index: 9999;
+  mix-blend-mode: multiply;
+}
+.cursor-ring {
+  position: fixed; width: 34px; height: 34px; border-radius: 50%;
+  border: 1.5px solid var(--red); transform: translate(-50%,-50%);
+  pointer-events: none; z-index: 9999;
+  transition: transform 0.18s ease, opacity 0.2s, border-color 0.2s;
+  opacity: 0.55;
+}
+.cursor-ring.hover {
+  transform: translate(-50%,-50%) scale(1.45);
+  opacity: 0.3;
+  border-color: var(--red);
+}
+/* Hide on touch devices — the cursor isn't useful there */
+@media (pointer: coarse) {
+  #cursor, .cursor-dot, .cursor-ring { display: none !important; }
+}
+
 @media (max-width: 768px) {
   /* Scroll-progress bar: keep thin so it never looks like a nav border */
   #scroll-progress { height: 2px; }

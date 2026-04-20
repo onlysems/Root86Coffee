@@ -52,7 +52,61 @@ document.addEventListener('DOMContentLoaded', () => {
   initStatCounters();
   initMap();
   initBtbCarousel();
+  initCursor();
 });
+
+// ================================================
+// CUSTOM CURSOR — red dot + trailing ring
+// Disabled on touch devices and when reduced-motion is preferred.
+// ================================================
+function initCursor(){
+  const dot  = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  if (!dot || !ring) return;
+  if (window.matchMedia('(pointer: coarse)').matches) {
+    dot.style.display = 'none'; ring.style.display = 'none';
+    return;
+  }
+
+  let mx = 0, my = 0, rx = 0, ry = 0, started = false;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px';
+    dot.style.top  = my + 'px';
+    if (!started) {
+      // First move: snap ring to pointer so it doesn't fly in from 0,0
+      rx = mx; ry = my;
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      started = true;
+    }
+  }, { passive: true });
+
+  // Hide when leaving the window, restore on re-entry
+  document.addEventListener('mouseleave', () => {
+    dot.style.opacity = '0'; ring.style.opacity = '0';
+  });
+  document.addEventListener('mouseenter', () => {
+    dot.style.opacity = '1'; ring.style.opacity = '0.55';
+  });
+
+  // Smooth ring follow
+  function tick(){
+    rx += (mx - rx) * 0.14;
+    ry += (my - ry) * 0.14;
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+    requestAnimationFrame(tick);
+  }
+  tick();
+
+  // Hover expand on interactive elements
+  const hover = e => e.target.closest('a, button, [role="button"], input, select, textarea, .ccard, label') && ring.classList.add('hover');
+  const unhover = e => e.target.closest('a, button, [role="button"], input, select, textarea, .ccard, label') && ring.classList.remove('hover');
+  document.addEventListener('mouseover', hover);
+  document.addEventListener('mouseout', unhover);
+}
 
 // ================================================
 // BEHIND-THE-BAG IMAGE CAROUSEL
