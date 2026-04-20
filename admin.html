@@ -155,14 +155,8 @@
   .publish-dot.publishing{background:#fff;animation:pulse 1s infinite}
   @keyframes pulse{0%,100%{opacity:.6}50%{opacity:1}}
 
-  /* ── Inbox overlay ── */
-  .inbox-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;z-index:200}
-  .inbox-overlay.open{display:block}
-  .inbox-panel{position:fixed;top:0;right:0;bottom:0;width:min(720px,100%);background:#fff;display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(0,0,0,.15);transform:translateX(100%);transition:transform .25s ease;z-index:201}
-  .inbox-overlay.open .inbox-panel{transform:translateX(0)}
-  .inbox-head{padding:18px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
-  .inbox-head h2{font-size:1.1rem;font-weight:500;margin:0}
-  .inbox-head .sub{font-size:.78rem;color:var(--muted)}
+  /* ── Inbox (in-page view) ── */
+  .inbox-page{background:var(--panel);border:1px solid var(--line);border-radius:6px;margin-top:16px;display:flex;flex-direction:column;min-height:calc(100vh - 210px);overflow:hidden}
   .inbox-tabs{display:flex;gap:4px;padding:0 24px;border-bottom:1px solid var(--line);background:#fafafa}
   .inbox-tab{padding:10px 14px;font-size:.78rem;background:none;border:none;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
   .inbox-tab.active{color:var(--ink);border-bottom-color:var(--red)}
@@ -627,6 +621,30 @@
       <div id="an-error" style="display:none;padding:40px;text-align:center;color:var(--red)"></div>
     </div>
 
+    <!-- ── INBOX VIEW ── -->
+    <div class="view" id="view-inbox">
+      <div class="dash-header">
+        <div>
+          <h1 class="dash-greeting">Inbox</h1>
+          <div class="dash-subtitle">Form submissions from the website</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="topbar-btn" id="inbox-refresh">Refresh</button>
+        </div>
+      </div>
+      <div class="inbox-page">
+        <div class="inbox-tabs">
+          <button class="inbox-tab active" data-tab="open">Open <span id="tab-open-count"></span></button>
+          <button class="inbox-tab" data-tab="closed">Closed</button>
+          <button class="inbox-tab" data-tab="all">All</button>
+        </div>
+        <div class="inbox-list" id="inbox-list">
+          <div class="inbox-loading">Loading...</div>
+        </div>
+        <div class="inbox-detail" id="inbox-detail"></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -704,29 +722,7 @@
   </div>
 </div>
 
-<!-- Inbox overlay -->
-<div class="inbox-overlay" id="inbox-overlay">
-  <div class="inbox-panel">
-    <div class="inbox-head">
-      <div>
-        <h2>Inbox</h2>
-        <div class="sub">Form submissions from the website</div>
-      </div>
-      <div style="flex:1"></div>
-      <button class="inbox-back" id="inbox-refresh">Refresh</button>
-      <button class="inbox-back" id="inbox-close">Close</button>
-    </div>
-    <div class="inbox-tabs">
-      <button class="inbox-tab active" data-tab="open">Open <span id="tab-open-count"></span></button>
-      <button class="inbox-tab" data-tab="closed">Closed</button>
-      <button class="inbox-tab" data-tab="all">All</button>
-    </div>
-    <div class="inbox-list" id="inbox-list">
-      <div class="inbox-loading">Loading...</div>
-    </div>
-    <div class="inbox-detail" id="inbox-detail"></div>
-  </div>
-</div>
+<!-- (inbox now rendered as an in-page view — see #view-inbox) -->
 
 <!-- Publish-to-GitHub modal -->
 <div class="modal-bg" id="publish-modal">
@@ -894,11 +890,10 @@ function bind(){
   if (dashRefresh) dashRefresh.addEventListener('click', () => { renderDashboard(); loadInbox().catch(()=>{}); });
   // Dashboard cards: clickable shortcuts
   const inboxCard = document.getElementById('dash-card-inbox');
-  if (inboxCard) inboxCard.addEventListener('click', openInbox);
+  if (inboxCard) inboxCard.addEventListener('click', () => switchView('inbox'));
   const draftsCard = document.getElementById('dash-card-drafts');
   if (draftsCard) draftsCard.addEventListener('click', () => switchView('coffees'));
 
-  $('#inbox-close').addEventListener('click', closeInbox);
   $('#inbox-refresh').addEventListener('click', () => loadInbox(true));
   document.querySelectorAll('.inbox-tab').forEach(tab => {
     tab.addEventListener('click', () => {
@@ -1021,11 +1016,6 @@ function updatePublishIndicator(){
 
 // ── View switching + Dashboard ───────────────
 function switchView(view){
-  // Special case: Inbox opens the existing overlay instead of being a standalone view
-  if (view === 'inbox'){
-    openInbox();
-    return;
-  }
   document.querySelectorAll('.sb-item[data-view]').forEach(el => {
     el.classList.toggle('active', el.dataset.view === view);
   });
@@ -1034,6 +1024,7 @@ function switchView(view){
   });
   if (view === 'dashboard') renderDashboard();
   if (view === 'analytics') openAnalytics();
+  if (view === 'inbox')     openInbox();
 }
 
 // ── Analytics ─────────────────────────────────
@@ -1605,13 +1596,15 @@ async function publishToGitHub(){
 // (INBOX_STATE declared at top of script)
 
 function openInbox(){
-  $('#inbox-overlay').classList.add('open');
-  $('#inbox-detail').classList.remove('show');
+  // Inbox is now a regular in-page view; just reset + load
+  const detail = document.getElementById('inbox-detail');
+  const list   = document.getElementById('inbox-list');
+  if (detail) detail.classList.remove('show');
+  if (list)   list.style.display = '';
   loadInbox();
 }
-function closeInbox(){
-  $('#inbox-overlay').classList.remove('open');
-}
+// closeInbox kept as a no-op for backwards-compat with error UI "Re-enter token" button
+function closeInbox(){}
 
 async function loadInbox(force){
   const token = localStorage.getItem(GH_TOKEN_KEY);
