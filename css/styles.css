@@ -354,22 +354,82 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
 .result-count strong { color: var(--red); }
 
 /* ── Coffee Grid ── */
-.coffee-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+.coffee-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; }
 .ccard {
-  background: var(--white); padding: 28px 26px;
-  border: 1px solid rgba(26,0,5,0.07);
+  background: var(--white); padding: 32px 30px 24px;
+  border: 1px solid rgba(26,0,5,0.08);
   border-top: 3px solid transparent;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
   transition: border-top-color var(--transition), transform var(--transition), box-shadow var(--transition);
   display: flex; flex-direction: column; position: relative; overflow: hidden;
+  gap: 18px;
 }
 .ccard:hover {
   border-top-color: var(--red); transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(200,16,46,0.11);
+  box-shadow: 0 18px 44px rgba(200,16,46,0.10);
 }
 .ccard.sold-out { opacity: 0.55; }
 
-.ccard-flags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+/* Corner ribbons (absolute) */
+.ccard-ribbons {
+  position: absolute; top: 14px; right: 14px;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 5px;
+  z-index: 2; pointer-events: none;
+}
+.ccard-ribbon {
+  font-size: 0.52rem; letter-spacing: 0.18em; text-transform: uppercase;
+  padding: 4px 9px; font-weight: 600; border-radius: 2px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+.ribbon-fav { background: linear-gradient(135deg, rgba(200,16,46,0.95), rgba(155,12,36,0.95)); color: #fff; }
+.ribbon-sale { background: #1a0005; color: #fff; }
+
+/* Header: origin + big serif name */
+.ccard-head { display: flex; flex-direction: column; gap: 8px; }
+.ccard-origin {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--muted);
+}
+.ccard-origin-name { color: var(--red); font-weight: 500; }
+.ccard-origin .flag-img { width: 18px; }
+
+/* Tasting notes as italic pull-quote */
+.ccard-notes {
+  font-family: var(--font-serif); font-style: italic;
+  font-size: 0.98rem; line-height: 1.45; color: var(--ink);
+  margin: 0; padding: 0 0 0 14px;
+  border-left: 2px solid rgba(200,16,46,0.35);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  position: relative;
+}
+
+/* 3-column specs grid */
+.ccard-specs {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 2px; margin: 0;
+  background: rgba(26,0,5,0.06);
+  border: 1px solid rgba(26,0,5,0.06);
+}
+.ccard-specs .spec {
+  background: var(--white); padding: 10px 12px;
+  display: flex; flex-direction: column; gap: 3px;
+  min-width: 0;
+}
+.ccard-specs dt {
+  font-size: 0.52rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--muted); font-weight: 500;
+}
+.ccard-specs dd {
+  margin: 0; font-size: 0.82rem; color: var(--ink); line-height: 1.3;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+.ccard-certs { display: flex; gap: 6px; flex-wrap: wrap; }
 .cflag {
   font-size: 0.56rem; letter-spacing: 0.18em; text-transform: uppercase;
   padding: 3px 8px;
@@ -384,9 +444,8 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
 .cflag-sale    { background: #1a0005; color: #fff; font-weight: 600; }
 
 .ccard-name {
-  font-family: var(--font-serif); font-size: 1.2rem; font-weight: 400;
-  color: var(--ink); margin-bottom: 12px; line-height: 1.3; flex: 0 0 auto;
-  display: flex; align-items: baseline; gap: 7px;
+  font-family: var(--font-serif); font-size: 1.55rem; font-weight: 400;
+  color: var(--ink); margin: 0; line-height: 1.15; flex: 0 0 auto;
 }
 .ccard-flag { font-size: 1em; line-height: 1; flex-shrink: 0; display: inline-flex; align-self: center; }
 .ccard-flag .flag-img,
@@ -410,7 +469,7 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
 .ccard-details { display: flex; flex-direction: column; gap: 5px; margin-bottom: 16px; flex: 1; }
 .ccard-detail { font-size: 0.76rem; color: var(--muted); line-height: 1.5; }
 .ccard-detail strong { color: var(--ink); font-weight: 400; }
-.ccard-na { color: rgba(26,0,5,0.3); }
+.ccard-na { color: rgba(26,0,5,0.3); font-style: normal; }
 .ccard-notes {
   font-style: italic; margin-top: 4px;
   display: -webkit-box;
@@ -427,35 +486,33 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
 }
 
 .ccard-stock {
-  display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
-  padding: 10px 0; margin-bottom: 4px;
-  border-top: 1px solid rgba(26,0,5,0.08);
+  display: flex; flex-wrap: wrap; align-items: center; gap: 7px;
+  font-size: 0.7rem; color: var(--ink);
   flex: 0 0 auto;
 }
-.ccard-stock .stock-label {
-  font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--red); font-weight: 500;
-  display: inline-flex; align-items: center; gap: 6px;
-  margin-right: 2px;
+.stock-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #2d7a2d;
+  box-shadow: 0 0 0 3px rgba(45,122,45,0.15);
+  display: inline-block; flex-shrink: 0;
 }
-.ccard-stock .stock-label::before {
-  content: ""; width: 6px; height: 6px; border-radius: 50%;
-  background: var(--red); display: inline-block;
+.stock-dot.out { background: var(--muted); box-shadow: 0 0 0 3px rgba(26,0,5,0.08); }
+.ccard-stock .stock-label {
+  font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: #2d7a2d; font-weight: 600;
 }
 .ccard-stock.out .stock-label { color: var(--muted); }
-.ccard-stock.out .stock-label::before { background: var(--muted); }
-.ccard-stock .stock-chip {
-  font-size: 0.62rem; color: var(--ink);
-  background: rgba(26,0,5,0.04);
-  border: 1px solid rgba(26,0,5,0.08);
-  padding: 2px 8px; border-radius: 3px;
-  white-space: nowrap;
-}
+.stock-sep { color: rgba(26,0,5,0.25); }
+.stock-where { color: var(--muted); font-size: 0.72rem; }
 
-.ccard-footer {
-  display: flex; justify-content: space-between; align-items: center; gap: 10px;
-  padding-top: 12px; border-top: 1px solid rgba(26,0,5,0.08); flex: 0 0 auto;
+.ccard-foot {
+  display: flex; flex-direction: column; gap: 14px;
+  padding-top: 16px; border-top: 1px solid rgba(26,0,5,0.08);
+  flex: 0 0 auto; margin-top: auto;
 }
+.ccard-actions { display: flex; gap: 8px; }
+.ccard-actions .more-info-btn,
+.ccard-actions .add-quote-btn { flex: 1; text-align: center; margin: 0; }
 
 .add-quote-btn {
   font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase;

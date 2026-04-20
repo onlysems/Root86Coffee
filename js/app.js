@@ -437,41 +437,43 @@ function renderGrid() {
 function cardHTML(c) {
   const flag = flagImg(c.origin);
   const inQ  = state.quote.some(q => q.id === c.id);
-  const fallback = v => (v && String(v).trim()) ? v : '<span class="ccard-na">N/A</span>';
+  const na = '<span class="ccard-na">N/A</span>';
+  const fallback = v => (v && String(v).trim()) ? v : na;
   const certFlags = c.certifications.map(cert =>
     `<span class="cflag ${CERT_CLASS[cert] || ''}">${cert}</span>`).join('');
-  const specialBadges = [
-    c.favourite ? `<span class="cflag cflag-fav">★ R86 Favourite</span>` : '',
-    c.onSale ? `<span class="cflag cflag-sale">On Sale</span>` : ''
+  const ribbons = [
+    c.favourite ? `<span class="ccard-ribbon ribbon-fav" title="Root 86 Favourite">★ Favourite</span>` : '',
+    c.onSale    ? `<span class="ccard-ribbon ribbon-sale" title="On Sale">On Sale</span>` : ''
   ].join('');
+  const warehouses = (c.warehouses || []).map(w => w.split(',')[0]);
+  const stockLine = c.available
+    ? `<span class="stock-dot" aria-hidden="true"></span><span class="stock-label">In stock</span>${warehouses.length ? `<span class="stock-sep">·</span><span class="stock-where">${warehouses.join(' · ')}</span>` : ''}`
+    : `<span class="stock-dot out" aria-hidden="true"></span><span class="stock-label">Out of stock</span>`;
 
   return `
-    <div class="ccard${!c.available || c.soldOut ? ' sold-out' : ''}" data-id="${c.id}">
-      <div class="ccard-flags">
-        <span class="cflag cflag-origin">${c.origin}</span>
-        ${specialBadges}
-        ${certFlags}
-      </div>
-      <div class="ccard-name">${flag ? `<span class="ccard-flag">${flag}</span>` : ''}${c.name}</div>
-      <div class="ccard-details">
-        <div class="ccard-detail"><strong>Process:</strong> ${fallback(c.process)}</div>
-        <div class="ccard-detail"><strong>Region:</strong> ${fallback(c.region)}</div>
-        <div class="ccard-detail"><strong>Bag Weight:</strong> ${c.bagWeight ? c.bagWeight + ' lbs' : '<span class="ccard-na">N/A</span>'}</div>
-        <div class="ccard-detail ccard-notes" data-notes="${(c.tastingNotes||'').replace(/"/g,'&quot;')}">${fallback(c.tastingNotes)}</div>
-      </div>
-      <div class="ccard-stock${c.available ? '' : ' out'}">
-        ${c.available
-          ? `<span class="stock-label">In stock</span>${(c.warehouses||[]).map(w => `<span class="stock-chip">${w.split(',')[0]}</span>`).join('')}`
-          : `<span class="stock-label">Out of stock</span>`}
-      </div>
-      <div class="ccard-footer">
-        <button class="more-info-btn" data-id="${c.id}">More Info</button>
-        <button class="add-quote-btn${inQ ? ' added' : ''}${!c.available ? '' : ''}" data-id="${c.id}"
-          ${!c.available ? 'disabled' : ''}>
-          ${inQ ? 'Added' : 'Add to Quote'}
-        </button>
-      </div>
-    </div>`;
+    <article class="ccard${!c.available || c.soldOut ? ' sold-out' : ''}" data-id="${c.id}">
+      ${ribbons ? `<div class="ccard-ribbons">${ribbons}</div>` : ''}
+      <header class="ccard-head">
+        <div class="ccard-origin">${flag ? `<span class="ccard-flag">${flag}</span>` : ''}<span class="ccard-origin-name">${c.origin}</span></div>
+        <h3 class="ccard-name">${c.name}</h3>
+      </header>
+      <blockquote class="ccard-notes" data-notes="${(c.tastingNotes||'').replace(/"/g,'&quot;')}">${c.tastingNotes && c.tastingNotes.trim() ? c.tastingNotes : 'Tasting notes coming soon.'}</blockquote>
+      <dl class="ccard-specs">
+        <div class="spec"><dt>Process</dt><dd>${fallback(c.process)}</dd></div>
+        <div class="spec"><dt>Region</dt><dd>${fallback(c.region)}</dd></div>
+        <div class="spec"><dt>Bag</dt><dd>${c.bagWeight ? c.bagWeight + ' lbs' : na}</dd></div>
+      </dl>
+      ${certFlags ? `<div class="ccard-certs">${certFlags}</div>` : ''}
+      <footer class="ccard-foot">
+        <div class="ccard-stock${c.available ? '' : ' out'}">${stockLine}</div>
+        <div class="ccard-actions">
+          <button class="more-info-btn" data-id="${c.id}">Details</button>
+          <button class="add-quote-btn${inQ ? ' added' : ''}" data-id="${c.id}" ${!c.available ? 'disabled' : ''}>
+            ${inQ ? '✓ Added' : 'Add to Quote'}
+          </button>
+        </div>
+      </footer>
+    </article>`;
 }
 
 function updateGridButtons() {
