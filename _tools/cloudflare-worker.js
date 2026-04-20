@@ -138,7 +138,7 @@ async function handleForm(request, env, cors, corsOrigin) {
         'Content-Type': 'application/json',
         'User-Agent': 'r86-forms-worker',
       },
-      body: JSON.stringify({ title, body, labels: ['submission', kindLabel] }),
+      body: JSON.stringify({ title, body, labels: ['submission', kindLabel, 'status:new'] }),
     }
   );
   if (!ghRes.ok) {
@@ -158,7 +158,7 @@ async function handleForm(request, env, cors, corsOrigin) {
           'Content-Type': 'application/json',
           'User-Agent': 'r86-forms-worker',
         },
-        body: JSON.stringify({ labels: ['submission', kindLabel] }),
+        body: JSON.stringify({ labels: ['submission', kindLabel, 'status:new'] }),
       }
     );
   } catch(e) { console.error('Label apply threw', e); }
