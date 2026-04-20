@@ -375,13 +375,36 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
 .ccard-detail { font-size: 0.76rem; color: var(--muted); line-height: 1.5; }
 .ccard-detail strong { color: var(--ink); font-weight: 400; }
 
-.ccard-footer {
-  display: flex; justify-content: space-between; align-items: center;
-  padding-top: 14px; border-top: 1px solid rgba(26,0,5,0.08); flex: 0 0 auto;
+.ccard-stock {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+  padding: 10px 0; margin-bottom: 4px;
+  border-top: 1px solid rgba(26,0,5,0.08);
+  flex: 0 0 auto;
 }
-.avail-badge { font-size: 0.58rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 4px 10px; }
-.avail-yes { background: rgba(200,16,46,0.08); color: var(--red); }
-.avail-no  { background: rgba(26,0,5,0.05); color: var(--muted); }
+.ccard-stock .stock-label {
+  font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--red); font-weight: 500;
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-right: 2px;
+}
+.ccard-stock .stock-label::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--red); display: inline-block;
+}
+.ccard-stock.out .stock-label { color: var(--muted); }
+.ccard-stock.out .stock-label::before { background: var(--muted); }
+.ccard-stock .stock-chip {
+  font-size: 0.62rem; color: var(--ink);
+  background: rgba(26,0,5,0.04);
+  border: 1px solid rgba(26,0,5,0.08);
+  padding: 2px 8px; border-radius: 3px;
+  white-space: nowrap;
+}
+
+.ccard-footer {
+  display: flex; justify-content: space-between; align-items: center; gap: 10px;
+  padding-top: 12px; border-top: 1px solid rgba(26,0,5,0.08); flex: 0 0 auto;
+}
 
 .add-quote-btn {
   font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase;
