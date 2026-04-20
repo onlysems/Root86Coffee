@@ -705,6 +705,14 @@
 const ADMIN_PW = 'root86admin';
 const STORAGE_KEY = 'r86_admin_data_v3';
 const LAST_PUBLISHED_KEY = 'r86_last_published_at';
+// GitHub + inbox constants (declared early so functions that run on init
+// — renderDashboard, loadInbox — can reference them without TDZ errors)
+const GH_OWNER  = 'onlysems';
+const GH_REPO   = 'Root86Coffee';
+const GH_BRANCH = 'main';
+const GH_PATH   = 'js/coffees.js';
+const GH_TOKEN_KEY = 'r86_gh_token';
+const INBOX_STATE = { issues: [], filter: 'open', activeNumber: null };
 
 // Load data: prefer localStorage edits, otherwise the bundled COFFEES
 let DATA = (() => {
@@ -1277,11 +1285,7 @@ function downloadExport(){
 }
 
 // ── Publish to GitHub ─────────────────────────────────
-const GH_OWNER  = 'onlysems';
-const GH_REPO   = 'Root86Coffee';
-const GH_BRANCH = 'main';
-const GH_PATH   = 'js/coffees.js';
-const GH_TOKEN_KEY = 'r86_gh_token';
+// (GH_OWNER/GH_REPO/GH_BRANCH/GH_PATH/GH_TOKEN_KEY declared at top of script)
 
 function openPublish(){
   const saved = localStorage.getItem(GH_TOKEN_KEY) || '';
@@ -1370,7 +1374,7 @@ async function publishToGitHub(){
 }
 
 // ── Inbox (GitHub Issues) ─────────────────────────────────
-const INBOX_STATE = { issues: [], filter: 'open', activeNumber: null };
+// (INBOX_STATE declared at top of script)
 
 function openInbox(){
   $('#inbox-overlay').classList.add('open');
