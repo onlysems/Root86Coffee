@@ -845,7 +845,7 @@ async function publishToGitHub(){
 
   try {
     logPublish('→ Fetching current file SHA...');
-    const getRes = await fetch(apiUrl, { headers });
+    const getRes = await fetch(apiUrl + `&_=${Date.now()}`, { headers, cache: 'no-store' });
     if (!getRes.ok) {
       const err = await getRes.json().catch(()=>({}));
       throw new Error(`GET failed (${getRes.status}): ${err.message || getRes.statusText}`);
