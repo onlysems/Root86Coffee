@@ -12,13 +12,24 @@ const state = {
 };
 
 // ── Flags ───────────────────────────────────────────────────
-const FLAGS = {
-  'Brazil':'🇧🇷','Colombia':'🇨🇴','Costa Rica':'🇨🇷','Ethiopia':'🇪🇹',
-  'Guatemala':'🇬🇹','Honduras':'🇭🇳','Indonesia':'🇮🇩','Kenya':'🇰🇪',
-  'Mexico':'🇲🇽','Nicaragua':'🇳🇮','Panama':'🇵🇦','Papua New Guinea':'🇵🇬',
-  'Peru':'🇵🇪','Rwanda':'🇷🇼','Tanzania':'🇹🇿',
-  'Uganda':'🇺🇬','Blend':'🌍'
+// ISO-3166 alpha-2 codes for our origins. Windows renders 🇵🇪 as "PE",
+// so we use flagcdn.com PNGs instead of emoji.
+const FLAG_CODES = {
+  'Brazil':'br','Colombia':'co','Costa Rica':'cr','Ethiopia':'et',
+  'Guatemala':'gt','Honduras':'hn','Indonesia':'id','Kenya':'ke',
+  'Mexico':'mx','Nicaragua':'ni','Panama':'pa','Papua New Guinea':'pg',
+  'Peru':'pe','Rwanda':'rw','Tanzania':'tz','Uganda':'ug'
 };
+function flagImg(origin, size = 'w40') {
+  const code = FLAG_CODES[origin];
+  if (!code) {
+    // Blends / unknown → globe glyph
+    return `<span class="flag-glyph" aria-label="${origin || 'Blend'}">🌍</span>`;
+  }
+  return `<img class="flag-img" src="https://flagcdn.com/${size}/${code}.png" srcset="https://flagcdn.com/${size === 'w80' ? 'w160' : 'w80'}/${code}.png 2x" width="24" height="18" alt="${origin} flag" loading="lazy" />`;
+}
+// Back-compat shim — some older call sites used FLAGS[origin] directly
+const FLAGS = new Proxy({}, { get: (_, k) => flagImg(k) });
 
 const CERT_CLASS = {
   'Organic':'cflag-organic','Fair Trade':'cflag-ft',
@@ -38,9 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderQuoteItems();
   bindEvents();
   initScrollProgress();
-  initBackToTop();
   initStatCounters();
-  initBtbVideo();
   initMap();
 });
 
@@ -249,7 +258,7 @@ function renderGrid() {
 }
 
 function cardHTML(c) {
-  const flag = FLAGS[c.origin] || '';
+  const flag = flagImg(c.origin);
   const inQ  = state.quote.some(q => q.id === c.id);
   const fallback = v => (v && String(v).trim()) ? v : '<span class="ccard-na">N/A</span>';
   const certFlags = c.certifications.map(cert =>
@@ -469,10 +478,10 @@ function openModal(id) {
   const c = COFFEES.find(x => x.id === id);
   if (!c) return;
   state.activeCoffeeId = id;
-  const flag = FLAGS[c.origin] || '';
+  const flag = flagImg(c.origin, 'w80');
   const inQ  = state.quote.some(q => q.id === id);
 
-  $('#modal-flag').textContent  = flag;
+  $('#modal-flag').innerHTML  = flag;
   $('#modal-name').textContent  = c.name;
   $('#modal-region').textContent = `${c.region} · ${c.origin}`;
   $('#modal-process').textContent  = c.process;
@@ -638,121 +647,14 @@ function initScrollProgress(){
 }
 
 // ================================================
-// BACK TO TOP COFFEE CUP
+// ADD-TO-QUOTE CART PULSE (bean trail + fly animation removed per user request)
 // ================================================
-function initBackToTop(){
-  const btn = document.getElementById('back-to-top');
-  const fill = document.getElementById('btt-fill');
-  if (!btn || !fill) return;
-  // Cup interior bounds (from SVG): top ~ y=13, bottom ~ y=38 => height 25
-  const CUP_TOP = 13, CUP_BOTTOM = 38, CUP_HEIGHT = CUP_BOTTOM - CUP_TOP;
-  let ticking = false;
-  function update(){
-    const h = document.documentElement;
-    const max = h.scrollHeight - h.clientHeight;
-    const pct = max > 0 ? window.scrollY / max : 0;
-    // Show once the user has scrolled past ~400px
-    btn.classList.toggle('show', window.scrollY > 400);
-    const fillH = Math.max(0, Math.min(CUP_HEIGHT, pct * CUP_HEIGHT));
-    fill.setAttribute('height', String(fillH));
-    fill.setAttribute('y', String(CUP_BOTTOM - fillH));
-    ticking = false;
-  }
-  window.addEventListener('scroll', () => {
-    if (!ticking) { requestAnimationFrame(update); ticking = true; }
-  }, { passive: true });
-  btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-  update();
-}
-
-// ================================================
-// COFFEE BEAN CURSOR TRAIL
-// ================================================
-function initBeanTrail(){
-  const wrap = document.getElementById('bean-trail');
-  if (!wrap) return;
-  // Disable on touch devices and on reduced-motion preference
-  if (window.matchMedia('(pointer: coarse)').matches) return;
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  let lastSpawn = 0;
-  let lx = 0, ly = 0;
-  document.addEventListener('mousemove', e => {
-    const now = performance.now();
-    const dx = e.clientX - lx, dy = e.clientY - ly;
-    const moved = Math.hypot(dx, dy);
-    if (now - lastSpawn < 80 || moved < 14) return;
-    lastSpawn = now; lx = e.clientX; ly = e.clientY;
-    spawnBean(e.clientX, e.clientY);
-  }, { passive: true });
-
-  function spawnBean(x, y){
-    const b = document.createElement('div');
-    b.className = 'bean';
-    const size = 6 + Math.random() * 5;
-    b.style.width = size + 'px';
-    b.style.height = (size * 1.25) + 'px';
-    b.style.left = (x - size/2) + 'px';
-    b.style.top  = (y - size/2) + 'px';
-    b.style.transform = `rotate(${Math.random() * 360}deg)`;
-    wrap.appendChild(b);
-    const driftX = (Math.random() - 0.5) * 40;
-    const driftY = 30 + Math.random() * 30;
-    const rot = (Math.random() - 0.5) * 180;
-    b.animate([
-      { transform: `translate(0,0) rotate(0deg)`, opacity: 0.7 },
-      { transform: `translate(${driftX}px, ${driftY}px) rotate(${rot}deg)`, opacity: 0 }
-    ], { duration: 900 + Math.random() * 400, easing: 'cubic-bezier(.4,.1,.6,1)', fill: 'forwards' })
-    .onfinish = () => b.remove();
-  }
-}
-
-// ================================================
-// FLY-TO-CART MINI ANIMATION
-// ================================================
-function flyToCart(sourceEl){
-  const target = document.getElementById('nav-quote-count')
-             || document.getElementById('nav-quote-btn');
-  if (!target || !sourceEl) return;
-  const s = sourceEl.getBoundingClientRect();
-  const t = target.getBoundingClientRect();
-  const bean = document.createElement('div');
-  bean.className = 'fly-bean';
-  bean.style.left = (s.left + s.width/2 - 7) + 'px';
-  bean.style.top  = (s.top  + s.height/2 - 9) + 'px';
-  document.body.appendChild(bean);
-  const dx = (t.left + t.width/2) - (s.left + s.width/2);
-  const dy = (t.top  + t.height/2) - (s.top  + s.height/2);
-  // Arc via two-stage keyframe
-  const midX = dx * 0.5, midY = Math.min(dy, 0) - 120;
-  const anim = bean.animate([
-    { transform: 'translate(0,0) scale(1)',        opacity: 1, offset: 0 },
-    { transform: `translate(${midX}px, ${midY}px) scale(1.1)`, opacity: 1, offset: 0.6 },
-    { transform: `translate(${dx}px, ${dy}px) scale(0.5)`,     opacity: 0.2, offset: 1 }
-  ], { duration: 720, easing: 'cubic-bezier(.45,.05,.55,.95)', fill: 'forwards' });
-  anim.onfinish = () => {
-    bean.remove();
-    const btn = document.getElementById('nav-quote-btn');
-    if (btn) {
-      btn.classList.remove('cart-pulse');
-      void btn.offsetWidth; // restart animation
-      btn.classList.add('cart-pulse');
-    }
-  };
-}
-
-// ================================================
-// BEHIND-THE-BAG VIDEO (auto-hides if src missing)
-// ================================================
-function initBtbVideo(){
-  const sec = document.getElementById('btb-section');
-  const vid = document.getElementById('btb-video');
-  if (!sec || !vid) return;
-  const source = vid.querySelector('source');
-  if (!source) return;
-  // Probe the file — reveal section only on successful load
-  fetch(source.src, { method: 'HEAD' })
-    .then(r => { if (r.ok) { sec.hidden = false; vid.load(); } })
-    .catch(() => { /* stay hidden */ });
+function flyToCart(/* sourceEl */){
+  const btn = document.getElementById('nav-quote-btn');
+  if (!btn) return;
+  btn.classList.remove('cart-pulse');
+  void btn.offsetWidth; // restart animation
+  btn.classList.add('cart-pulse');
 }
 
 // ================================================
@@ -814,6 +716,13 @@ function initMap() {
   }
 
   // Add markers with branded popups
+  // Per-location label direction/offset so Vancouver & Parksville (very close)
+  // don't overlap each other.
+  const LABEL_DIRS = {
+    'Vancouver': { direction: 'bottom', offset: [0, 10] },
+    'Parksville': { direction: 'top', offset: [0, -10] },
+    'Lévis': { direction: 'right', offset: [10, 0] }
+  };
   LOCATIONS.forEach(loc => {
     const popup = L.popup({ closeButton: true, maxWidth: 260, className: 'r86-popup-wrap' })
       .setContent(`
@@ -826,13 +735,26 @@ function initMap() {
     const marker = L.marker([loc.lat, loc.lng], { icon: makeIcon(loc.delay) })
       .addTo(map)
       .bindPopup(popup);
+    const lbl = LABEL_DIRS[loc.city] || { direction: 'right', offset: [10, 0] };
     marker.bindTooltip(loc.city, {
       permanent: true,
-      direction: 'right',
-      offset: [10, 0],
+      direction: lbl.direction,
+      offset: lbl.offset,
       className: 'r86-map-label'
     });
   });
+
+  // Branded title in the top-left corner of the map
+  const TitleControl = L.Control.extend({
+    options: { position: 'topleft' },
+    onAdd: function() {
+      const el = L.DomUtil.create('div', 'r86-map-title');
+      el.innerHTML = 'Root 86 Coffee';
+      L.DomEvent.disableClickPropagation(el);
+      return el;
+    }
+  });
+  new TitleControl().addTo(map);
 
   // Fit bounds to show all markers with padding
   const bounds = L.latLngBounds(LOCATIONS.map(l => [l.lat, l.lng]));

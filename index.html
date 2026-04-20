@@ -32,7 +32,7 @@
   <link rel="dns-prefetch" href="https://basemaps.cartocdn.com" />
 
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9749;</text></svg>" />
-  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/styles.css?v=nobeans" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
 
@@ -121,25 +121,6 @@
 <!-- Scroll progress indicator -->
 <div id="scroll-progress"></div>
 
-<!-- Bean trail container (JS fills it) -->
-<div id="bean-trail" aria-hidden="true"></div>
-
-<!-- Back to top coffee cup -->
-<button id="back-to-top" aria-label="Back to top" title="Back to top">
-  <svg viewBox="0 0 40 44" class="btt-svg">
-    <!-- Cup outline -->
-    <path d="M8 10 L32 10 L30 38 Q30 40 28 40 L12 40 Q10 40 10 38 Z" class="btt-cup" />
-    <!-- Handle -->
-    <path d="M32 16 Q38 18 38 24 Q38 30 32 32" class="btt-handle" />
-    <!-- Coffee fill (clipped by cup shape via JS) -->
-    <rect id="btt-fill" x="9" y="40" width="22" height="0" class="btt-fill" />
-    <!-- Steam -->
-    <path d="M14 8 Q13 5 14 2" class="btt-steam" />
-    <path d="M20 8 Q19 4 20 0" class="btt-steam" />
-    <path d="M26 8 Q25 5 26 2" class="btt-steam" />
-  </svg>
-</button>
-
 <!-- ================================================
      NAVIGATION
      ================================================ -->
@@ -226,28 +207,6 @@
     <div class="stat-label">Standard: Exceptional</div>
   </div>
 </div>
-
-<!-- ================================================
-     BEHIND THE BAG
-     (hides itself if media/behind-the-bag.mp4 isn't present)
-     ================================================ -->
-<section class="btb-section" id="btb-section" hidden>
-  <div class="container btb-grid">
-    <div class="btb-copy">
-      <span class="btb-eyebrow">Behind the Bag</span>
-      <h2 class="btb-title">From origin<br>to your <em>roaster</em>.</h2>
-      <p class="btb-body">
-        Every lot at Root 86 is personally cupped, sourced, and warehoused in Canada before it reaches your roastery floor. See the journey.
-      </p>
-    </div>
-    <div class="btb-media">
-      <video id="btb-video" autoplay muted loop playsinline preload="metadata" poster="">
-        <source src="media/behind-the-bag.mp4" type="video/mp4" />
-      </video>
-      <div class="btb-frame"></div>
-    </div>
-  </div>
-</section>
 
 <!-- ================================================
      MARQUEE
@@ -716,7 +675,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="js/coffees.js"></script>
 <script src="js/submit.js"></script>
-<script src="js/app.js"></script>
+<script src="js/app.js?v=nobeans"></script>
 <script src="js/track.js" defer></script>
 <script>
   if (typeof emailjs !== 'undefined' && typeof SITE_SETTINGS !== 'undefined' && SITE_SETTINGS.emailjsPublicKey && SITE_SETTINGS.emailjsPublicKey !== 'YOUR_PUBLIC_KEY') {
