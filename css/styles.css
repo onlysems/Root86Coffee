@@ -1102,6 +1102,72 @@ footer { background: var(--red-deep); padding: 52px 0 32px; border-top: 3px soli
 }
 
 /* ============================================================
+   NEWSLETTER SIGNUP
+   ============================================================ */
+.newsletter-section {
+  padding: 90px 0;
+  background: linear-gradient(180deg, var(--off-white) 0%, #f4ece9 100%);
+  border-top: 1px solid rgba(26,0,5,0.06);
+}
+.newsletter-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.newsletter-eyebrow {
+  font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--red); display: block; margin-bottom: 18px; font-weight: 500;
+}
+.newsletter-title {
+  font-family: var(--font-serif); font-size: clamp(32px, 3.4vw, 46px);
+  font-weight: 300; line-height: 1.1; color: var(--ink); margin-bottom: 20px;
+}
+.newsletter-body {
+  font-size: 0.92rem; line-height: 1.75; color: var(--muted); max-width: 440px;
+}
+.newsletter-form { display: flex; flex-direction: column; gap: 12px; }
+.newsletter-row  { display: flex; gap: 10px; }
+.newsletter-input {
+  flex: 1;
+  padding: 14px 18px;
+  background: #fff;
+  border: 1px solid rgba(26,0,5,0.12);
+  border-radius: 3px;
+  font-size: 0.92rem;
+  color: var(--ink);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  font-family: inherit;
+}
+.newsletter-input:focus {
+  outline: none;
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(200,16,46,0.12);
+}
+.newsletter-btn {
+  padding: 14px 28px; flex-shrink: 0; white-space: nowrap;
+  font-size: 0.76rem;
+}
+.newsletter-hp {
+  position: absolute !important; left: -9999px !important;
+  width: 1px; height: 1px; opacity: 0; pointer-events: none;
+}
+.newsletter-status {
+  font-size: 0.85rem; min-height: 1.2em; margin-top: 2px;
+  letter-spacing: 0.02em;
+}
+.newsletter-status.ok  { color: #2d7a2d; }
+.newsletter-status.err { color: var(--red); }
+@media (max-width: 900px) {
+  .newsletter-grid { grid-template-columns: 1fr; gap: 36px; padding: 0 24px; }
+  .newsletter-section { padding: 60px 0; }
+}
+@media (max-width: 520px) {
+  .newsletter-row { flex-direction: column; }
+  .newsletter-btn { width: 100%; }
+}
+
+/* ============================================================
    BEHIND THE BAG — image carousel
    ============================================================ */
 .btb-section {

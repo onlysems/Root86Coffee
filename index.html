@@ -32,7 +32,7 @@
   <link rel="dns-prefetch" href="https://basemaps.cartocdn.com" />
 
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9749;</text></svg>" />
-  <link rel="stylesheet" href="css/styles.css?v=logo1" />
+  <link rel="stylesheet" href="css/styles.css?v=sub1" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
 
@@ -503,6 +503,33 @@
 </div>
 
 <!-- ================================================
+     NEWSLETTER SIGNUP
+     ================================================ -->
+<section class="newsletter-section" id="newsletter">
+  <div class="container newsletter-grid">
+    <div class="newsletter-copy">
+      <span class="newsletter-eyebrow">Stay in the loop</span>
+      <h2 class="newsletter-title">New lots, cupping notes,<br>and arrivals — first.</h2>
+      <p class="newsletter-body">
+        Join our mailing list to hear about fresh arrivals, limited micro-lots, and seasonal offers before they're listed publicly. No spam, unsubscribe any time.
+      </p>
+    </div>
+    <form class="newsletter-form" id="newsletter-form" novalidate>
+      <div class="newsletter-row">
+        <input type="text" class="newsletter-input" id="newsletter-name" name="name" placeholder="Your name (optional)" autocomplete="name" />
+      </div>
+      <div class="newsletter-row">
+        <input type="email" class="newsletter-input" id="newsletter-email" name="email" placeholder="you@roastery.ca" autocomplete="email" required />
+        <button type="submit" class="btn-red newsletter-btn" id="newsletter-btn">Subscribe</button>
+      </div>
+      <!-- Honeypot — bots fill this, humans don't see it -->
+      <input type="text" name="website" class="newsletter-hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      <div class="newsletter-status" id="newsletter-status" role="status" aria-live="polite"></div>
+    </form>
+  </div>
+</section>
+
+<!-- ================================================
      FOOTER
      ================================================ -->
 <footer>
@@ -697,7 +724,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="js/coffees.js"></script>
 <script src="js/submit.js"></script>
-<script src="js/app.js?v=logo1"></script>
+<script src="js/app.js?v=sub1"></script>
 <script src="js/track.js" defer></script>
 <script>
   if (typeof emailjs !== 'undefined' && typeof SITE_SETTINGS !== 'undefined' && SITE_SETTINGS.emailjsPublicKey && SITE_SETTINGS.emailjsPublicKey !== 'YOUR_PUBLIC_KEY') {

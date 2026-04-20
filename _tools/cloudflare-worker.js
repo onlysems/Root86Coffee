@@ -58,6 +58,12 @@ export default {
     if (path === '/stats' && request.method === 'GET') {
       return handleStats(request, env, cors);
     }
+    if (path === '/subscribe' && request.method === 'POST') {
+      return handleSubscribe(request, env, cors, corsOrigin);
+    }
+    if (path === '/subscribers' && request.method === 'GET') {
+      return handleSubscribersList(request, env, cors);
+    }
     // Default: form submission (root path)
     if (request.method === 'POST') {
       return handleForm(request, env, cors, corsOrigin);
@@ -65,6 +71,102 @@ export default {
     return json({ error: 'Method not allowed' }, 405, cors);
   },
 };
+
+// ────────────────────────────────────────────────────────────
+// /subscribe  — newsletter signup
+// Stores `sub:<email>` in KV and creates a GitHub issue
+// ────────────────────────────────────────────────────────────
+async function handleSubscribe(request, env, cors, corsOrigin) {
+  if (!corsOrigin) return json({ error: 'Origin not allowed' }, 403, cors);
+
+  let data;
+  try { data = await request.json(); }
+  catch { return json({ error: 'Invalid JSON' }, 400, cors); }
+
+  if (data.website) return json({ ok: true }, 200, cors); // honeypot — silently accept
+
+  const cap = (v, n) => String(v == null ? '' : v).slice(0, n);
+  const email = cap(data.email, 200).trim().toLowerCase();
+  const name  = cap(data.name, 120).trim();
+  const source = cap(data.source || 'homepage', 40);
+
+  // Basic email validation
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return json({ error: 'Invalid email' }, 400, cors);
+  }
+
+  const now = new Date().toISOString();
+  const record = { email, name, source, ts: now };
+
+  // Write to KV (if bound)
+  let existed = false;
+  if (env.STATS) {
+    try {
+      const prior = await env.STATS.get('sub:' + email);
+      existed = !!prior;
+      await env.STATS.put('sub:' + email, JSON.stringify(record));
+      if (!existed) {
+        try { await bumpEvent(env, 'subscribe'); } catch(e) {}
+      }
+    } catch(e) { console.error('KV sub write', e); }
+  }
+
+  // Notify owner via GitHub issue (only on first-time signup)
+  if (!existed && env.GH_TOKEN) {
+    try {
+      const title = `[newsletter] ${email}${name ? ' — ' + name : ''}`;
+      const body = [
+        `**Newsletter signup**`,
+        `**Email:** ${md(email)}`,
+        name ? `**Name:** ${md(name)}` : '',
+        `**Source:** ${md(source)}`,
+        `**Submitted:** ${now}`,
+      ].filter(Boolean).join('\n');
+      await fetch(
+        `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/issues`,
+        { method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${env.GH_TOKEN}`,
+            'Accept': 'application/vnd.github+json',
+            'X-GitHub-Api-Version': '2022-11-28',
+            'Content-Type': 'application/json',
+            'User-Agent': 'r86-forms-worker',
+          },
+          body: JSON.stringify({ title, body, labels: ['submission', 'newsletter', 'status:new'] }),
+        }
+      );
+    } catch(e) { console.error('GH newsletter issue', e); }
+  }
+
+  return json({ ok: true, duplicate: existed }, 200, cors);
+}
+
+// ────────────────────────────────────────────────────────────
+// /subscribers  — admin reader (requires X-Analytics-Key)
+// ────────────────────────────────────────────────────────────
+async function handleSubscribersList(request, env, cors) {
+  const key = request.headers.get('X-Analytics-Key') || '';
+  if (!env.ANALYTICS_KEY || key !== env.ANALYTICS_KEY) {
+    return json({ error: 'Unauthorized' }, 401, cors);
+  }
+  if (!env.STATS) return json({ error: 'STATS not bound' }, 500, cors);
+
+  const subs = [];
+  let cursor;
+  do {
+    const list = await env.STATS.list({ prefix: 'sub:', cursor });
+    const vals = await Promise.all(list.keys.map(k => env.STATS.get(k.name)));
+    vals.forEach(v => {
+      if (!v) return;
+      try { subs.push(JSON.parse(v)); } catch(e) {}
+    });
+    cursor = list.list_complete ? null : list.cursor;
+  } while (cursor);
+
+  // Newest first
+  subs.sort((a, b) => (b.ts || '').localeCompare(a.ts || ''));
+  return json({ ok: true, count: subs.length, subscribers: subs }, 200, cors);
+}
 
 // ────────────────────────────────────────────────────────────
 // Forms → GitHub Issue (unchanged behavior)

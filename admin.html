@@ -234,6 +234,14 @@
   .inbox-detail-empty-title{font-size:.95rem;color:var(--ink);font-weight:500;margin-bottom:6px}
   .inbox-detail-empty-sub{font-size:.82rem;max-width:300px;line-height:1.55}
 
+  /* ── Subscribers ── */
+  .subs-summary{background:linear-gradient(135deg,#fff 0%,#fcf6f4 100%);border:1px solid var(--line);border-radius:8px;padding:22px 26px}
+  .subs-table{width:100%;border-collapse:collapse;font-size:.88rem}
+  .subs-table th{text-align:left;padding:14px 18px;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600;border-bottom:1px solid var(--line);background:#fafafa}
+  .subs-table td{padding:13px 18px;border-bottom:1px solid var(--line);color:var(--ink);vertical-align:middle}
+  .subs-table tbody tr:hover{background:var(--hover)}
+  .subs-table tbody tr:last-child td{border-bottom:none}
+
   /* ── Analytics ── */
   .seg{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:4px;overflow:hidden}
   .seg-btn{padding:7px 14px;font-size:.75rem;background:none;border:none;color:var(--muted);cursor:pointer;font-weight:500;letter-spacing:.04em;border-right:1px solid var(--line)}
@@ -538,6 +546,7 @@
       <button class="sb-item" data-view="inbox"><span class="sb-icon">&#9993;</span> Inbox <span class="sb-badge" id="sb-inbox-badge" style="display:none">0</span></button>
       <button class="sb-item" data-view="pipeline"><span class="sb-icon">&#9776;</span> Pipeline</button>
       <button class="sb-item" data-view="analytics"><span class="sb-icon">&#9636;</span> Analytics</button>
+      <button class="sb-item" data-view="subscribers"><span class="sb-icon">&#9993;</span> Subscribers</button>
     </div>
     <div class="sb-foot">
       <button class="sb-signout" id="btn-logout">Sign Out</button>
@@ -859,6 +868,54 @@
       </div>
     </div>
 
+    <!-- ── SUBSCRIBERS VIEW ── -->
+    <div class="view" id="view-subscribers">
+      <div class="topbar">
+        <div class="topbar-brand">Subscribers</div>
+        <div class="topbar-spacer"></div>
+        <button class="topbar-btn" id="subs-refresh" title="Refresh subscriber list">&#8635; Refresh</button>
+        <button class="topbar-btn" id="subs-export" title="Download CSV">&#11015; Export CSV</button>
+      </div>
+      <div class="dash-wrap">
+        <div class="dash-header">
+          <div>
+            <h1 class="dash-greeting">Newsletter Subscribers</h1>
+            <div class="dash-subtitle" id="subs-subtitle">People who signed up via the homepage form</div>
+          </div>
+        </div>
+
+        <div id="subs-setup" style="display:none;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:28px;margin-top:16px;max-width:600px">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+            <span style="font-size:1.1rem">&#128274;</span>
+            <div style="font-weight:600;font-size:1rem">Connect with your analytics key</div>
+          </div>
+          <div style="color:var(--muted);font-size:.85rem;line-height:1.7;margin-bottom:16px">
+            Subscribers use the same <code>ANALYTICS_KEY</code> as the Analytics tab. Set it once over there and it'll work here too.
+          </div>
+        </div>
+
+        <div id="subs-content" style="display:none;margin-top:18px">
+          <div class="subs-summary" id="subs-summary"></div>
+          <div style="overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:6px;margin-top:12px">
+            <table class="subs-table" id="subs-table">
+              <thead>
+                <tr>
+                  <th>Email</th>
+                  <th>Name</th>
+                  <th>Source</th>
+                  <th>Signed up</th>
+                </tr>
+              </thead>
+              <tbody id="subs-tbody"></tbody>
+            </table>
+          </div>
+          <div id="subs-empty" style="display:none;padding:40px;text-align:center;color:var(--muted)">No subscribers yet.</div>
+        </div>
+
+        <div id="subs-error" style="display:none;background:#fdeaea;border:1px solid #f5b5b5;color:#8a0f20;padding:14px 18px;border-radius:6px;margin-top:16px;font-size:.88rem"></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -1085,6 +1142,11 @@ function bind(){
   });
   const anRefresh = document.getElementById('an-refresh');
   if (anRefresh) anRefresh.addEventListener('click', loadAnalytics);
+
+  const subsRefresh = document.getElementById('subs-refresh');
+  if (subsRefresh) subsRefresh.addEventListener('click', loadSubscribers);
+  const subsExport = document.getElementById('subs-export');
+  if (subsExport) subsExport.addEventListener('click', exportSubscribersCsv);
   const anSetkey = document.getElementById('an-setkey');
   if (anSetkey) anSetkey.addEventListener('click', () => {
     $('#an-content').style.display = 'none';
@@ -1249,10 +1311,11 @@ function switchView(view){
   document.querySelectorAll('.view').forEach(el => {
     el.classList.toggle('active', el.id === 'view-' + view);
   });
-  if (view === 'dashboard') renderDashboard();
-  if (view === 'analytics') openAnalytics();
-  if (view === 'inbox')     openInbox();
-  if (view === 'pipeline')  openPipeline();
+  if (view === 'dashboard')   renderDashboard();
+  if (view === 'analytics')   openAnalytics();
+  if (view === 'inbox')       openInbox();
+  if (view === 'pipeline')    openPipeline();
+  if (view === 'subscribers') openSubscribers();
 }
 
 // ── Lead pipeline ─────────────────────────────
@@ -1595,6 +1658,89 @@ function renderLineChart(daily){
 }
 
 function fmt(n){ return (n == null) ? '—' : String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+
+// ── Subscribers ─────────────────────────────
+let SUBSCRIBERS = [];
+function openSubscribers(){
+  const key = localStorage.getItem(AN_KEY_STORAGE) || '';
+  const setup = document.getElementById('subs-setup');
+  const content = document.getElementById('subs-content');
+  const errBox = document.getElementById('subs-error');
+  errBox.style.display = 'none';
+  if (!key) {
+    setup.style.display = 'block';
+    content.style.display = 'none';
+    return;
+  }
+  setup.style.display = 'none';
+  loadSubscribers();
+}
+async function loadSubscribers(){
+  const key = localStorage.getItem(AN_KEY_STORAGE);
+  if (!key) return openSubscribers();
+  if (!WORKER_BASE) {
+    document.getElementById('subs-error').textContent = 'Worker endpoint is not configured in SITE_SETTINGS.formEndpoint';
+    document.getElementById('subs-error').style.display = 'block';
+    return;
+  }
+  try {
+    const r = await fetch(WORKER_BASE + '/subscribers', { headers: { 'X-Analytics-Key': key } });
+    if (r.status === 401) {
+      localStorage.removeItem(AN_KEY_STORAGE);
+      return openSubscribers();
+    }
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const data = await r.json();
+    SUBSCRIBERS = data.subscribers || [];
+    renderSubscribers();
+  } catch(e) {
+    document.getElementById('subs-error').textContent = 'Failed to load subscribers: ' + e.message;
+    document.getElementById('subs-error').style.display = 'block';
+  }
+}
+function renderSubscribers(){
+  const content = document.getElementById('subs-content');
+  const tbody = document.getElementById('subs-tbody');
+  const empty = document.getElementById('subs-empty');
+  const summary = document.getElementById('subs-summary');
+  content.style.display = 'block';
+
+  summary.innerHTML = `<div style="font-size:2rem;font-family:var(--serif,Georgia);font-weight:300;color:var(--ink)">${SUBSCRIBERS.length.toLocaleString()}</div><div style="color:var(--muted);font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;margin-top:2px">Total subscribers</div>`;
+
+  if (!SUBSCRIBERS.length) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+  tbody.innerHTML = SUBSCRIBERS.map(s => {
+    const when = s.ts ? new Date(s.ts) : null;
+    const whenStr = when && !isNaN(when) ? when.toLocaleDateString() + ' ' + when.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' }) : '—';
+    return `<tr>
+      <td><a href="mailto:${esc(s.email)}" style="color:var(--red);text-decoration:none">${esc(s.email)}</a></td>
+      <td>${esc(s.name) || '<span style="color:var(--muted)">—</span>'}</td>
+      <td><span style="font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)">${esc(s.source || 'homepage')}</span></td>
+      <td style="white-space:nowrap;color:var(--muted);font-size:.82rem">${whenStr}</td>
+    </tr>`;
+  }).join('');
+}
+function exportSubscribersCsv(){
+  if (!SUBSCRIBERS.length) { toast('No subscribers to export'); return; }
+  const rows = [['email','name','source','signed_up_iso']];
+  SUBSCRIBERS.forEach(s => rows.push([s.email || '', s.name || '', s.source || '', s.ts || '']));
+  const csv = rows.map(r => r.map(v => {
+    const str = String(v);
+    return /[",\n]/.test(str) ? '"' + str.replace(/"/g, '""') + '"' : str;
+  }).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'root86-subscribers-' + new Date().toISOString().slice(0,10) + '.csv';
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
 
 function renderDashboard(){
   const live = DATA.filter(c => !c.hidden);

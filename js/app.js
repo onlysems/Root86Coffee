@@ -53,7 +53,71 @@ document.addEventListener('DOMContentLoaded', () => {
   initMap();
   initBtbCarousel();
   initCursor();
+  initNewsletter();
 });
+
+// ================================================
+// NEWSLETTER SIGNUP
+// Posts to <formEndpoint>/subscribe (Cloudflare Worker).
+// ================================================
+function initNewsletter(){
+  const form = document.getElementById('newsletter-form');
+  if (!form) return;
+  const btn    = document.getElementById('newsletter-btn');
+  const status = document.getElementById('newsletter-status');
+  const emailEl = document.getElementById('newsletter-email');
+  const nameEl  = document.getElementById('newsletter-name');
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    if (!status || !btn) return;
+    const email = (emailEl.value || '').trim();
+    const name  = (nameEl.value || '').trim();
+    const website = (form.querySelector('input[name="website"]')?.value || '').trim();
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      status.textContent = 'Please enter a valid email.';
+      status.className = 'newsletter-status err';
+      return;
+    }
+
+    const base = (typeof SITE_SETTINGS !== 'undefined' && SITE_SETTINGS.formEndpoint)
+      ? SITE_SETTINGS.formEndpoint.replace(/\/+$/, '') : '';
+    if (!base) {
+      status.textContent = 'Signup isn\'t configured yet.';
+      status.className = 'newsletter-status err';
+      return;
+    }
+
+    btn.disabled = true;
+    const origLabel = btn.textContent;
+    btn.textContent = 'Subscribing…';
+    status.textContent = '';
+    status.className = 'newsletter-status';
+
+    try {
+      const r = await fetch(base + '/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, name, website, source: 'homepage' })
+      });
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok || !data.ok) throw new Error(data.error || 'Something went wrong');
+
+      status.textContent = data.duplicate
+        ? 'You\'re already on the list — thanks!'
+        : 'You\'re in. Watch your inbox for the next arrival drop.';
+      status.className = 'newsletter-status ok';
+      form.reset();
+    } catch(err) {
+      status.textContent = 'Couldn\'t subscribe — try again in a moment.';
+      status.className = 'newsletter-status err';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = origLabel;
+    }
+  });
+}
 
 // ================================================
 // CUSTOM CURSOR — red dot + trailing ring
