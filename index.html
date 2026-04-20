@@ -27,6 +27,8 @@
   <link rel="preconnect" href="https://static.wixstatic.com" />
   <link rel="preconnect" href="https://unpkg.com" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="dns-prefetch" href="https://www.facebook.com" />
+  <link rel="dns-prefetch" href="https://connect.facebook.net"/>
   <link rel="dns-prefetch" href="https://basemaps.cartocdn.com" />
 
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9749;</text></svg>" />
@@ -412,6 +414,35 @@
 </section>
 
 <!-- ================================================
+     FACEBOOK FEED
+     ================================================ -->
+<section class="fb-section" id="facebook" aria-labelledby="fb-heading">
+  <div class="fb-inner">
+    <div class="fb-intro">
+      <span class="fb-eyebrow">Latest from the field</span>
+      <h2 id="fb-heading" class="fb-heading">Follow us on <em>Facebook</em></h2>
+      <p class="fb-sub">New arrivals, harvest updates, roaster spotlights, and the everyday life of a Canadian green coffee importer. Follow <a href="https://www.facebook.com/root86coffee/" target="_blank" rel="noopener">@root86coffee</a> for the latest.</p>
+      <a href="https://www.facebook.com/root86coffee/" target="_blank" rel="noopener" class="fb-cta">Visit our Facebook page <span aria-hidden="true">&rarr;</span></a>
+    </div>
+    <div class="fb-feed">
+      <div class="fb-page"
+           data-href="https://www.facebook.com/root86coffee/"
+           data-tabs="timeline"
+           data-width="500"
+           data-height="700"
+           data-small-header="true"
+           data-adapt-container-width="true"
+           data-hide-cover="false"
+           data-show-facepile="false">
+        <blockquote cite="https://www.facebook.com/root86coffee/" class="fb-xfbml-parse-ignore">
+          <a href="https://www.facebook.com/root86coffee/">Root 86 Coffee on Facebook</a>
+        </blockquote>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================
      CONTACT
      ================================================ -->
 <div class="contact-section" id="contact">
@@ -636,6 +667,12 @@
     emailjs.init(SITE_SETTINGS.emailjsPublicKey);
   }
 </script>
+
+<!-- Facebook Page Plugin SDK (loaded async, after page is interactive) -->
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0"
+        nonce="r86fb"></script>
 
 </body>
 </html>

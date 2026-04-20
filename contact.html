@@ -314,18 +314,61 @@
 
 <script src="js/coffees.js"></script>
 <script>
-  // Simple mailto fallback for contact form
-  document.getElementById('cp-contact-form').addEventListener('submit', function(e) {
+  // Initialize EmailJS with shared site settings
+  const EMAILJS_CONFIGURED =
+    typeof SITE_SETTINGS !== 'undefined'
+    && SITE_SETTINGS.emailjsPublicKey
+    && SITE_SETTINGS.emailjsPublicKey !== 'YOUR_PUBLIC_KEY';
+  if (EMAILJS_CONFIGURED && typeof emailjs !== 'undefined') {
+    emailjs.init(SITE_SETTINGS.emailjsPublicKey);
+  }
+
+  document.getElementById('cp-contact-form').addEventListener('submit', async function(e) {
     e.preventDefault();
     const btn = document.getElementById('cp-submit');
     btn.disabled = true; btn.textContent = 'Sending...';
 
-    const name    = document.getElementById('cp-name').value;
-    const company = document.getElementById('cp-company').value;
-    const email   = document.getElementById('cp-email').value;
-    const phone   = document.getElementById('cp-phone').value;
-    const message = document.getElementById('cp-message').value;
+    const name    = document.getElementById('cp-name').value.trim();
+    const company = document.getElementById('cp-company').value.trim();
+    const email   = document.getElementById('cp-email').value.trim();
+    const phone   = document.getElementById('cp-phone').value.trim();
+    const message = document.getElementById('cp-message').value.trim();
 
+    const showSuccess = () => {
+      document.getElementById('cp-contact-form').style.display = 'none';
+      document.getElementById('cp-success').style.display = 'block';
+    };
+    const showError = (msg) => {
+      btn.disabled = false;
+      btn.textContent = 'Send Message';
+      alert(msg || 'Something went wrong. Please email root86coffee@gmail.com directly or call 1-855-908-0086.');
+    };
+
+    // Preferred path: EmailJS (background send, no mail client needed)
+    if (EMAILJS_CONFIGURED && typeof emailjs !== 'undefined') {
+      try {
+        await emailjs.send(
+          SITE_SETTINGS.emailjsServiceId,
+          SITE_SETTINGS.emailjsContactTemplateId || SITE_SETTINGS.emailjsTemplateId,
+          {
+            form_type: 'Contact Form',
+            name: name,
+            company: company || 'N/A',
+            email: email,
+            phone: phone || 'N/A',
+            message: message,
+            submitted_at: new Date().toLocaleString('en-CA', { timeZone: 'America/Vancouver' })
+          }
+        );
+        showSuccess();
+        return;
+      } catch (err) {
+        console.error('EmailJS error:', err);
+        // Fall through to mailto fallback
+      }
+    }
+
+    // Fallback: open mail client
     const subject = encodeURIComponent('Website Enquiry - ' + name + (company ? ' (' + company + ')' : ''));
     const body    = encodeURIComponent(
       'Name: ' + name + '\n' +
@@ -334,13 +377,8 @@
       'Phone: ' + (phone || 'N/A') + '\n\n' +
       'Message:\n' + message
     );
-
     window.location.href = 'mailto:root86coffee@gmail.com?subject=' + subject + '&body=' + body;
-
-    setTimeout(() => {
-      document.getElementById('cp-contact-form').style.display = 'none';
-      document.getElementById('cp-success').style.display = 'block';
-    }, 800);
+    setTimeout(showSuccess, 800);
   });
 </script>
 

@@ -897,3 +897,64 @@ footer { background: var(--red-deep); padding: 52px 0 32px; border-top: 3px soli
   #canada-map { height: 320px; }
   .map-locations { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   FACEBOOK FEED SECTION
+   ============================================================ */
+.fb-section {
+  background: var(--cream, #faf7f2);
+  padding: 110px 0;
+  border-top: 1px solid rgba(26,0,5,0.06);
+  border-bottom: 1px solid rgba(26,0,5,0.06);
+}
+.fb-inner {
+  max-width: 1280px; margin: 0 auto; padding: 0 52px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 72px;
+  align-items: center;
+}
+.fb-eyebrow {
+  font-size: 0.64rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--red); display: block; margin-bottom: 18px;
+}
+.fb-heading {
+  font-family: var(--font-serif); font-size: clamp(32px, 4vw, 56px);
+  font-weight: 300; color: var(--ink); line-height: 1.05; margin-bottom: 22px;
+}
+.fb-heading em { font-style: italic; color: var(--red); }
+.fb-sub {
+  font-size: 0.92rem; color: var(--muted);
+  line-height: 1.9; max-width: 420px; margin-bottom: 32px;
+}
+.fb-sub a { color: var(--red); border-bottom: 1px solid currentColor; }
+.fb-cta {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--ink); font-weight: 500;
+  border-bottom: 1px solid var(--ink); padding-bottom: 5px;
+  transition: color 0.25s, border-color 0.25s, gap 0.25s;
+}
+.fb-cta:hover { color: var(--red); border-color: var(--red); gap: 16px; }
+.fb-feed {
+  display: flex; justify-content: center;
+  min-height: 500px;
+}
+.fb-feed .fb-page,
+.fb-feed .fb-page span,
+.fb-feed iframe {
+  width: 100% !important;
+  max-width: 500px;
+  border-radius: 4px;
+  box-shadow: 0 8px 32px rgba(26,0,5,0.08);
+  background: #fff;
+}
+
+@media (max-width: 900px) {
+  .fb-section { padding: 72px 0; }
+  .fb-inner {
+    grid-template-columns: 1fr; gap: 48px;
+    padding: 0 32px;
+  }
+  .fb-intro { text-align: left; }
+  .fb-sub { max-width: none; }
+  .fb-feed { min-height: auto; }
+}
