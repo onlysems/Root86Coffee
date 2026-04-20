@@ -215,6 +215,7 @@ function renderGrid() {
 function cardHTML(c) {
   const flag = FLAGS[c.origin] || '';
   const inQ  = state.quote.some(q => q.id === c.id);
+  const fallback = v => (v && String(v).trim()) ? v : '<span class="ccard-na">—</span>';
   const certFlags = c.certifications.map(cert =>
     `<span class="cflag ${CERT_CLASS[cert] || ''}">${cert}</span>`).join('');
   const specialBadges = [
@@ -231,10 +232,10 @@ function cardHTML(c) {
       </div>
       <div class="ccard-name">${flag ? `<span class="ccard-flag">${flag}</span>` : ''}${c.name}</div>
       <div class="ccard-details">
-        <div class="ccard-detail"><strong>Process:</strong> ${c.process}</div>
-        <div class="ccard-detail"><strong>Region:</strong> ${c.region}</div>
-        <div class="ccard-detail"><strong>Bag Weight:</strong> ${c.bagWeight} lbs</div>
-        <div class="ccard-detail" style="font-style:italic;margin-top:2px">${c.tastingNotes}</div>
+        <div class="ccard-detail"><strong>Process:</strong> ${fallback(c.process)}</div>
+        <div class="ccard-detail"><strong>Region:</strong> ${fallback(c.region)}</div>
+        <div class="ccard-detail"><strong>Bag Weight:</strong> ${c.bagWeight ? c.bagWeight + ' lbs' : '<span class="ccard-na">—</span>'}</div>
+        <div class="ccard-detail ccard-notes" title="${(c.tastingNotes||'').replace(/"/g,'&quot;')}">${fallback(c.tastingNotes)}</div>
       </div>
       <div class="ccard-stock${c.available ? '' : ' out'}">
         ${c.available
