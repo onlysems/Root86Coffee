@@ -76,7 +76,7 @@
   .topbar-btn{
     padding:7px 14px; font-size:.78rem; border:1px solid var(--line-strong);
     background:#fff; color:var(--ink); display:inline-flex; align-items:center; gap:6px;
-    transition:background .15s;
+    transition:background .15s; text-decoration:none;
   }
   .topbar-btn:hover{background:var(--hover)}
   .topbar-btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
@@ -324,6 +324,7 @@
     </div>
     <div class="topbar-spacer"></div>
     <button class="topbar-btn" id="btn-inbox">Inbox <span class="inbox-badge" id="inbox-badge" style="display:none">0</span></button>
+    <a class="topbar-btn" id="btn-analytics" href="https://dash.cloudflare.com/?to=/:account/pages/view/root86coffee/metrics" target="_blank" rel="noopener">Analytics &#8599;</a>
     <button class="topbar-btn" id="btn-reset">Discard Drafts</button>
     <button class="topbar-btn" id="btn-export">Export</button>
     <button class="topbar-btn primary" id="btn-publish">Publish to GitHub</button>
