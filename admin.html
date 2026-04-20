@@ -189,34 +189,31 @@
   .stpill{display:inline-flex;align-items:center;gap:5px;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:10px;font-weight:600;vertical-align:1px;border:1px solid transparent}
   .stpill::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.85}
   .stpill.new{background:rgba(46,130,200,.08);color:#2567a8;border-color:rgba(46,130,200,.2)}
+  .stpill.read{background:rgba(34,150,80,.1);color:#1e7d43;border-color:rgba(34,150,80,.25)}
   .stpill.quoted{background:rgba(230,150,30,.1);color:#a66a0a;border-color:rgba(230,150,30,.25)}
   .stpill.sample-sent{background:rgba(140,80,200,.1);color:#7b3fb8;border-color:rgba(140,80,200,.22)}
-  .stpill.won{background:rgba(34,150,80,.1);color:#1e7d43;border-color:rgba(34,150,80,.25)}
-  .stpill.lost{background:rgba(0,0,0,.05);color:var(--muted);border-color:rgba(0,0,0,.1)}
 
   /* Status switcher (detail pane) */
   .stsw{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 18px}
   .stsw-btn{font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;padding:5px 10px;border-radius:14px;border:1px solid var(--line);background:#fff;cursor:pointer;color:var(--muted);font-weight:600;transition:all .15s}
   .stsw-btn:hover{border-color:rgba(200,16,46,.3);color:var(--ink)}
   .stsw-btn.active.new{background:rgba(46,130,200,.1);color:#2567a8;border-color:rgba(46,130,200,.3)}
+  .stsw-btn.active.read{background:rgba(34,150,80,.12);color:#1e7d43;border-color:rgba(34,150,80,.35)}
   .stsw-btn.active.quoted{background:rgba(230,150,30,.12);color:#a66a0a;border-color:rgba(230,150,30,.35)}
   .stsw-btn.active.sample-sent{background:rgba(140,80,200,.12);color:#7b3fb8;border-color:rgba(140,80,200,.32)}
-  .stsw-btn.active.won{background:rgba(34,150,80,.12);color:#1e7d43;border-color:rgba(34,150,80,.35)}
-  .stsw-btn.active.lost{background:rgba(0,0,0,.06);color:var(--muted);border-color:rgba(0,0,0,.2)}
 
   /* ── Kanban pipeline view ── */
-  .kanban{display:grid;grid-template-columns:repeat(5,minmax(220px,1fr));gap:14px;margin-top:12px;align-items:start}
-  @media(max-width:1200px){.kanban{grid-template-columns:repeat(3,1fr)}}
-  @media(max-width:760px){.kanban{grid-template-columns:1fr}}
+  .kanban{display:grid;grid-template-columns:repeat(4,minmax(240px,1fr));gap:14px;margin-top:12px;align-items:start}
+  @media(max-width:1100px){.kanban{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:620px){.kanban{grid-template-columns:1fr}}
   .kcol{background:var(--panel);border:1px solid var(--line);border-radius:6px;display:flex;flex-direction:column;min-height:200px}
   .kcol-head{padding:12px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:8px}
   .kcol-title{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:8px}
   .kcol-title::before{content:'';width:8px;height:8px;border-radius:50%;background:currentColor}
   .kcol[data-status="new"] .kcol-title{color:#2567a8}
+  .kcol[data-status="read"] .kcol-title{color:#1e7d43}
   .kcol[data-status="quoted"] .kcol-title{color:#a66a0a}
   .kcol[data-status="sample-sent"] .kcol-title{color:#7b3fb8}
-  .kcol[data-status="won"] .kcol-title{color:#1e7d43}
-  .kcol[data-status="lost"] .kcol-title{color:var(--muted)}
   .kcol-count{font-size:.72rem;color:var(--muted);background:rgba(0,0,0,.05);padding:2px 8px;border-radius:10px;font-weight:600}
   .kcol-body{padding:10px;display:flex;flex-direction:column;gap:8px;flex:1;overflow-y:auto;max-height:calc(100vh - 280px)}
   .kcard{background:#fff;border:1px solid var(--line);border-radius:5px;padding:11px 12px;cursor:pointer;transition:all .15s;border-left:3px solid transparent}
@@ -1239,10 +1236,9 @@ function switchView(view){
 // ── Lead pipeline ─────────────────────────────
 const PIPELINE_STATUSES = [
   { key: 'new',          label: 'New' },
+  { key: 'read',         label: 'Read' },
   { key: 'quoted',       label: 'Quoted' },
-  { key: 'sample-sent',  label: 'Sample Sent' },
-  { key: 'won',          label: 'Won' },
-  { key: 'lost',         label: 'Lost' }
+  { key: 'sample-sent',  label: 'Sample Sent' }
 ];
 function getStatus(issue){
   if (!issue || !Array.isArray(issue.labels)) return 'new';
@@ -1278,15 +1274,6 @@ async function setStatus(num, newStatus){
       method: 'POST', headers,
       body: JSON.stringify({ labels: ['status:' + newStatus] })
     });
-    // Auto-close if won/lost, auto-reopen otherwise
-    const wantClosed = (newStatus === 'won' || newStatus === 'lost');
-    if (wantClosed && issue.state === 'open') {
-      await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/issues/${num}`, { method: 'PATCH', headers, body: JSON.stringify({ state: 'closed' }) });
-      issue.state = 'closed';
-    } else if (!wantClosed && issue.state === 'closed') {
-      await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/issues/${num}`, { method: 'PATCH', headers, body: JSON.stringify({ state: 'open' }) });
-      issue.state = 'open';
-    }
     // Update local labels
     issue.labels = (issue.labels || []).filter(l => l.name.indexOf('status:') !== 0);
     issue.labels.push({ name: 'status:' + newStatus });
