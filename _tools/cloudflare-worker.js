@@ -166,6 +166,34 @@ export default {
     }
 
     const issue = await ghRes.json();
+
+    // Belt-and-suspenders: explicitly apply labels in a follow-up call.
+    // Some fine-grained PAT configurations silently drop the inline
+    // "labels" field when creating issues. The dedicated add-labels
+    // endpoint is more reliable.
+    try {
+      const labelRes = await fetch(
+        `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/issues/${issue.number}/labels`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${env.GH_TOKEN}`,
+            'Accept': 'application/vnd.github+json',
+            'X-GitHub-Api-Version': '2022-11-28',
+            'Content-Type': 'application/json',
+            'User-Agent': 'r86-forms-worker',
+          },
+          body: JSON.stringify({ labels: ['submission', kindLabel] }),
+        }
+      );
+      if (!labelRes.ok) {
+        const txt = await labelRes.text();
+        console.error('Label API', labelRes.status, txt);
+      }
+    } catch (e) {
+      console.error('Label apply threw', e);
+    }
+
     return json({ ok: true, number: issue.number, url: issue.html_url }, 200, cors);
   },
 };
