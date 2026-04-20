@@ -155,29 +155,71 @@
   .publish-dot.publishing{background:#fff;animation:pulse 1s infinite}
   @keyframes pulse{0%,100%{opacity:.6}50%{opacity:1}}
 
-  /* ── Inbox (in-page view) ── */
-  .inbox-page{background:var(--panel);border:1px solid var(--line);border-radius:6px;margin-top:16px;display:flex;flex-direction:column;min-height:calc(100vh - 210px);overflow:hidden}
-  .inbox-tabs{display:flex;gap:4px;padding:0 24px;border-bottom:1px solid var(--line);background:#fafafa}
-  .inbox-tab{padding:10px 14px;font-size:.78rem;background:none;border:none;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+  /* ── Inbox (split-pane in-page view) ── */
+  .inbox-shell{display:grid;grid-template-columns:340px 1fr;gap:16px;margin-top:16px;min-height:calc(100vh - 210px)}
+  @media (max-width:960px){.inbox-shell{grid-template-columns:1fr}}
+  .inbox-sidebar{background:var(--panel);border:1px solid var(--line);border-radius:6px;display:flex;flex-direction:column;overflow:hidden}
+  .inbox-search-wrap{padding:12px;border-bottom:1px solid var(--line)}
+  .inbox-search{width:100%;padding:8px 12px;border:1px solid var(--line);border-radius:4px;font-size:.82rem;outline:none;background:#fff}
+  .inbox-search:focus{border-color:var(--red)}
+  .inbox-tabs{display:flex;gap:2px;padding:0 12px;border-bottom:1px solid var(--line);background:#fafafa}
+  .inbox-tab{padding:10px 10px;font-size:.74rem;background:none;border:none;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:6px;font-weight:500;letter-spacing:.02em}
   .inbox-tab.active{color:var(--ink);border-bottom-color:var(--red)}
-  .inbox-list{flex:1;overflow-y:auto;padding:8px 0}
-  .inbox-item{padding:14px 24px;border-bottom:1px solid rgba(0,0,0,.05);cursor:pointer;transition:background .15s}
+  .inbox-tab-count{display:inline-block;background:rgba(0,0,0,.06);color:var(--muted);border-radius:10px;padding:1px 7px;font-size:.68rem;min-width:18px;text-align:center}
+  .inbox-tab.active .inbox-tab-count{background:rgba(200,16,46,.12);color:var(--red)}
+  .inbox-list{flex:1;overflow-y:auto;padding:4px 0}
+  .inbox-item{padding:13px 16px;border-bottom:1px solid rgba(0,0,0,.05);cursor:pointer;transition:background .12s;border-left:3px solid transparent}
   .inbox-item:hover{background:#fafafa}
-  .inbox-item.closed{opacity:.55}
-  .inbox-item-top{display:flex;justify-content:space-between;gap:12px;margin-bottom:4px}
-  .inbox-item-title{font-size:.9rem;color:var(--ink);font-weight:500;line-height:1.35}
-  .inbox-item-meta{font-size:.7rem;color:var(--muted);white-space:nowrap}
-  .inbox-item-snippet{font-size:.78rem;color:var(--muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-  .inbox-tag{display:inline-block;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;padding:2px 7px;border-radius:3px;margin-right:6px;font-weight:500}
+  .inbox-item.active{background:rgba(200,16,46,.04);border-left-color:var(--red)}
+  .inbox-item.closed{opacity:.62}
+  .inbox-item.closed .inbox-item-title{font-weight:400}
+  .inbox-item-top{display:flex;justify-content:space-between;gap:10px;margin-bottom:4px;align-items:baseline}
+  .inbox-item-title{font-size:.86rem;color:var(--ink);font-weight:600;line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+  .inbox-item-meta{font-size:.68rem;color:var(--muted);white-space:nowrap;flex-shrink:0}
+  .inbox-item-snippet{font-size:.74rem;color:var(--muted);line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .inbox-tag{display:inline-block;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;padding:2px 6px;border-radius:3px;margin-right:6px;font-weight:600;vertical-align:1px}
   .inbox-tag.contact{background:rgba(46,130,200,.1);color:#2567a8}
   .inbox-tag.quote{background:rgba(200,16,46,.08);color:var(--red)}
-  .inbox-empty{padding:60px 24px;text-align:center;color:var(--muted);font-size:.85rem}
-  .inbox-loading{padding:40px;text-align:center;color:var(--muted);font-size:.8rem}
-  .inbox-detail{flex:1;overflow-y:auto;padding:24px;display:none}
-  .inbox-detail.show{display:block}
-  .inbox-detail h3{font-size:1.05rem;margin:0 0 6px;font-weight:500}
-  .inbox-detail .meta{font-size:.75rem;color:var(--muted);margin-bottom:18px}
-  .inbox-detail pre{font-family:inherit;white-space:pre-wrap;word-wrap:break-word;font-size:.85rem;line-height:1.7;color:var(--ink);background:#fafafa;padding:16px;border-radius:4px;border:1px solid var(--line)}
+  .inbox-empty{padding:40px 20px;text-align:center;color:var(--muted);font-size:.82rem}
+  .inbox-loading{padding:30px;text-align:center;color:var(--muted);font-size:.78rem}
+  .inbox-detail{background:var(--panel);border:1px solid var(--line);border-radius:6px;overflow-y:auto;padding:28px 32px;min-height:380px}
+  .inbox-detail h3{font-size:1.1rem;margin:0 0 6px;font-weight:600;line-height:1.3}
+  .inbox-detail .meta{font-size:.75rem;color:var(--muted);margin-bottom:20px}
+  .inbox-detail-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 24px;color:var(--muted);min-height:320px}
+  .inbox-detail-empty-icon{font-size:2.4rem;opacity:.3;margin-bottom:14px}
+  .inbox-detail-empty-title{font-size:.95rem;color:var(--ink);font-weight:500;margin-bottom:6px}
+  .inbox-detail-empty-sub{font-size:.82rem;max-width:300px;line-height:1.55}
+
+  /* ── Analytics ── */
+  .seg{display:inline-flex;background:#fff;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+  .seg-btn{padding:7px 14px;font-size:.75rem;background:none;border:none;color:var(--muted);cursor:pointer;font-weight:500;letter-spacing:.04em;border-right:1px solid var(--line)}
+  .seg-btn:last-child{border-right:none}
+  .seg-btn:hover{background:var(--hover)}
+  .seg-btn.active{background:var(--ink);color:#fff}
+  .an-hero{display:grid;grid-template-columns:1fr 2fr;gap:24px;background:linear-gradient(135deg,#fff 0%,#fcf6f4 100%);border:1px solid var(--line);border-radius:8px;padding:26px 28px;margin-top:16px;align-items:center}
+  @media (max-width:780px){.an-hero{grid-template-columns:1fr}}
+  .an-hero-label{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:10px}
+  .an-hero-value{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+  .an-hero-value #an-pv{font-size:2.6rem;font-weight:700;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink)}
+  .an-trend{display:inline-flex;align-items:center;gap:4px;font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:12px}
+  .an-trend.up{background:rgba(34,150,80,.1);color:#1e7d43}
+  .an-trend.down{background:rgba(200,16,46,.08);color:var(--red)}
+  .an-trend.flat{background:rgba(0,0,0,.05);color:var(--muted)}
+  .an-hero-sub{font-size:.78rem;color:var(--muted);margin-top:8px;line-height:1.5}
+  .an-hero-right{min-height:90px}
+  .an-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:16px}
+  .an-stat{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px 18px;display:flex;align-items:flex-start;gap:14px}
+  .an-stat-icon{width:36px;height:36px;border-radius:8px;background:rgba(200,16,46,.08);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+  .an-stat-body{flex:1;min-width:0}
+  .an-stat-k{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:4px}
+  .an-stat-v{font-size:1.6rem;font-weight:600;color:var(--ink);line-height:1;font-variant-numeric:tabular-nums;margin-bottom:4px}
+  .an-stat-sub{font-size:.72rem;color:var(--muted)}
+  .an-panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+  .an-panel-head{padding:16px 20px 10px;display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+  .an-panel-title{font-size:.88rem;font-weight:600;color:var(--ink)}
+  .an-panel-sub{font-size:.72rem;color:var(--muted)}
+  .an-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:16px;margin-top:16px}
+  @media (max-width:960px){.an-grid{grid-template-columns:1fr}}
   .sub-fields{background:#fafafa;border:1px solid var(--line);border-radius:6px;padding:4px 0;margin:0 0 16px}
   .sub-fields .row{display:grid;grid-template-columns:130px 1fr;gap:12px;padding:10px 16px;border-bottom:1px solid var(--line);font-size:.85rem}
   .sub-fields .row:last-child{border-bottom:none}
@@ -569,55 +611,119 @@
           <div class="dash-subtitle" id="an-subtitle">Traffic &amp; engagement from the live site</div>
         </div>
         <div style="display:flex;gap:8px;align-items:center">
-          <select id="an-range" style="padding:8px 10px;border:1px solid var(--line);background:#fff;border-radius:4px;font-size:.8rem">
-            <option value="7">Last 7 days</option>
-            <option value="30" selected>Last 30 days</option>
-            <option value="90">Last 90 days</option>
-          </select>
-          <button class="topbar-btn" id="an-refresh">Refresh</button>
-          <button class="topbar-btn" id="an-setkey">Set key</button>
+          <div class="seg" id="an-range-seg" role="tablist" aria-label="Date range">
+            <button class="seg-btn" data-range="7">7D</button>
+            <button class="seg-btn active" data-range="30">30D</button>
+            <button class="seg-btn" data-range="90">90D</button>
+          </div>
+          <button class="topbar-btn" id="an-refresh" title="Refresh data">&#8635; Refresh</button>
+          <button class="topbar-btn" id="an-setkey" title="Change analytics key">Key</button>
         </div>
       </div>
 
-      <div id="an-setup" style="display:none;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:24px;margin-top:16px">
-        <div style="font-weight:500;margin-bottom:8px">Connect analytics</div>
-        <div style="color:var(--muted);font-size:.85rem;line-height:1.7;margin-bottom:14px">
-          Paste your <code>ANALYTICS_KEY</code> (the secret you set on the Cloudflare Worker). It's stored only in this browser.
+      <div id="an-setup" style="display:none;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:28px;margin-top:16px;max-width:600px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+          <span style="font-size:1.1rem">&#128274;</span>
+          <div style="font-weight:600;font-size:1rem">Connect analytics</div>
         </div>
-        <div style="display:flex;gap:8px;max-width:520px">
+        <div style="color:var(--muted);font-size:.85rem;line-height:1.7;margin-bottom:16px">
+          Paste your <code>ANALYTICS_KEY</code> (the secret you set on the Cloudflare Worker). Stored only in this browser.
+        </div>
+        <div style="display:flex;gap:8px">
           <input type="password" id="an-key-input" placeholder="analytics key" aria-label="Analytics key"
                  style="flex:1;padding:10px 12px;border:1px solid var(--line);border-radius:4px;font-family:monospace;font-size:.8rem" />
-          <button class="topbar-btn primary" id="an-key-save" style="background:var(--red);color:#fff;border-color:var(--red)">Save</button>
+          <button class="topbar-btn primary" id="an-key-save" style="background:var(--red);color:#fff;border-color:var(--red)">Save &amp; Load</button>
         </div>
       </div>
 
       <div id="an-content" style="display:none">
-        <div class="dash-cards" style="margin-top:16px">
-          <div class="dash-card"><div class="k">Pageviews</div><div class="v" id="an-pv">—</div><div class="sub" id="an-pv-sub">in range</div></div>
-          <div class="dash-card"><div class="k">Quote submits</div><div class="v" id="an-quote">—</div><div class="sub">form completions</div></div>
-          <div class="dash-card"><div class="k">Contact submits</div><div class="v" id="an-contact">—</div><div class="sub">contact messages</div></div>
-          <div class="dash-card"><div class="k">Coffee views</div><div class="v" id="an-coffee-total">—</div><div class="sub">modal opens (all time)</div></div>
-        </div>
-
-        <div class="dash-section" style="margin-top:24px">
-          <h3 style="margin:0 0 12px;font-size:.95rem;font-weight:600">Daily pageviews</h3>
-          <div id="an-chart" style="background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px;min-height:180px"></div>
-        </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px">
-          <div>
-            <h3 style="margin:0 0 12px;font-size:.95rem;font-weight:600">Top coffees (all time)</h3>
-            <div id="an-coffees" style="background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 0"></div>
+        <!-- Hero: dominant pageview metric + sparkline + trend pill -->
+        <div class="an-hero">
+          <div class="an-hero-left">
+            <div class="an-hero-label">Pageviews</div>
+            <div class="an-hero-value">
+              <span id="an-pv">—</span>
+              <span class="an-trend" id="an-pv-trend"></span>
+            </div>
+            <div class="an-hero-sub" id="an-pv-sub">&nbsp;</div>
           </div>
-          <div>
-            <h3 style="margin:0 0 12px;font-size:.95rem;font-weight:600">Top pages &amp; referrers</h3>
-            <div id="an-paths" style="background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 0;margin-bottom:12px"></div>
-            <div id="an-refs" style="background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:8px 0"></div>
+          <div class="an-hero-right" id="an-spark"></div>
+        </div>
+
+        <!-- Secondary stat cards -->
+        <div class="an-stats">
+          <div class="an-stat">
+            <div class="an-stat-icon">&#128196;</div>
+            <div class="an-stat-body">
+              <div class="an-stat-k">Quote submits</div>
+              <div class="an-stat-v" id="an-quote">—</div>
+              <div class="an-stat-sub">form completions</div>
+            </div>
+          </div>
+          <div class="an-stat">
+            <div class="an-stat-icon">&#9993;</div>
+            <div class="an-stat-body">
+              <div class="an-stat-k">Contact submits</div>
+              <div class="an-stat-v" id="an-contact">—</div>
+              <div class="an-stat-sub">contact messages</div>
+            </div>
+          </div>
+          <div class="an-stat">
+            <div class="an-stat-icon">&#9749;</div>
+            <div class="an-stat-body">
+              <div class="an-stat-k">Coffee views</div>
+              <div class="an-stat-v" id="an-coffee-total">—</div>
+              <div class="an-stat-sub">modal opens (all time)</div>
+            </div>
+          </div>
+          <div class="an-stat">
+            <div class="an-stat-icon">&#128200;</div>
+            <div class="an-stat-body">
+              <div class="an-stat-k">Conversion rate</div>
+              <div class="an-stat-v" id="an-conv">—</div>
+              <div class="an-stat-sub">pageviews → quote</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Full-width chart -->
+        <div class="an-panel" style="margin-top:20px">
+          <div class="an-panel-head">
+            <div class="an-panel-title">Daily pageviews</div>
+            <div class="an-panel-sub" id="an-chart-sub">&nbsp;</div>
+          </div>
+          <div id="an-chart"></div>
+        </div>
+
+        <!-- Two-column below -->
+        <div class="an-grid">
+          <div class="an-panel">
+            <div class="an-panel-head">
+              <div class="an-panel-title">Most viewed coffees</div>
+              <div class="an-panel-sub">All-time · modal opens</div>
+            </div>
+            <div id="an-coffees"></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:16px">
+            <div class="an-panel">
+              <div class="an-panel-head">
+                <div class="an-panel-title">Top pages</div>
+                <div class="an-panel-sub">In range</div>
+              </div>
+              <div id="an-paths"></div>
+            </div>
+            <div class="an-panel">
+              <div class="an-panel-head">
+                <div class="an-panel-title">Top referrers</div>
+                <div class="an-panel-sub">In range</div>
+              </div>
+              <div id="an-refs"></div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div id="an-loading" style="display:none;padding:40px;text-align:center;color:var(--muted)">Loading analytics...</div>
+      <div id="an-loading" style="display:none;padding:60px;text-align:center;color:var(--muted)">Loading analytics...</div>
       <div id="an-error" style="display:none;padding:40px;text-align:center;color:var(--red)"></div>
     </div>
 
@@ -629,19 +735,32 @@
           <div class="dash-subtitle">Form submissions from the website</div>
         </div>
         <div style="display:flex;gap:8px;align-items:center">
-          <button class="topbar-btn" id="inbox-refresh">Refresh</button>
+          <button class="topbar-btn" id="inbox-refresh" title="Refresh inbox">&#8635; Refresh</button>
         </div>
       </div>
-      <div class="inbox-page">
-        <div class="inbox-tabs">
-          <button class="inbox-tab active" data-tab="open">Open <span id="tab-open-count"></span></button>
-          <button class="inbox-tab" data-tab="closed">Closed</button>
-          <button class="inbox-tab" data-tab="all">All</button>
-        </div>
-        <div class="inbox-list" id="inbox-list">
-          <div class="inbox-loading">Loading...</div>
-        </div>
-        <div class="inbox-detail" id="inbox-detail"></div>
+      <div class="inbox-shell">
+        <!-- LEFT: search + tabs + list -->
+        <aside class="inbox-sidebar">
+          <div class="inbox-search-wrap">
+            <input type="text" id="inbox-search" class="inbox-search" placeholder="Search submissions..." aria-label="Search submissions" />
+          </div>
+          <div class="inbox-tabs">
+            <button class="inbox-tab active" data-tab="open">Open <span class="inbox-tab-count" id="tab-open-count">0</span></button>
+            <button class="inbox-tab" data-tab="closed">Closed <span class="inbox-tab-count" id="tab-closed-count">0</span></button>
+            <button class="inbox-tab" data-tab="all">All <span class="inbox-tab-count" id="tab-all-count">0</span></button>
+          </div>
+          <div class="inbox-list" id="inbox-list">
+            <div class="inbox-loading">Loading...</div>
+          </div>
+        </aside>
+        <!-- RIGHT: detail pane -->
+        <section class="inbox-detail" id="inbox-detail">
+          <div class="inbox-detail-empty">
+            <div class="inbox-detail-empty-icon">&#9993;</div>
+            <div class="inbox-detail-empty-title">Select a submission</div>
+            <div class="inbox-detail-empty-sub">Pick a form submission from the list to see the full details here.</div>
+          </div>
+        </section>
       </div>
     </div>
 
@@ -775,7 +894,7 @@ const GH_REPO   = 'Root86Coffee';
 const GH_BRANCH = 'main';
 const GH_PATH   = 'js/coffees.js';
 const GH_TOKEN_KEY = 'r86_gh_token';
-const INBOX_STATE = { issues: [], filter: 'open', activeNumber: null };
+const INBOX_STATE = { issues: [], filter: 'open', activeNumber: null, search: '' };
 const AN_KEY_STORAGE = 'r86_analytics_key';
 const WORKER_BASE = (typeof SITE_SETTINGS !== 'undefined' && SITE_SETTINGS.formEndpoint) ? SITE_SETTINGS.formEndpoint.replace(/\/+$/,'') : '';
 const AN_STATE = { data: null, days: 30 };
@@ -861,8 +980,14 @@ function bind(){
   $('#btn-publish').addEventListener('click', openPublish);
 
   // Analytics
-  const anRange = document.getElementById('an-range');
-  if (anRange) anRange.addEventListener('change', e => { AN_STATE.days = parseInt(e.target.value) || 30; loadAnalytics(); });
+  document.querySelectorAll('#an-range-seg .seg-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#an-range-seg .seg-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      AN_STATE.days = parseInt(btn.dataset.range) || 30;
+      loadAnalytics();
+    });
+  });
   const anRefresh = document.getElementById('an-refresh');
   if (anRefresh) anRefresh.addEventListener('click', loadAnalytics);
   const anSetkey = document.getElementById('an-setkey');
@@ -895,6 +1020,11 @@ function bind(){
   if (draftsCard) draftsCard.addEventListener('click', () => switchView('coffees'));
 
   $('#inbox-refresh').addEventListener('click', () => loadInbox(true));
+  const inboxSearch = document.getElementById('inbox-search');
+  if (inboxSearch) inboxSearch.addEventListener('input', e => {
+    INBOX_STATE.search = e.target.value || '';
+    renderInboxList();
+  });
   document.querySelectorAll('.inbox-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.inbox-tab').forEach(t => t.classList.remove('active'));
@@ -1090,15 +1220,42 @@ function renderAnalytics(){
   $('#an-content').style.display = 'block';
   $('#an-subtitle').textContent = `Traffic & engagement — last ${d.range_days} days`;
 
+  // Trend: compare second half of range to first half
+  const daily = d.daily || [];
+  const mid = Math.floor(daily.length / 2) || 1;
+  const firstHalf = daily.slice(0, mid).reduce((a, x) => a + x.pv, 0);
+  const secondHalf = daily.slice(mid).reduce((a, x) => a + x.pv, 0);
+  const trendEl = $('#an-pv-trend');
+  if (firstHalf === 0 && secondHalf === 0) {
+    trendEl.innerHTML = '';
+  } else {
+    const base = firstHalf || 1;
+    const pct = Math.round(((secondHalf - firstHalf) / base) * 100);
+    const cls = pct > 2 ? 'up' : (pct < -2 ? 'down' : 'flat');
+    const arrow = pct > 2 ? '&#9650;' : (pct < -2 ? '&#9660;' : '&#9632;');
+    trendEl.className = 'an-trend ' + cls;
+    trendEl.innerHTML = `${arrow} ${pct > 0 ? '+' : ''}${pct}% vs first half`;
+  }
+
   $('#an-pv').textContent = fmt(d.total_pageviews);
-  $('#an-pv-sub').textContent = `${d.range_days} day${d.range_days===1?'':'s'} · avg ${fmt(Math.round(d.total_pageviews / d.range_days))}/day`;
+  const avg = d.range_days ? Math.round(d.total_pageviews / d.range_days) : 0;
+  const peak = Math.max(0, ...daily.map(x => x.pv));
+  $('#an-pv-sub').textContent = `Avg ${fmt(avg)}/day · peak ${fmt(peak)} · ${d.range_days} day window`;
+  $('#an-chart-sub').textContent = peak ? `Peak day: ${fmt(peak)} views` : 'Waiting for traffic';
+
   $('#an-quote').textContent   = fmt(d.events.quote_submit);
   $('#an-contact').textContent = fmt(d.events.contact_submit);
   const coffeeTotal = Object.values(d.coffees || {}).reduce((a,b) => a + b, 0);
   $('#an-coffee-total').textContent = fmt(coffeeTotal);
+  // Conversion rate (pageviews → quote submit). Only meaningful if pv > 0.
+  const convPct = d.total_pageviews ? ((d.events.quote_submit / d.total_pageviews) * 100) : 0;
+  $('#an-conv').textContent = d.total_pageviews ? convPct.toFixed(convPct < 1 ? 2 : 1) + '%' : '—';
 
-  // Daily bar chart (inline SVG)
-  $('#an-chart').innerHTML = renderBarChart(d.daily);
+  // Sparkline in hero
+  $('#an-spark').innerHTML = renderSparkline(daily);
+
+  // Daily chart (line + area)
+  $('#an-chart').innerHTML = renderLineChart(daily);
 
   // Top coffees (lookup names from COFFEES)
   const coffeeRows = Object.entries(d.coffees || {})
@@ -1108,7 +1265,10 @@ function renderAnalytics(){
     })
     .sort((a,b) => b.count - a.count)
     .slice(0, 10);
-  $('#an-coffees').innerHTML = renderRankRows(coffeeRows.map(r => ({ label: r.name, value: r.count })));
+  $('#an-coffees').innerHTML = renderRankRows(
+    coffeeRows.map(r => ({ label: r.name, value: r.count })),
+    'No coffee views yet'
+  );
 
   // Top paths
   const pathRows = Object.entries(d.paths || {})
@@ -1122,7 +1282,7 @@ function renderAnalytics(){
     .map(([label, value]) => ({ label, value }))
     .sort((a,b) => b.value - a.value)
     .slice(0, 6);
-  $('#an-refs').innerHTML = renderRankRows(refRows, 'No referrer data yet');
+  $('#an-refs').innerHTML = renderRankRows(refRows, 'No external referrers yet');
 }
 
 function renderRankRows(rows, emptyMsg){
@@ -1136,27 +1296,81 @@ function renderRankRows(rows, emptyMsg){
     </div>`).join('');
 }
 
-function renderBarChart(daily){
-  if (!daily || !daily.length) return '<div class="an-empty">No traffic in range yet</div>';
+function renderSparkline(daily){
+  if (!daily || !daily.length) return '<div style="color:var(--muted);font-size:.78rem;text-align:center;padding:30px">No data yet</div>';
+  const W = 400, H = 80, pad = 4;
   const max = Math.max(1, ...daily.map(x => x.pv));
-  const W = 720, H = 140, pad = 20;
-  const bw = (W - pad*2) / daily.length;
-  const bars = daily.map((d, i) => {
-    const h = (d.pv / max) * (H - pad*2);
-    const x = pad + i * bw;
-    const y = H - pad - h;
-    return `<rect x="${x+1}" y="${y}" width="${bw-2}" height="${h}" fill="#c8102e" opacity="${d.pv ? 0.85 : 0.15}" rx="2">
-              <title>${d.day}: ${d.pv}</title></rect>`;
-  }).join('');
-  const firstLabel = daily[0].day.slice(5);
-  const lastLabel  = daily[daily.length-1].day.slice(5);
+  const step = (W - pad*2) / Math.max(1, daily.length - 1);
+  const points = daily.map((d, i) => {
+    const x = pad + i * step;
+    const y = H - pad - (d.pv / max) * (H - pad*2);
+    return [x, y];
+  });
+  const pathD = points.map((p, i) => (i === 0 ? 'M' : 'L') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
+  const areaD = pathD + ` L${points[points.length-1][0].toFixed(1)},${H-pad} L${points[0][0].toFixed(1)},${H-pad} Z`;
   return `
-    <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:180px;display:block">
-      <line x1="${pad}" y1="${H-pad}" x2="${W-pad}" y2="${H-pad}" stroke="#e5e5e5" />
-      ${bars}
-      <text x="${pad}" y="${H-4}" font-size="10" fill="#888">${firstLabel}</text>
-      <text x="${W-pad}" y="${H-4}" font-size="10" fill="#888" text-anchor="end">${lastLabel}</text>
-      <text x="${pad}" y="14" font-size="10" fill="#888">Peak: ${max}</text>
+    <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:90px;display:block">
+      <defs>
+        <linearGradient id="spark-fill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#c8102e" stop-opacity=".28"/>
+          <stop offset="100%" stop-color="#c8102e" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <path d="${areaD}" fill="url(#spark-fill)" />
+      <path d="${pathD}" fill="none" stroke="#c8102e" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" />
+    </svg>`;
+}
+
+function renderLineChart(daily){
+  if (!daily || !daily.length) return '<div class="an-empty" style="padding:50px">No traffic in range yet</div>';
+  const W = 760, H = 200, padL = 36, padR = 14, padT = 14, padB = 26;
+  const innerW = W - padL - padR, innerH = H - padT - padB;
+  const max = Math.max(1, ...daily.map(x => x.pv));
+  const step = daily.length > 1 ? innerW / (daily.length - 1) : 0;
+  const points = daily.map((d, i) => {
+    const x = padL + (daily.length > 1 ? i * step : innerW / 2);
+    const y = padT + innerH - (d.pv / max) * innerH;
+    return { x, y, d };
+  });
+  const pathD = points.map((p, i) => (i === 0 ? 'M' : 'L') + p.x.toFixed(1) + ',' + p.y.toFixed(1)).join(' ');
+  const areaD = pathD + ` L${points[points.length-1].x.toFixed(1)},${padT + innerH} L${points[0].x.toFixed(1)},${padT + innerH} Z`;
+
+  // Y-axis ticks (0, mid, max)
+  const ticks = [0, Math.round(max / 2), max];
+  const yLines = ticks.map(v => {
+    const y = padT + innerH - (v / max) * innerH;
+    return `<line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="#eee" />
+            <text x="${padL - 8}" y="${y + 3}" font-size="10" fill="#999" text-anchor="end">${v}</text>`;
+  }).join('');
+
+  // X-axis labels: first, middle, last
+  const xLabel = (idx) => {
+    if (!daily[idx]) return '';
+    const p = points[idx], lab = daily[idx].day.slice(5);
+    return `<text x="${p.x}" y="${H - 8}" font-size="10" fill="#999" text-anchor="middle">${lab}</text>`;
+  };
+
+  const dots = points.map(p =>
+    `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="2.2" fill="#c8102e" opacity="${p.d.pv ? 1 : 0.2}">
+       <title>${p.d.day}: ${p.d.pv} views</title>
+     </circle>`
+  ).join('');
+
+  return `
+    <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:220px;display:block;padding:10px 0 0">
+      <defs>
+        <linearGradient id="chart-fill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#c8102e" stop-opacity=".22"/>
+          <stop offset="100%" stop-color="#c8102e" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      ${yLines}
+      <path d="${areaD}" fill="url(#chart-fill)" />
+      <path d="${pathD}" fill="none" stroke="#c8102e" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+      ${dots}
+      ${xLabel(0)}
+      ${daily.length > 2 ? xLabel(Math.floor(daily.length / 2)) : ''}
+      ${xLabel(daily.length - 1)}
     </svg>`;
 }
 
@@ -1659,44 +1873,75 @@ async function loadInbox(force){
 
 function updateInboxBadge(){
   const openCount = INBOX_STATE.issues.filter(i => i.state === 'open').length;
+  const closedCount = INBOX_STATE.issues.filter(i => i.state === 'closed').length;
+  const all = INBOX_STATE.issues.length;
   const badges = [document.getElementById('inbox-badge'), document.getElementById('sb-inbox-badge')];
   badges.forEach(badge => {
     if (!badge) return;
     badge.textContent = openCount;
     badge.style.display = openCount > 0 ? 'inline-block' : 'none';
   });
-  const tabCount = document.getElementById('tab-open-count');
-  if (tabCount) tabCount.textContent = openCount ? ` (${openCount})` : '';
-  // Also refresh the dashboard number if it's visible
+  const setCount = (id, n) => { const el = document.getElementById(id); if (el) el.textContent = n; };
+  setCount('tab-open-count', openCount);
+  setCount('tab-closed-count', closedCount);
+  setCount('tab-all-count', all);
   const dashInbox = document.getElementById('dash-inbox-open');
   if (dashInbox) dashInbox.textContent = openCount;
 }
 
+function humanRelativeTime(iso){
+  const d = new Date(iso);
+  const now = new Date();
+  const ms = now - d;
+  const min = Math.floor(ms / 60000);
+  if (min < 1)  return 'just now';
+  if (min < 60) return min + 'm';
+  const hr = Math.floor(min / 60);
+  if (hr < 24) return hr + 'h';
+  const day = Math.floor(hr / 24);
+  if (day < 7)  return day + 'd';
+  if (day < 60) return Math.floor(day / 7) + 'w';
+  return d.toLocaleDateString('en-CA', { month: 'short', day: 'numeric' });
+}
+
 function renderInboxList(){
   const f = INBOX_STATE.filter;
-  let list = INBOX_STATE.issues;
+  const q = (INBOX_STATE.search || '').toLowerCase();
+  let list = INBOX_STATE.issues.slice();
   if (f === 'open')   list = list.filter(i => i.state === 'open');
   if (f === 'closed') list = list.filter(i => i.state === 'closed');
+  if (q) {
+    list = list.filter(i =>
+      (i.title || '').toLowerCase().includes(q) ||
+      (i.body  || '').toLowerCase().includes(q)
+    );
+  }
 
   if (!list.length){
-    $('#inbox-list').innerHTML = '<div class="inbox-empty">No submissions yet.</div>';
+    const msg = q ? `No matches for "${escapeHtml(q)}"` :
+                f === 'open'   ? 'No open submissions. Nicely done.' :
+                f === 'closed' ? 'Nothing closed yet.' :
+                                 'No submissions yet.';
+    $('#inbox-list').innerHTML = `<div class="inbox-empty">${msg}</div>`;
     return;
   }
 
+  const activeNum = INBOX_STATE.activeNumber;
   $('#inbox-list').innerHTML = list.map(issue => {
     const kind = issue.labels.find(l => l.name === 'quote') ? 'quote' : 'contact';
-    const dt = new Date(issue.created_at);
-    const when = dt.toLocaleDateString('en-CA', { month:'short', day:'numeric' }) + ' · ' + dt.toLocaleTimeString('en-CA', { hour:'numeric', minute:'2-digit' });
-    const snippet = (issue.body || '').replace(/\*\*/g,'').replace(/\n+/g,' ').slice(0, 200);
+    const when = humanRelativeTime(issue.created_at);
+    const cleanTitle = issue.title.replace(/^\[(contact|quote)\]\s*/i, '');
+    const snippet = (issue.body || '').replace(/\*\*/g,'').replace(/\n+/g,' ').replace(/^(Form|Name|Email|Phone|Company|Address|Submitted):?.*?(?=\s[A-Z])/g,'').slice(0, 140).trim();
+    const activeCls = activeNum === issue.number ? ' active' : '';
     return `
-      <div class="inbox-item${issue.state==='closed'?' closed':''}" data-num="${issue.number}">
+      <div class="inbox-item${issue.state==='closed'?' closed':''}${activeCls}" data-num="${issue.number}">
         <div class="inbox-item-top">
           <div class="inbox-item-title">
-            <span class="inbox-tag ${kind}">${kind}</span>${escapeHtml(issue.title.replace(/^\[(contact|quote)\]\s*/i,''))}
+            <span class="inbox-tag ${kind}">${kind}</span>${escapeHtml(cleanTitle)}
           </div>
           <div class="inbox-item-meta">${when}</div>
         </div>
-        <div class="inbox-item-snippet">${escapeHtml(snippet)}</div>
+        <div class="inbox-item-snippet">${escapeHtml(snippet || '—')}</div>
       </div>`;
   }).join('');
 
@@ -1709,17 +1954,27 @@ function openIssue(num){
   const issue = INBOX_STATE.issues.find(i => i.number === num);
   if (!issue) return;
   INBOX_STATE.activeNumber = num;
+
+  // Re-render list to highlight active item
+  renderInboxList();
+
   const dt = new Date(issue.created_at);
   const when = dt.toLocaleString('en-CA', { timeZone: 'America/Vancouver' });
   const emailMatch = (issue.body || '').match(/\*\*Email:\*\*\s*([^\s<]+)/);
   const replyEmail = emailMatch ? emailMatch[1] : null;
   const replySubj = encodeURIComponent('Re: ' + issue.title);
+  const kind = issue.labels.find(l => l.name === 'quote') ? 'quote' : 'contact';
+  const stateLabel = issue.state === 'open'
+    ? `<span class="inbox-tag" style="background:rgba(34,150,80,.1);color:#1e7d43">Open</span>`
+    : `<span class="inbox-tag" style="background:rgba(0,0,0,.06);color:var(--muted)">Handled</span>`;
 
   const parsed = parseSubmissionBody(issue.body || '');
 
   $('#inbox-detail').innerHTML = `
-    <button class="inbox-back" id="detail-back">&larr; Back to list</button>
-    <h3 style="margin-top:18px">${escapeHtml(issue.title)}</h3>
+    <div style="margin-bottom:6px">
+      <span class="inbox-tag ${kind}">${kind}</span>${stateLabel}
+    </div>
+    <h3>${escapeHtml(issue.title.replace(/^\[(contact|quote)\]\s*/i, ''))}</h3>
     <div class="meta">Submitted ${when} · <a href="${issue.html_url}" target="_blank" rel="noopener" style="color:var(--red)">View on GitHub &#8599;</a></div>
     ${renderParsedSubmission(parsed)}
     <div class="inbox-detail-actions">
@@ -1729,14 +1984,6 @@ function openIssue(num){
         : `<button class="inbox-reopen-btn" id="detail-reopen-issue">Reopen</button>`}
     </div>
   `;
-  $('#inbox-detail').classList.add('show');
-  $('#inbox-list').style.display = 'none';
-
-  $('#detail-back').addEventListener('click', () => {
-    $('#inbox-detail').classList.remove('show');
-    $('#inbox-list').style.display = 'block';
-    INBOX_STATE.activeNumber = null;
-  });
   const closeBtn = $('#detail-close-issue');
   const reopenBtn = $('#detail-reopen-issue');
   if (closeBtn) closeBtn.addEventListener('click', () => toggleIssueState(num, 'closed'));
