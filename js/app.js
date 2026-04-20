@@ -663,6 +663,143 @@ function initMap() {
     if (dot)  dot.style.opacity  = '1';
     if (ring) ring.style.opacity = '0.5';
   });
+
+  // ── Animated shipping routes ──────────────────────────────────
+  // Red pulses travel from each warehouse to major Canadian cities on
+  // a continuous loop. Conveys "we ship coast-to-coast from in-country"
+  // visually, without requiring the visitor to read the copy.
+  initShippingRoutes(map, el, LOCATIONS);
+}
+
+function initShippingRoutes(map, el, LOCATIONS){
+  const NS = 'http://www.w3.org/2000/svg';
+  const DESTINATIONS = [
+    { lat: 48.4284, lng: -123.3656 }, // Victoria
+    { lat: 49.8880, lng: -119.4960 }, // Kelowna
+    { lat: 51.0447, lng: -114.0719 }, // Calgary
+    { lat: 53.5461, lng: -113.4938 }, // Edmonton
+    { lat: 52.1332, lng: -106.6700 }, // Saskatoon
+    { lat: 49.8951, lng:  -97.1384 }, // Winnipeg
+    { lat: 48.3809, lng:  -89.2477 }, // Thunder Bay
+    { lat: 43.6532, lng:  -79.3832 }, // Toronto
+    { lat: 45.4215, lng:  -75.6972 }, // Ottawa
+    { lat: 45.5017, lng:  -73.5673 }, // Montreal
+    { lat: 46.8139, lng:  -71.2080 }, // Quebec City
+    { lat: 44.6488, lng:  -63.5752 }, // Halifax
+    { lat: 46.2382, lng:  -63.1311 }, // Charlottetown
+    { lat: 45.2733, lng:  -66.0633 }, // Saint John
+    { lat: 47.5615, lng:  -52.7126 }, // St. John's
+  ];
+
+  const svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('class', 'r86-routes');
+  svg.style.cssText = 'position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:400';
+  el.appendChild(svg);
+
+  function spawnPulse(){
+    if (document.hidden) return;
+    const origin = LOCATIONS[Math.floor(Math.random() * LOCATIONS.length)];
+    const dest   = DESTINATIONS[Math.floor(Math.random() * DESTINATIONS.length)];
+    let p1, p2;
+    try {
+      p1 = map.latLngToContainerPoint([origin.lat, origin.lng]);
+      p2 = map.latLngToContainerPoint([dest.lat,   dest.lng]);
+    } catch(e) { return; }
+    const dx = p2.x - p1.x, dy = p2.y - p1.y;
+    const dist = Math.hypot(dx, dy);
+    if (dist < 40) return; // skip trivial / offscreen
+
+    // Curve upward (away from straight line) — bezier control point perpendicular
+    const mx = (p1.x + p2.x) / 2, my = (p1.y + p2.y) / 2;
+    const curve = Math.min(90, dist * 0.22);
+    // Flip direction so arcs bulge toward the top of the map
+    const sign = (my > (p1.y + p2.y) / 2) ? 1 : -1;
+    const cx = mx + (-dy / dist) * curve * sign;
+    const cy = my + ( dx / dist) * curve * sign - Math.min(30, dist * 0.08);
+
+    const path = document.createElementNS(NS, 'path');
+    path.setAttribute('d', `M${p1.x},${p1.y} Q${cx},${cy} ${p2.x},${p2.y}`);
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', '#c8102e');
+    path.setAttribute('stroke-width', '1.4');
+    path.setAttribute('stroke-linecap', 'round');
+    path.style.opacity = '0';
+    svg.appendChild(path);
+    let len;
+    try { len = path.getTotalLength(); } catch(e) { path.remove(); return; }
+    path.setAttribute('stroke-dasharray', len);
+    path.setAttribute('stroke-dashoffset', len);
+
+    const dot = document.createElementNS(NS, 'circle');
+    dot.setAttribute('r', '3.2');
+    dot.setAttribute('fill', '#c8102e');
+    dot.style.filter = 'drop-shadow(0 0 5px rgba(200,16,46,0.7))';
+    svg.appendChild(dot);
+
+    const duration = 2100 + Math.random() * 900;
+    const start = performance.now();
+    function tick(now){
+      const t = Math.min(1, (now - start) / duration);
+      // easeInOutCubic
+      const e = t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3) / 2;
+      path.setAttribute('stroke-dashoffset', String(len * (1 - e)));
+      const pt = path.getPointAtLength(len * e);
+      dot.setAttribute('cx', pt.x);
+      dot.setAttribute('cy', pt.y);
+      // Line opacity: fade in, hold, fade out behind the dot
+      let op;
+      if (t < 0.15) op = t / 0.15 * 0.55;
+      else if (t < 0.7) op = 0.55;
+      else op = 0.55 * (1 - (t - 0.7) / 0.3);
+      path.style.opacity = String(op);
+      if (t < 1) requestAnimationFrame(tick);
+      else {
+        path.remove(); dot.remove();
+        // Arrival ring
+        const ring = document.createElementNS(NS, 'circle');
+        ring.setAttribute('cx', p2.x); ring.setAttribute('cy', p2.y);
+        ring.setAttribute('r', '4');
+        ring.setAttribute('fill', 'none');
+        ring.setAttribute('stroke', '#c8102e');
+        ring.setAttribute('stroke-width', '1.5');
+        svg.appendChild(ring);
+        const rs = performance.now();
+        (function ringTick(n){
+          const tt = Math.min(1, (n - rs) / 800);
+          ring.setAttribute('r', String(4 + tt * 22));
+          ring.style.opacity = String(1 - tt);
+          if (tt < 1) requestAnimationFrame(ringTick);
+          else ring.remove();
+        })(rs);
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  // Clear in-flight pulses on map move so arcs don't desync
+  map.on('movestart zoomstart', () => { while (svg.firstChild) svg.removeChild(svg.firstChild); });
+
+  let loopTimer = null;
+  function loop(){
+    spawnPulse();
+    loopTimer = setTimeout(loop, 850 + Math.random() * 1100);
+  }
+  function startAnim(){ if (!loopTimer) loop(); }
+  function stopAnim(){ if (loopTimer) { clearTimeout(loopTimer); loopTimer = null; } }
+
+  // Only animate while the map is on-screen
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => e.isIntersecting ? startAnim() : stopAnim());
+    }, { threshold: 0.15 });
+    io.observe(el);
+  } else {
+    startAnim();
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stopAnim();
+    else startAnim();
+  });
 }
 
 // ================================================
