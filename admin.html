@@ -130,7 +130,7 @@
   .topbar-btn{
     padding:7px 14px; font-size:.78rem; border:1px solid var(--line-strong);
     background:#fff; color:var(--ink); display:inline-flex; align-items:center; gap:6px;
-    transition:background .15s; text-decoration:none;
+    transition:background .15s; text-decoration:none; border-radius:4px;
   }
   .topbar-btn:hover{background:var(--hover)}
   .topbar-btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
@@ -138,6 +138,15 @@
   .topbar-btn.danger{color:var(--red);border-color:rgba(200,16,46,.4)}
   .topbar-btn.danger:hover{background:rgba(200,16,46,.06)}
   .inbox-badge{display:inline-block;background:var(--red);color:#fff;border-radius:10px;padding:1px 7px;font-size:.68rem;margin-left:6px;font-weight:500}
+  .publish-status{font-size:.72rem;color:var(--muted);padding:0 6px;white-space:nowrap}
+  .publish-status.drafts{color:var(--amber);font-weight:500}
+  .publish-dot{
+    width:8px;height:8px;border-radius:50%;background:transparent;flex-shrink:0;display:inline-block;
+    transition:background .2s;
+  }
+  .publish-dot.has-drafts{background:#FFCC57;box-shadow:0 0 0 3px rgba(255,204,87,.25)}
+  .publish-dot.publishing{background:#fff;animation:pulse 1s infinite}
+  @keyframes pulse{0%,100%{opacity:.6}50%{opacity:1}}
 
   /* ── Inbox overlay ── */
   .inbox-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;z-index:200}
@@ -450,16 +459,16 @@
             <div class="v" id="dash-hidden">—</div>
             <div class="sub">Not shown publicly yet</div>
           </div>
-          <div class="dash-card accent">
+          <button class="dash-card accent" id="dash-card-inbox" style="cursor:pointer;text-align:left;font-family:inherit" type="button">
             <div class="k">Open Submissions</div>
             <div class="v" id="dash-inbox-open">—</div>
-            <div class="sub" id="dash-inbox-sub">Form replies awaiting action</div>
-          </div>
-          <div class="dash-card">
+            <div class="sub" id="dash-inbox-sub">Click to open Inbox</div>
+          </button>
+          <button class="dash-card" id="dash-card-drafts" style="cursor:pointer;text-align:left;font-family:inherit" type="button">
             <div class="k">Unsaved Drafts</div>
             <div class="v" id="dash-drafts">—</div>
-            <div class="sub">Edits that haven't been published</div>
-          </div>
+            <div class="sub" id="dash-drafts-sub">Edits that haven't been published</div>
+          </button>
         </div>
 
         <div class="dash-section-title">Quick Links</div>
@@ -498,9 +507,13 @@
           Content &nbsp;/&nbsp; <strong>Coffees</strong>
         </div>
         <div class="topbar-spacer"></div>
+        <span class="publish-status" id="publish-status" title="When the site was last published"></span>
         <button class="topbar-btn" id="btn-reset">Discard Drafts</button>
         <button class="topbar-btn" id="btn-export">Export</button>
-        <button class="topbar-btn primary" id="btn-publish">Publish to GitHub</button>
+        <button class="topbar-btn primary" id="btn-publish">
+          <span class="publish-dot" id="publish-dot" aria-hidden="true"></span>
+          <span id="publish-label">Publish to GitHub</span>
+        </button>
         <button class="topbar-btn" id="btn-add">+ Add Item</button>
       </div>
 
@@ -676,6 +689,7 @@
    ============================================================ */
 const ADMIN_PW = 'root86admin';
 const STORAGE_KEY = 'r86_admin_data_v3';
+const LAST_PUBLISHED_KEY = 'r86_last_published_at';
 
 // Load data: prefer localStorage edits, otherwise the bundled COFFEES
 let DATA = (() => {
@@ -733,6 +747,9 @@ function init(){
   bind();
   render();
   renderDashboard();
+  updatePublishIndicator();
+  // Keep the "Last published X ago" label fresh without reloading
+  setInterval(updatePublishIndicator, 60000);
 }
 
 function bind(){
@@ -760,6 +777,11 @@ function bind(){
   });
   const dashRefresh = $('#dash-refresh');
   if (dashRefresh) dashRefresh.addEventListener('click', () => { renderDashboard(); loadInbox().catch(()=>{}); });
+  // Dashboard cards: clickable shortcuts
+  const inboxCard = document.getElementById('dash-card-inbox');
+  if (inboxCard) inboxCard.addEventListener('click', openInbox);
+  const draftsCard = document.getElementById('dash-card-drafts');
+  if (draftsCard) draftsCard.addEventListener('click', () => switchView('coffees'));
 
   $('#inbox-close').addEventListener('click', closeInbox);
   $('#inbox-refresh').addEventListener('click', () => loadInbox(true));
@@ -822,6 +844,66 @@ function applyFilterSort(){
   return rows;
 }
 
+// ── Publish indicator ─────────────────────────
+function countDrafts(){
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (!stored) return 0;
+    const saved = JSON.parse(stored);
+    const original = (typeof COFFEES !== 'undefined') ? COFFEES : [];
+    if (!Array.isArray(saved) || !Array.isArray(original)) return 0;
+    const byId = new Map(original.map(c => [c.id, c]));
+    let n = 0;
+    saved.forEach(c => {
+      const o = byId.get(c.id);
+      if (!o || JSON.stringify(o) !== JSON.stringify(c)) n++;
+    });
+    // Also count deletions (items in original but not in saved)
+    const savedIds = new Set(saved.map(c => c.id));
+    original.forEach(c => { if (!savedIds.has(c.id)) n++; });
+    return n;
+  } catch { return 0; }
+}
+
+function humanTimeSince(iso){
+  if (!iso) return null;
+  const t = new Date(iso).getTime();
+  if (!t) return null;
+  const diff = Date.now() - t;
+  const m = Math.floor(diff / 60000);
+  if (m < 1) return 'just now';
+  if (m < 60) return m + ' min ago';
+  const h = Math.floor(m / 60);
+  if (h < 24) return h + (h === 1 ? ' hour ago' : ' hours ago');
+  const d = Math.floor(h / 24);
+  if (d < 30) return d + (d === 1 ? ' day ago' : ' days ago');
+  return new Date(iso).toLocaleDateString('en-CA');
+}
+
+function updatePublishIndicator(){
+  const drafts = countDrafts();
+  const last = localStorage.getItem(LAST_PUBLISHED_KEY);
+  const dot = document.getElementById('publish-dot');
+  const label = document.getElementById('publish-label');
+  const status = document.getElementById('publish-status');
+  if (dot) dot.classList.toggle('has-drafts', drafts > 0);
+  if (label) label.textContent = drafts > 0
+    ? `Publish (${drafts} pending)`
+    : 'Publish to GitHub';
+  if (status) {
+    if (drafts > 0) {
+      status.textContent = `${drafts} unsaved change${drafts === 1 ? '' : 's'}`;
+      status.classList.add('drafts');
+    } else if (last) {
+      status.textContent = `Published ${humanTimeSince(last)}`;
+      status.classList.remove('drafts');
+    } else {
+      status.textContent = '';
+      status.classList.remove('drafts');
+    }
+  }
+}
+
 // ── View switching + Dashboard ───────────────
 function switchView(view){
   // Special case: Inbox opens the existing overlay instead of being a standalone view
@@ -846,23 +928,7 @@ function renderDashboard(){
   const openCount = INBOX_STATE && INBOX_STATE.issues
     ? INBOX_STATE.issues.filter(i => i.state === 'open').length
     : 0;
-
-  // Detect drafts by comparing localStorage against the original
-  let draftCount = 0;
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored){
-      const saved = JSON.parse(stored);
-      const original = (typeof COFFEES !== 'undefined') ? COFFEES : [];
-      if (Array.isArray(saved) && Array.isArray(original)){
-        const byId = new Map(original.map(c => [c.id, c]));
-        saved.forEach(c => {
-          const o = byId.get(c.id);
-          if (!o || JSON.stringify(o) !== JSON.stringify(c)) draftCount++;
-        });
-      }
-    }
-  } catch {}
+  const draftCount = countDrafts();
 
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
   set('dash-coffees', live.length);
@@ -871,11 +937,31 @@ function renderDashboard(){
   set('dash-hidden', hiddenCount);
   set('dash-inbox-open', openCount);
   set('dash-drafts', draftCount);
+  // Contextual subtext that tells the client what to do next
+  const inboxSub = document.getElementById('dash-inbox-sub');
+  if (inboxSub) inboxSub.textContent = openCount > 0
+    ? (openCount === 1 ? '1 person waiting for a reply' : `${openCount} people waiting for a reply`)
+    : 'All caught up';
+  const draftsSub = document.getElementById('dash-drafts-sub');
+  if (draftsSub) draftsSub.textContent = draftCount > 0
+    ? 'Click Coffees to review and publish'
+    : 'Everything is live';
 
-  // Greeting based on hour of day
+  // Greeting based on hour of day + last-published line
   const h = new Date().getHours();
   const hello = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
   set('dash-hello', hello);
+  const subtitle = document.getElementById('dash-subtitle');
+  if (subtitle) {
+    const last = localStorage.getItem(LAST_PUBLISHED_KEY);
+    if (draftCount > 0) {
+      subtitle.textContent = `You have ${draftCount} unpublished change${draftCount === 1 ? '' : 's'}. Head to Coffees to publish.`;
+    } else if (last) {
+      subtitle.textContent = `Site is up to date — last published ${humanTimeSince(last)}.`;
+    } else {
+      subtitle.textContent = `Here's what's happening with Root 86 Coffee today.`;
+    }
+  }
 }
 
 function render(){
@@ -910,14 +996,14 @@ function render(){
     const favStar = c.favourite ? '<span class="fav-star" title="R86 Favourite">&#9733;</span>' : '';
 
     // Status chips: click to toggle
-    const statusChip = (key, activeClass, label, on) =>
-      `<span class="status-chip ${on ? 'on ' + activeClass : 'off'}" data-toggle="${key}" data-id="${c.id}" title="Click to toggle">${label}</span>`;
+    const statusChip = (key, activeClass, label, on, tip) =>
+      `<span class="status-chip ${on ? 'on ' + activeClass : 'off'}" data-toggle="${key}" data-id="${c.id}" title="${tip}">${label}</span>`;
 
     const statusCell = `
-      ${statusChip('favourite', 'fav', '&#9733; Favourite', !!c.favourite)}
-      ${statusChip('onSale',    'sale', 'On Sale',          !!c.onSale)}
-      ${statusChip('soldOut',   'sold', 'Sold Out',         !!(c.soldOut || !c.available))}
-      ${statusChip('hidden',    'hidden', 'Hidden',         !!c.hidden)}
+      ${statusChip('favourite', 'fav',    '&#9733; Favourite', !!c.favourite, 'R86 Favourite — pinned to top of the catalogue')}
+      ${statusChip('onSale',    'sale',   'On Sale',           !!c.onSale,    'Shows a Sale badge on the public card')}
+      ${statusChip('soldOut',   'sold',   'Sold Out',          !!(c.soldOut || !c.available), 'Marks as unavailable — card shows Out of Stock')}
+      ${statusChip('hidden',    'hidden', 'Hidden',            !!c.hidden,    'Draft mode — not visible on the public site')}
     `;
 
     return `
@@ -1065,6 +1151,7 @@ function nextId(){
 // ── Persist ─────────────────────────────────
 function persist(){
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(DATA)); } catch(e){}
+  updatePublishIndicator();
 }
 
 // ── Export ─────────────────────────────────
@@ -1182,6 +1269,10 @@ async function publishToGitHub(){
   const btn = $('#gh-publish-go');
   btn.disabled = true;
   $('#publish-log').textContent = '';
+  const dot = document.getElementById('publish-dot');
+  if (dot) { dot.classList.remove('has-drafts'); dot.classList.add('publishing'); }
+  const label = document.getElementById('publish-label');
+  if (label) label.textContent = 'Publishing...';
 
   const apiUrl = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_PATH}?ref=${GH_BRANCH}`;
   const headers = {
@@ -1219,12 +1310,20 @@ async function publishToGitHub(){
     logPublish(`✓ Committed: ${result.commit.sha.slice(0,10)}`);
     logPublish(`✓ GitHub Pages will rebuild in ~1-2 min`);
     logPublish(`✓ SEO pages auto-regenerate via Actions`);
-    toast('Published to GitHub!');
+    // Clear local drafts now that the remote matches what we just pushed,
+    // and remember when we published so the UI can display "Last published".
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.setItem(LAST_PUBLISHED_KEY, new Date().toISOString());
+    updatePublishIndicator();
+    renderDashboard();
+    toast('Published! All drafts cleared.');
   } catch (e) {
     logPublish(`✗ ${e.message}`);
     toast('Publish failed — see log', true);
   } finally {
     btn.disabled = false;
+    if (dot) dot.classList.remove('publishing');
+    updatePublishIndicator();
   }
 }
 
@@ -1243,7 +1342,14 @@ function closeInbox(){
 async function loadInbox(force){
   const token = localStorage.getItem(GH_TOKEN_KEY);
   if (!token){
-    $('#inbox-list').innerHTML = '<div class="inbox-empty">Paste your GitHub token via <strong>Publish to GitHub</strong> first.<br>The inbox uses the same token to read issues.</div>';
+    $('#inbox-list').innerHTML = `
+      <div class="inbox-empty">
+        <div style="font-weight:500;color:var(--ink);margin-bottom:6px">Set up GitHub first</div>
+        <div style="margin-bottom:16px">The Inbox uses your GitHub token to read form submissions.</div>
+        <button class="inbox-close-btn" id="inbox-setup-btn">Set up GitHub token</button>
+      </div>`;
+    const btn = document.getElementById('inbox-setup-btn');
+    if (btn) btn.addEventListener('click', () => { closeInbox(); openPublish(); });
     return;
   }
   $('#inbox-list').innerHTML = '<div class="inbox-loading">Loading submissions...</div>';
@@ -1338,7 +1444,7 @@ function openIssue(num){
     <div class="inbox-detail-actions">
       ${replyEmail ? `<a class="inbox-reply-btn" href="mailto:${replyEmail}?subject=${replySubj}">&#9993; Reply via email</a>` : ''}
       ${issue.state === 'open'
-        ? `<button class="inbox-close-btn" id="detail-close-issue">Mark handled (close)</button>`
+        ? `<button class="inbox-close-btn" id="detail-close-issue">Mark as Handled</button>`
         : `<button class="inbox-reopen-btn" id="detail-reopen-issue">Reopen</button>`}
     </div>
   `;
@@ -1387,9 +1493,6 @@ async function toggleIssueState(num, newState){
   }
 }
 
-function escapeHtml(s){
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
 
 // --- Submission body parser/renderer -----------------------------------------
 // The Cloudflare Worker writes issue bodies as markdown with
