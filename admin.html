@@ -346,8 +346,18 @@
   }
   .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--red)}
   .field textarea{min-height:88px;resize:vertical;font-family:inherit;line-height:1.5}
-  .field-bools{display:flex;gap:18px;align-items:center}
+  .field-bools{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
   .field-bools label{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:.82rem;color:var(--ink);text-transform:none;letter-spacing:0;font-weight:400}
+  .chk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}
+  .chk-opt{
+    display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);
+    background:#fff;border-radius:4px;cursor:pointer;font-size:.84rem;color:var(--ink);
+    text-transform:none;letter-spacing:0;font-weight:400;transition:background .15s,border-color .15s;
+  }
+  .chk-opt:hover{background:var(--hover)}
+  .chk-opt input[type=checkbox]{margin:0;cursor:pointer;accent-color:var(--red);width:15px;height:15px;flex-shrink:0}
+  .chk-opt.on{background:rgba(200,16,46,.05);border-color:rgba(200,16,46,.3)}
+  .chk-opt .chk-label{flex:1;user-select:none}
   .modal-foot{
     padding:16px 28px; border-top:1px solid var(--line);
     display:flex; gap:10px; justify-content:flex-end; background:#FAFAFB;
@@ -569,11 +579,13 @@
       <div class="field"><label>Variety</label><input id="m-variety" type="text" /></div>
       <div class="field"><label>Altitude</label><input id="m-altitude" type="text" placeholder="e.g. 1,500-1,800m" /></div>
       <div class="field"><label>Bag Weight (lbs)</label><input id="m-bag" type="number" min="1" /></div>
-      <div class="field full"><label>Certifications (comma-separated)</label>
-        <input id="m-certs" type="text" placeholder="Organic, Fair Trade, Rainforest Alliance, Women's Lot, Decaf" />
+      <div class="field full">
+        <label>Certifications</label>
+        <div class="chk-grid" id="m-certs-grid"></div>
       </div>
-      <div class="field full"><label>Warehouses (comma-separated)</label>
-        <input id="m-whs" type="text" placeholder="Vancouver, BC, Lévis, QC, Parksville, BC" />
+      <div class="field full">
+        <label>Warehouses <span style="color:var(--muted);font-weight:400;font-size:.75rem">(select all that stock this coffee)</span></label>
+        <div class="chk-grid" id="m-whs-grid"></div>
       </div>
       <div class="field full"><label>Tasting Notes</label>
         <input id="m-notes" type="text" placeholder="Caramel, Apple, Chocolate" />
@@ -1063,6 +1075,30 @@ function deleteRow(id){
 }
 
 // ── Edit modal ─────────────────────────────
+// Render a checkbox grid of options inside #containerId. Pre-check any value in `selected`.
+function renderChkGrid(containerId, options, selected){
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  const set = new Set(selected || []);
+  el.innerHTML = (options || []).map(opt => {
+    const checked = set.has(opt);
+    const safe = escapeHtml(opt);
+    return `
+      <label class="chk-opt ${checked ? 'on' : ''}">
+        <input type="checkbox" value="${safe}" ${checked ? 'checked' : ''} />
+        <span class="chk-label">${safe}</span>
+      </label>`;
+  }).join('');
+  el.querySelectorAll('input[type=checkbox]').forEach(inp => {
+    inp.addEventListener('change', () => inp.closest('.chk-opt').classList.toggle('on', inp.checked));
+  });
+}
+function readChkGrid(containerId){
+  const el = document.getElementById(containerId);
+  if (!el) return [];
+  return [...el.querySelectorAll('input[type=checkbox]:checked')].map(i => i.value);
+}
+
 function openEdit(id){
   EDITING_ID = id;
   const c = id ? DATA.find(x => x.id===id) : {
@@ -1080,8 +1116,8 @@ function openEdit(id){
   $('#m-variety').value = c.variety||'';
   $('#m-altitude').value = c.altitude||'';
   $('#m-bag').value = c.bagWeight||152;
-  $('#m-certs').value = (c.certifications||[]).join(', ');
-  $('#m-whs').value = (c.warehouses||[]).join(', ');
+  renderChkGrid('m-certs-grid', FILTER_OPTIONS.certifications, c.certifications || []);
+  renderChkGrid('m-whs-grid',   FILTER_OPTIONS.warehouses,     c.warehouses    || []);
   $('#m-notes').value = c.tastingNotes||'';
   $('#m-desc').value = c.description||'';
   $('#m-image').value = c.image||'';
@@ -1104,8 +1140,8 @@ function saveEdit(){
     variety: $('#m-variety').value.trim(),
     altitude: $('#m-altitude').value.trim(),
     bagWeight: parseInt($('#m-bag').value)||152,
-    certifications: splitTags($('#m-certs').value),
-    warehouses: splitWarehouses($('#m-whs').value),
+    certifications: readChkGrid('m-certs-grid'),
+    warehouses:     readChkGrid('m-whs-grid'),
     tastingNotes: $('#m-notes').value.trim(),
     description: $('#m-desc').value.trim(),
     image: $('#m-image').value.trim(),
