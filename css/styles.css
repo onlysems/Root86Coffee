@@ -33,12 +33,20 @@ body {
   color: var(--ink);
   line-height: 1.6;
   overflow-x: hidden;
+  cursor: none;
   -webkit-font-smoothing: antialiased;
 }
 img { max-width: 100%; display: block; }
-a { color: inherit; text-decoration: none; cursor: pointer; }
-button { cursor: pointer; border: none; background: none; font-family: inherit; }
-input, select, textarea { font-family: inherit; }
+a { color: inherit; text-decoration: none; cursor: none; }
+button { cursor: none; border: none; background: none; font-family: inherit; }
+input, select, textarea { font-family: inherit; cursor: none; }
+label { cursor: none; }
+
+/* Touch devices: restore normal cursor everywhere (custom one is hidden) */
+@media (pointer: coarse) {
+  body, a, button, input, select, textarea, label { cursor: auto; }
+  a, button { cursor: pointer; }
+}
 ul { list-style: none; }
 
 /* ── Noise texture ── */
@@ -839,9 +847,13 @@ footer { background: var(--red-deep); padding: 52px 0 32px; border-top: 3px soli
 }
 
 /* Override Leaflet defaults to match brand */
-.leaflet-container { font-family: var(--font-sans); }
-.leaflet-grab { cursor: grab; }
-.leaflet-grabbing { cursor: grabbing; }
+.leaflet-container { font-family: var(--font-sans); cursor: none !important; }
+.leaflet-grab, .leaflet-grabbing { cursor: none !important; }
+/* On touch, restore grab cursors */
+@media (pointer: coarse) {
+  .leaflet-container { cursor: grab !important; }
+  .leaflet-grabbing { cursor: grabbing !important; }
+}
 
 /* Custom marker pin */
 .r86-marker {
