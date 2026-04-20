@@ -6,7 +6,7 @@
 const state = {
   quote: [],
   filters: { origin: '', process: '', certification: '', warehouse: '', special: '', search: '' },
-  filteredCoffees: [...COFFEES],
+  filteredCoffees: COFFEES.filter(c => !c.hidden),
   activeCoffeeId: null,
   panelOpen: false
 };
@@ -165,6 +165,7 @@ function buildFilters() {
 function applyFilters() {
   const { origin, process, certification, warehouse, special, search } = state.filters;
   state.filteredCoffees = COFFEES.filter(c => {
+    if (c.hidden) return false;
     if (origin && c.origin !== origin) return false;
     if (process && c.process !== process) return false;
     if (certification && !c.certifications.includes(certification)) return false;

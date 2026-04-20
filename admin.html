@@ -130,6 +130,11 @@
   table.cms tbody tr:nth-child(even){background:var(--row-alt)}
   table.cms tbody tr:hover{background:var(--hover)}
   table.cms tbody tr.editing{background:var(--selected) !important}
+  table.cms tbody tr.hidden-row td{opacity:.45}
+  .thumb{
+    display:inline-block;width:28px;height:28px;background:#EEE;vertical-align:middle;
+    margin-right:10px;object-fit:cover;border:1px solid var(--line);
+  }
 
   td.col-check{width:34px;text-align:center}
   td.col-actions{width:90px;white-space:nowrap}
@@ -266,6 +271,7 @@
       Content &nbsp;/&nbsp; <strong>Coffees</strong>
     </div>
     <div class="topbar-spacer"></div>
+    <button class="topbar-btn" id="btn-reset">Discard Drafts</button>
     <button class="topbar-btn" id="btn-export">Export Updated File</button>
     <button class="topbar-btn primary" id="btn-add">+ Add Item</button>
     <button class="topbar-btn danger" id="btn-logout">Sign Out</button>
@@ -282,6 +288,8 @@
       <option value="favourite">★ Favourites</option>
       <option value="onSale">On Sale</option>
       <option value="soldOut">Sold Out</option>
+      <option value="hidden">Hidden (drafts)</option>
+      <option value="visible">Visible only</option>
     </select>
   </div>
 
@@ -297,6 +305,7 @@
           <th data-sort="favourite" style="text-align:center">★ Fav</th>
           <th data-sort="onSale" style="text-align:center">Sale</th>
           <th data-sort="soldOut" style="text-align:center">Sold Out</th>
+          <th data-sort="hidden" style="text-align:center">Hidden</th>
           <th>Warehouses</th>
           <th>Actions</th>
         </tr>
@@ -335,6 +344,9 @@
       <div class="field full"><label>Description</label>
         <textarea id="m-desc"></textarea>
       </div>
+      <div class="field full"><label>Flag / Image URL</label>
+        <input id="m-image" type="text" placeholder="https://static.wixstatic.com/media/..." />
+      </div>
       <div class="field full">
         <label>Flags</label>
         <div class="field-bools">
@@ -342,6 +354,7 @@
           <label><input type="checkbox" id="m-fav" /> ★ R86 Favourite</label>
           <label><input type="checkbox" id="m-sale" /> On Sale</label>
           <label><input type="checkbox" id="m-sold" /> Sold Out</label>
+          <label><input type="checkbox" id="m-hidden" /> Hidden (draft, not shown publicly)</label>
         </div>
       </div>
     </div>
@@ -383,7 +396,7 @@
    ROOT 86 COFFEE - Admin CMS
    ============================================================ */
 const ADMIN_PW = 'root86admin';
-const STORAGE_KEY = 'r86_admin_data_v2';
+const STORAGE_KEY = 'r86_admin_data_v3';
 
 // Load data: prefer localStorage edits, otherwise the bundled COFFEES
 let DATA = (() => {
@@ -459,6 +472,11 @@ function bind(){
   $('#btn-add').addEventListener('click', () => openEdit(null));
   $('#btn-logout').addEventListener('click', logout);
   $('#btn-export').addEventListener('click', openExport);
+  $('#btn-reset').addEventListener('click', () => {
+    if (!confirm('Discard all unpublished draft edits and revert to what is on the live site?')) return;
+    localStorage.removeItem(STORAGE_KEY);
+    location.reload();
+  });
 
   $('#modal-close').addEventListener('click', closeEdit);
   $('#modal-cancel').addEventListener('click', closeEdit);
@@ -480,6 +498,8 @@ function applyFilterSort(){
     if (FILTER.special==='favourite' && !c.favourite) return false;
     if (FILTER.special==='onSale' && !c.onSale) return false;
     if (FILTER.special==='soldOut' && !c.soldOut && c.available) return false;
+    if (FILTER.special==='hidden' && !c.hidden) return false;
+    if (FILTER.special==='visible' && c.hidden) return false;
     if (FILTER.search) {
       const q = FILTER.search;
       const blob = `${c.name} ${c.origin} ${c.region} ${c.process} ${c.tastingNotes||''}`.toLowerCase();
@@ -516,15 +536,16 @@ function render(){
     }).join('') || '<span style="color:#aaa">—</span>';
     const whs = (c.warehouses||[]).map(w => `<span class="pill wh">${w}</span>`).join('') || '<span style="color:#aaa">—</span>';
     return `
-      <tr data-id="${c.id}">
+      <tr data-id="${c.id}" class="${c.hidden?'hidden-row':''}">
         <td class="col-num">${c.id}</td>
-        <td><strong>${escapeHtml(c.name)}</strong><div style="color:var(--muted);font-size:.74rem;margin-top:2px">${escapeHtml(c.region||'')}</div></td>
+        <td>${c.image?`<img class="thumb" src="${escapeHtml(c.image)}" alt="" onerror="this.style.display='none'" />`:''}<strong>${escapeHtml(c.name)}</strong><div style="color:var(--muted);font-size:.74rem;margin-top:2px">${escapeHtml(c.region||'')}</div></td>
         <td>${escapeHtml(c.origin)}</td>
         <td>${certs}</td>
         <td>${escapeHtml(c.process||'')}</td>
         <td style="text-align:center"><span class="toggle fav ${c.favourite?'on':''}" data-toggle="favourite" data-id="${c.id}"></span></td>
         <td style="text-align:center"><span class="toggle sale ${c.onSale?'on':''}" data-toggle="onSale" data-id="${c.id}"></span></td>
         <td style="text-align:center"><span class="toggle sold ${c.soldOut||!c.available?'on':''}" data-toggle="soldOut" data-id="${c.id}"></span></td>
+        <td style="text-align:center"><span class="toggle ${c.hidden?'on':''}" data-toggle="hidden" data-id="${c.id}"></span></td>
         <td>${whs}</td>
         <td class="col-actions">
           <button class="row-btn" data-edit="${c.id}">Edit</button>
@@ -573,8 +594,8 @@ function openEdit(id){
   const c = id ? DATA.find(x => x.id===id) : {
     id: nextId(), name:'', origin:'', region:'', process:'Washed',
     grade:'', variety:'', altitude:'', bagWeight:152,
-    certifications:[], warehouses:['Vancouver, BC'], tastingNotes:'', description:'',
-    available:true, favourite:false, onSale:false, soldOut:false
+    certifications:[], warehouses:['Vancouver, BC'], tastingNotes:'', description:'', image:'',
+    available:true, favourite:false, onSale:false, soldOut:false, hidden:false
   };
   $('#modal-title').textContent = id ? 'Edit Coffee' : 'Add New Coffee';
   $('#m-name').value = c.name||'';
@@ -589,10 +610,12 @@ function openEdit(id){
   $('#m-whs').value = (c.warehouses||[]).join(', ');
   $('#m-notes').value = c.tastingNotes||'';
   $('#m-desc').value = c.description||'';
+  $('#m-image').value = c.image||'';
   $('#m-available').checked = c.available!==false;
   $('#m-fav').checked = !!c.favourite;
   $('#m-sale').checked = !!c.onSale;
   $('#m-sold').checked = !!c.soldOut;
+  $('#m-hidden').checked = !!c.hidden;
   $('#edit-modal').classList.add('open');
 }
 function closeEdit(){ $('#edit-modal').classList.remove('open'); EDITING_ID=null; }
@@ -611,10 +634,12 @@ function saveEdit(){
     warehouses: splitWarehouses($('#m-whs').value),
     tastingNotes: $('#m-notes').value.trim(),
     description: $('#m-desc').value.trim(),
+    image: $('#m-image').value.trim(),
     available: $('#m-available').checked,
     favourite: $('#m-fav').checked,
     onSale: $('#m-sale').checked,
-    soldOut: $('#m-sold').checked
+    soldOut: $('#m-sold').checked,
+    hidden: $('#m-hidden').checked
   };
   if (!data.name) { toast('Name is required', true); return; }
   if (data.soldOut) data.available = false;
@@ -673,9 +698,11 @@ function buildExportText(){
     props.push(`    altitude: ${JSON.stringify(c.altitude||'')}`);
     props.push(`    tastingNotes: ${JSON.stringify(c.tastingNotes||'')}`);
     props.push(`    description: ${JSON.stringify(c.description||'')}`);
+    props.push(`    image: ${JSON.stringify(c.image||'')}`);
     if (c.favourite) props.push(`    favourite: true`);
     if (c.onSale) props.push(`    onSale: true`);
     if (c.soldOut) props.push(`    soldOut: true`);
+    if (c.hidden) props.push(`    hidden: true`);
     return `  {\n${props.join(',\n')}\n  }`;
   }).join(',\n');
 
