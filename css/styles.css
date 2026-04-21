@@ -887,7 +887,8 @@ footer { background: var(--red-deep); padding: 52px 0 32px; border-top: 3px soli
   nav { padding: 18px 24px; }
   nav.scrolled { padding: 12px 24px; }
   .nav-links { display: none; }
-  .nav-hamburger { display: flex; }
+  .nav-right  { display: none; }   /* mobile menu already has Explore + Quote */
+  .nav-hamburger { display: flex; margin-left: auto; }
   .stat-band { flex-wrap: wrap; }
   .stat-item { flex: 0 0 50%; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.14); }
   .how-grid { grid-template-columns: 1fr; }
