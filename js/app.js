@@ -269,6 +269,17 @@ function initBtbCarousel(){
 function initHeroCanvas() {
   const canvas = $('#hero-canvas');
   if (!canvas) return;
+
+  // Skip the animation entirely on phones and for users who prefer
+  // reduced motion. The canvas stays in the DOM for layout but nothing
+  // draws or burns battery.
+  const smallScreen = window.matchMedia('(max-width: 768px)').matches;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (smallScreen || reducedMotion) {
+    canvas.style.display = 'none';
+    return;
+  }
+
   const ctx = canvas.getContext('2d');
   const particles = [];
   const COUNT = 90;
@@ -292,6 +303,12 @@ function initHeroCanvas() {
   }
 
   function draw() {
+    // Skip rendering when the tab is hidden — saves CPU/battery for
+    // users with many tabs open. Resume seamlessly when visible.
+    if (document.hidden) {
+      requestAnimationFrame(draw);
+      return;
+    }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     particles.forEach(p => {
       p.x += p.vx; p.y += p.vy;

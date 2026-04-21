@@ -32,7 +32,7 @@
   <link rel="dns-prefetch" href="https://basemaps.cartocdn.com" />
 
   <link rel="icon" type="image/jpeg" href="/images/logo.jpg" />
-  <link rel="stylesheet" href="css/styles.css?v=mobnav1" />
+  <link rel="stylesheet" href="css/styles.css?v=scan1" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
 
@@ -202,8 +202,8 @@
     <div class="stat-label">Canadian Operated</div>
   </div>
   <div class="stat-item">
-    <div class="stat-num">1</div>
-    <div class="stat-label">Standard: Exceptional</div>
+    <div class="stat-num" data-target="10" data-suffix="+">0+</div>
+    <div class="stat-label">Years Serving Canadian Roasters</div>
   </div>
 </div>
 
@@ -522,6 +522,7 @@
       </div>
       <!-- Honeypot — bots fill this, humans don't see it -->
       <input type="text" name="website" class="newsletter-hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      <p class="newsletter-consent">By subscribing, you agree to receive occasional emails from Root 86 Coffee. Unsubscribe any time by replying. No spam.</p>
       <div class="newsletter-status" id="newsletter-status" role="status" aria-live="polite"></div>
     </form>
   </div>
@@ -769,7 +770,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="js/coffees.js"></script>
 <script src="js/submit.js"></script>
-<script src="js/app.js?v=quote2"></script>
+<script src="js/app.js?v=scan1"></script>
 <script src="js/track.js" defer></script>
 <script>
   if (typeof emailjs !== 'undefined' && typeof SITE_SETTINGS !== 'undefined' && SITE_SETTINGS.emailjsPublicKey && SITE_SETTINGS.emailjsPublicKey !== 'YOUR_PUBLIC_KEY') {

@@ -1253,6 +1253,11 @@ footer { background: var(--red-deep); padding: 52px 0 32px; border-top: 3px soli
 }
 .newsletter-status.ok  { color: #2d7a2d; }
 .newsletter-status.err { color: var(--red); }
+.newsletter-consent {
+  font-size: 0.72rem; line-height: 1.5;
+  color: rgba(255,255,255,0.55);
+  margin: 4px 0 0; max-width: 440px;
+}
 @media (max-width: 900px) {
   .newsletter-grid { grid-template-columns: 1fr; gap: 36px; padding: 0 24px; }
   .newsletter-section { padding: 60px 0; }
