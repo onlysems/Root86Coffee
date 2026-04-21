@@ -488,6 +488,26 @@
   .field textarea{min-height:88px;resize:vertical;font-family:inherit;line-height:1.5}
   .field-bools{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
   .field-bools label{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:.82rem;color:var(--ink);text-transform:none;letter-spacing:0;font-weight:400}
+
+  /* Edit-modal flag chips: match the table's cleaned-up chip language */
+  .flag-chips{display:flex;flex-wrap:wrap;gap:8px}
+  .flag-chip{
+    position:relative;display:inline-flex;align-items:center;gap:6px;
+    padding:8px 14px;border:1px solid rgba(26,0,5,0.16);border-radius:4px;
+    font-size:.76rem;font-weight:600;letter-spacing:.05em;
+    color:var(--muted);background:#fff;cursor:pointer;user-select:none;
+    transition:background .15s,border-color .15s,color .15s;
+  }
+  .flag-chip input{position:absolute;opacity:0;pointer-events:none;width:0;height:0}
+  .flag-chip:hover{border-color:rgba(26,0,5,0.32);color:var(--ink)}
+  .flag-chip:has(input:checked){background:rgba(26,0,5,0.05);color:var(--ink);border-color:rgba(26,0,5,0.35)}
+  .flag-chip-available:has(input:checked){background:rgba(45,122,45,0.08);color:#2d7a2d;border-color:rgba(45,122,45,0.4)}
+  .flag-chip-fav:has(input:checked){background:rgba(200,16,46,0.08);color:var(--red);border-color:var(--red)}
+  .flag-chip-sale:has(input:checked){background:#fff;color:var(--red);border-color:var(--red)}
+  .flag-chip-sold:has(input:checked){background:rgba(26,0,5,0.06);color:var(--ink);border-color:rgba(26,0,5,0.35)}
+  .flag-chip-hidden:has(input:checked){background:rgba(26,0,5,0.04);color:var(--muted);border-color:rgba(26,0,5,0.25)}
+  .flag-chip:focus-within{outline:2px solid rgba(200,16,46,0.25);outline-offset:2px}
+  .flag-hint{margin-top:8px;font-size:.72rem;color:var(--muted);line-height:1.45}
   .chk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}
   .chk-opt{
     display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);
@@ -1091,13 +1111,14 @@
       </div>
       <div class="field full">
         <div class="field-label">Flags</div>
-        <div class="field-bools" role="group" aria-label="Flags">
-          <label><input type="checkbox" id="m-available" checked /> Available</label>
-          <label><input type="checkbox" id="m-fav" /> ★ R86 Favourite</label>
-          <label><input type="checkbox" id="m-sale" /> On Sale</label>
-          <label><input type="checkbox" id="m-sold" /> Sold Out</label>
-          <label><input type="checkbox" id="m-hidden" /> Hidden (draft, not shown publicly)</label>
+        <div class="flag-chips" role="group" aria-label="Flags">
+          <label class="flag-chip flag-chip-available"><input type="checkbox" id="m-available" checked /><span>Available</span></label>
+          <label class="flag-chip flag-chip-fav"><input type="checkbox" id="m-fav" /><span>&#9733; R86 Favourite</span></label>
+          <label class="flag-chip flag-chip-sale"><input type="checkbox" id="m-sale" /><span>On Sale</span></label>
+          <label class="flag-chip flag-chip-sold"><input type="checkbox" id="m-sold" /><span>Sold Out</span></label>
+          <label class="flag-chip flag-chip-hidden"><input type="checkbox" id="m-hidden" /><span>Hidden</span></label>
         </div>
+        <div class="flag-hint">Hidden keeps the coffee in the admin only, not shown on the public site.</div>
       </div>
     </div>
     <div class="modal-foot">
