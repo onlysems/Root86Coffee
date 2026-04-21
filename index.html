@@ -32,7 +32,7 @@
   <link rel="dns-prefetch" href="https://basemaps.cartocdn.com" />
 
   <link rel="icon" type="image/jpeg" href="/images/logo.jpg" />
-  <link rel="stylesheet" href="css/styles.css?v=qpfix1" />
+  <link rel="stylesheet" href="css/styles.css?v=pickup1" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
 
@@ -689,6 +689,15 @@
           Power tailgate required
         </label>
       </div>
+      <div class="qf-field" id="pickup-loc-wrap" style="display:none;margin-top:10px">
+        <label class="qf-label" id="pickup-loc-label">Pickup Location</label>
+        <div class="qf-readonly" id="pickup-loc-auto" style="display:none"></div>
+        <select class="qf-select" id="field-pickup-location" style="display:none">
+          <option value="">Select a warehouse</option>
+          <option value="Vancouver, BC">Vancouver, BC</option>
+          <option value="Parksville, BC">Parksville, BC</option>
+        </select>
+      </div>
       <div class="qf-field" style="margin-top:10px">
         <label class="qf-label">Additional Notes</label>
         <textarea class="qf-input" id="field-notes" placeholder="Special requests, sample requests..."></textarea>
@@ -722,7 +731,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="js/coffees.js"></script>
 <script src="js/submit.js"></script>
-<script src="js/app.js?v=card7"></script>
+<script src="js/app.js?v=pickup1"></script>
 <script src="js/track.js" defer></script>
 <script>
   if (typeof emailjs !== 'undefined' && typeof SITE_SETTINGS !== 'undefined' && SITE_SETTINGS.emailjsPublicKey && SITE_SETTINGS.emailjsPublicKey !== 'YOUR_PUBLIC_KEY') {

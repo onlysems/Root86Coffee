@@ -543,6 +543,85 @@ function zoneLabel(z){
   return z;
 }
 
+// Specific BC warehouses for a coffee ('vancouver' / 'parksville')
+function bcWarehouses(coffee){
+  const set = new Set();
+  (coffee.warehouses || []).forEach(w => {
+    const s = (w || '').toLowerCase();
+    if (s.indexOf('vancouver') !== -1) set.add('vancouver');
+    if (s.indexOf('parksville') !== -1) set.add('parksville');
+  });
+  return set;
+}
+// Intersection of BC warehouse options across the full quote, so only
+// warehouses that stock every selected coffee are valid pickup points.
+function quoteBcPickupOptions(){
+  if (!state.quote.length) return new Set();
+  let inter = null;
+  for (const c of state.quote) {
+    const set = bcWarehouses(c);
+    if (inter === null) inter = new Set(set);
+    else inter = new Set([...inter].filter(x => set.has(x)));
+  }
+  return inter || new Set();
+}
+// Decide what to show in the pickup-location field based on the current
+// quote and pickup-checkbox state. Called whenever either changes.
+function updatePickupLocationField(){
+  const wrap   = $('#pickup-loc-wrap');
+  const auto   = $('#pickup-loc-auto');
+  const select = $('#field-pickup-location');
+  const label  = $('#pickup-loc-label');
+  if (!wrap || !auto || !select) return;
+
+  const zones  = quoteCompatibleZones();
+  const isQC   = zones.has('east') && !zones.has('west');
+  const isBC   = zones.has('west') && !zones.has('east');
+  const pickup = $('#field-pickup') && $('#field-pickup').checked;
+
+  // QC quote: always show warehouse (per spec, even without pickup)
+  if (isQC) {
+    wrap.style.display = '';
+    label.textContent = pickup ? 'Pickup Location' : 'Shipping From';
+    auto.textContent = 'Lévis, QC';
+    auto.style.display = '';
+    select.style.display = 'none';
+    select.value = 'Lévis, QC';
+    return;
+  }
+
+  // BC quote: only matters if the customer wants to pick up
+  if (isBC && pickup) {
+    const opts = quoteBcPickupOptions();
+    wrap.style.display = '';
+    label.textContent = 'Pickup Location';
+    if (opts.size === 1) {
+      const only = opts.has('vancouver') ? 'Vancouver, BC' : 'Parksville, BC';
+      auto.textContent = only;
+      auto.style.display = '';
+      select.style.display = 'none';
+      select.value = only;
+    } else if (opts.size >= 2) {
+      // Ambiguous — customer picks
+      auto.style.display = 'none';
+      select.style.display = '';
+      // Preserve prior selection if still valid
+      if (!select.value) select.value = '';
+    } else {
+      // No common warehouse (shouldn't happen if compatibility logic is working)
+      auto.textContent = 'No shared BC warehouse';
+      auto.style.display = '';
+      select.style.display = 'none';
+      select.value = '';
+    }
+    return;
+  }
+
+  // Otherwise hide the field entirely
+  wrap.style.display = 'none';
+  select.value = '';
+}
+
 function toggleQuote(id) {
   const coffee = COFFEES.find(c => c.id === id);
   if (!coffee) return;
@@ -583,6 +662,8 @@ function renderQuoteItems() {
   const wrap = $('#quote-items-wrap');
   const totalEl = $('#qp-bag-total');
   if (!wrap) return;
+  // Refresh pickup-location affordance whenever the quote changes
+  updatePickupLocationField();
 
   const totalBags = state.quote.reduce((s, q) => s + (q.qty || 1), 0);
   if (totalEl) totalEl.textContent = totalBags > 0 ? `(${totalBags} bag${totalBags !== 1 ? 's' : ''})` : '';
@@ -716,6 +797,14 @@ function closeModal() {
 async function handleSubmit(e) {
   e.preventDefault();
   if (state.quote.length === 0) { showToast('Add at least one coffee first', true); return; }
+  // If the pickup-location selector is visible and empty, the customer
+  // still has to choose Vancouver or Parksville before we can submit.
+  const locSel = $('#field-pickup-location');
+  if (locSel && locSel.style.display !== 'none' && !locSel.value) {
+    showToast('Please choose a pickup warehouse', true);
+    locSel.focus();
+    return;
+  }
 
   const btn = $('#form-submit');
   btn.disabled = true; btn.textContent = 'Sending...';
@@ -738,6 +827,7 @@ async function handleSubmit(e) {
     residential: $('#field-residential').value,
     payment:     $('#field-payment').value,
     pickup:      $('#field-pickup').checked,
+    pickup_location: $('#field-pickup-location') ? ($('#field-pickup-location').value || '') : '',
     tailgate:    $('#field-tailgate').checked,
     notes:       $('#field-notes').value,
     items:       items,
@@ -1109,6 +1199,8 @@ function bindEvents() {
 
   // Form
   $('#quote-form')?.addEventListener('submit', handleSubmit);
+  // Show/hide pickup location when the pickup checkbox is toggled
+  $('#field-pickup')?.addEventListener('change', updatePickupLocationField);
 
   // Modal
   $('#modal-close')?.addEventListener('click', closeModal);

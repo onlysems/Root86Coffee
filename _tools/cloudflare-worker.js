@@ -175,6 +175,7 @@ async function handleForm(request, env, cors, corsOrigin) {
   const residential = cap(data.residential, 40);
   const payment     = cap(data.payment, 40);
   const pickup      = !!data.pickup;
+  const pickupLocation = cap(data.pickup_location, 80);
   const tailgate    = !!data.tailgate;
   const items       = Array.isArray(data.items) ? data.items.slice(0, 200) : [];
 
@@ -190,6 +191,7 @@ async function handleForm(request, env, cors, corsOrigin) {
   if (payment)     lines.push(`**Payment:** ${md(payment)}`);
   if (formType === 'quote') {
     lines.push(`**Pickup:** ${pickup ? 'Yes' : 'No'}`);
+    if (pickupLocation) lines.push(`**Warehouse:** ${md(pickupLocation)}`);
     lines.push(`**Tailgate:** ${tailgate ? 'Yes' : 'No'}`);
   }
   lines.push(`**Submitted:** ${new Date().toISOString()}`);

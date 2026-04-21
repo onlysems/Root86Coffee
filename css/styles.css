@@ -692,6 +692,16 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
 
 .qp-divider { height: 1px; background: rgba(26,0,5,0.08); margin: 20px 0; }
 
+.qf-readonly {
+  padding: 10px 12px;
+  background: rgba(26,0,5,0.04);
+  border: 1px solid rgba(26,0,5,0.08);
+  border-radius: 3px;
+  font-size: 0.85rem;
+  color: var(--ink);
+  font-family: var(--font-serif);
+}
+
 /* Contact form */
 .qf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
 .qf-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
