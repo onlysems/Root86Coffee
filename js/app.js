@@ -247,7 +247,13 @@ function initBtbCarousel(){
     restart();
   }
   function next(){ goTo(idx + 1); }
+  function prev(){ goTo(idx - 1); }
   function restart(){ clearInterval(timer); timer = setInterval(next, 4200); }
+
+  const prevBtn = document.getElementById('btb-prev');
+  const nextBtn = document.getElementById('btb-next');
+  if (prevBtn) prevBtn.addEventListener('click', prev);
+  if (nextBtn) nextBtn.addEventListener('click', next);
 
   restart();
 
