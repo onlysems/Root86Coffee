@@ -1243,6 +1243,27 @@ function bindEvents() {
   $('#qp-close')?.addEventListener('click', closePanel);
   $('#quote-overlay')?.addEventListener('click', closePanel);
 
+  // The 'Quote' nav link (and any #quote anchor) opens the quote panel
+  // rather than scrolling to a section. Intercept the click, and also
+  // respond if the page loaded with #quote already in the URL.
+  document.querySelectorAll('a[href="#quote"], a[href$="index.html#quote"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      openPanel();
+      // Close the mobile menu if it was open
+      const mm = document.getElementById('mobile-menu');
+      const hb = document.getElementById('nav-hamburger');
+      if (mm) mm.classList.remove('open');
+      if (hb) hb.classList.remove('active');
+      // Clean the hash so re-clicking works every time
+      if (location.hash === '#quote') history.replaceState(null, '', location.pathname);
+    });
+  });
+  if (location.hash === '#quote') {
+    // Arriving from another page via index.html#quote — open after paint
+    setTimeout(() => { openPanel(); history.replaceState(null, '', location.pathname); }, 150);
+  }
+
   // Form
   $('#quote-form')?.addEventListener('submit', handleSubmit);
   // Method radio (Delivery vs Pickup) drives the hidden pickup flag,
