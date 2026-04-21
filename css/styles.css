@@ -491,14 +491,14 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
 
 .add-quote-btn {
   font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase;
-  background: var(--ink); color: var(--white); padding: 11px 14px;
+  background: var(--red); color: var(--white); padding: 11px 14px;
   font-weight: 600; font-family: var(--font-sans);
-  border: 1px solid var(--ink); border-radius: 2px; cursor: pointer;
+  border: 1px solid var(--red); border-radius: 2px; cursor: pointer;
   transition: background var(--transition), border-color var(--transition), opacity var(--transition);
 }
-.add-quote-btn:hover { background: var(--red); border-color: var(--red); }
+.add-quote-btn:hover { background: var(--red-dark); border-color: var(--red-dark); }
 .add-quote-btn:disabled { background: rgba(26,0,5,0.12); border-color: transparent; color: var(--muted); cursor: not-allowed; }
-.add-quote-btn.added { background: var(--red); border-color: var(--red); }
+.add-quote-btn.added { background: var(--red-dark); border-color: var(--red-dark); }
 .add-quote-btn.incompatible {
   background: rgba(26,0,5,0.08); border-color: transparent; color: var(--muted);
   cursor: not-allowed;
