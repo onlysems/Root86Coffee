@@ -881,7 +881,6 @@
                 <option value="">All types</option>
                 <option value="quote">Quote</option>
                 <option value="contact">Contact</option>
-                <option value="newsletter">Newsletter</option>
               </select>
               <select id="inbox-filter-date" class="inbox-filter" aria-label="Filter by date">
                 <option value="">All time</option>
@@ -2323,7 +2322,12 @@ async function loadInbox(force){
     }
     const items = await res.json();
     if (!Array.isArray(items)) throw new Error('Unexpected response from GitHub');
-    INBOX_STATE.issues = items.filter(i => !i.pull_request);
+    // Exclude newsletter signups from the inbox entirely; they live in the
+    // Subscribers tab. Filtering at load time keeps counts/badges/tabs clean.
+    INBOX_STATE.issues = items.filter(i =>
+      !i.pull_request &&
+      !(i.labels || []).some(l => l.name === 'newsletter')
+    );
     updateInboxBadge();
     renderInboxList();
   } catch(e){

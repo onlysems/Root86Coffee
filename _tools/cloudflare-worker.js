@@ -114,32 +114,9 @@ async function handleSubscribe(request, env, cors, corsOrigin) {
     } catch(e) { console.error('KV sub write', e); }
   }
 
-  // Notify owner via GitHub issue (only on first-time signup)
-  if (!existed && env.GH_TOKEN) {
-    try {
-      const title = `[newsletter] ${email}${name ? ' — ' + name : ''}`;
-      const body = [
-        `**Newsletter signup**`,
-        `**Email:** ${md(email)}`,
-        name ? `**Name:** ${md(name)}` : '',
-        `**Source:** ${md(source)}`,
-        `**Submitted:** ${now}`,
-      ].filter(Boolean).join('\n');
-      await fetch(
-        `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/issues`,
-        { method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${env.GH_TOKEN}`,
-            'Accept': 'application/vnd.github+json',
-            'X-GitHub-Api-Version': '2022-11-28',
-            'Content-Type': 'application/json',
-            'User-Agent': 'r86-forms-worker',
-          },
-          body: JSON.stringify({ title, body, labels: ['submission', 'newsletter', 'status:new'] }),
-        }
-      );
-    } catch(e) { console.error('GH newsletter issue', e); }
-  }
+  // Newsletter signups are stored in KV only (visible in admin Subscribers tab).
+  // We intentionally do NOT create a GitHub issue here, otherwise the inbox
+  // gets cluttered with signups that aren't actual customer inquiries.
 
   return json({ ok: true, duplicate: existed }, 200, cors);
 }
