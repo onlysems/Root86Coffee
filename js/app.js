@@ -441,14 +441,14 @@ function cardHTML(c) {
   const fallback = v => (v && String(v).trim()) ? v : na;
   const certFlags = c.certifications.map(cert =>
     `<span class="cflag ${CERT_CLASS[cert] || ''}">${cert}</span>`).join('');
-  const ribbons = c.favourite
-    ? `<span class="ccard-ribbon ribbon-fav" title="Root 86 Favourite">★ Favourite</span>`
-    : '';
+  const ribbons = [
+    c.favourite ? `<span class="ccard-ribbon ribbon-fav" title="Root 86 Favourite">★ Favourite</span>` : '',
+    c.onSale    ? `<span class="ccard-ribbon ribbon-sale" title="On Sale">On Sale</span>` : ''
+  ].filter(Boolean).join('');
   const warehouses = (c.warehouses || []).map(w => w.split(',')[0]);
-  const salePill = c.onSale ? `<span class="stock-sale" title="On Sale">On Sale</span>` : '';
   const stockLine = c.available
-    ? `<span class="stock-dot" aria-hidden="true"></span><span class="stock-label">In stock</span>${warehouses.length ? `<span class="stock-sep">·</span><span class="stock-where">${warehouses.join(' · ')}</span>` : ''}${salePill}`
-    : `<span class="stock-dot out" aria-hidden="true"></span><span class="stock-label">Out of stock</span>${salePill}`;
+    ? `<span class="stock-dot" aria-hidden="true"></span><span class="stock-label">In stock</span>${warehouses.length ? `<span class="stock-sep">·</span><span class="stock-where">${warehouses.join(' · ')}</span>` : ''}`
+    : `<span class="stock-dot out" aria-hidden="true"></span><span class="stock-label">Out of stock</span>`;
 
   return `
     <article class="ccard${!c.available || c.soldOut ? ' sold-out' : ''}" data-id="${c.id}">
