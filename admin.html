@@ -239,6 +239,12 @@
 
   /* ── Subscribers ── */
   .subs-summary{background:linear-gradient(135deg,#fff 0%,#fcf6f4 100%);border:1px solid var(--line);border-radius:8px;padding:22px 26px}
+  .subs-stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+  .subs-stat{display:flex;flex-direction:column;gap:4px;padding:0 4px;border-left:1px solid rgba(26,0,5,0.08)}
+  .subs-stat:first-child{border-left:none;padding-left:0}
+  .subs-stat-num{font-size:2rem;font-family:var(--serif,Georgia);font-weight:300;color:var(--ink);line-height:1.05}
+  .subs-stat-label{color:var(--muted);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;margin-top:4px}
+  @media(max-width:780px){.subs-stats-row{grid-template-columns:repeat(2,1fr);gap:16px}}
   .subs-table{width:100%;border-collapse:collapse;font-size:.88rem}
   .subs-table th{text-align:left;padding:14px 18px;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600;border-bottom:1px solid var(--line);background:#fafafa}
   .subs-table td{padding:13px 18px;border-bottom:1px solid var(--line);color:var(--ink);vertical-align:middle}
@@ -1809,7 +1815,31 @@ function renderSubscribers(){
   const summary = document.getElementById('subs-summary');
   content.style.display = 'block';
 
-  summary.innerHTML = `<div style="font-size:2rem;font-family:var(--serif,Georgia);font-weight:300;color:var(--ink)">${SUBSCRIBERS.length.toLocaleString()}</div><div style="color:var(--muted);font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;margin-top:2px">Total subscribers</div>`;
+  // Bucket signups by recency. Week = last 7 days; month/year = calendar month/year.
+  const now = new Date();
+  const weekAgo = Date.now() - 7 * 86400000;
+  const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+  const yearStart  = new Date(now.getFullYear(), 0, 1).getTime();
+  let weekCount = 0, monthCount = 0, yearCount = 0;
+  SUBSCRIBERS.forEach(s => {
+    const t = s.ts ? new Date(s.ts).getTime() : 0;
+    if (!t || isNaN(t)) return;
+    if (t >= weekAgo)    weekCount++;
+    if (t >= monthStart) monthCount++;
+    if (t >= yearStart)  yearCount++;
+  });
+  const stat = (num, label) => `
+    <div class="subs-stat">
+      <div class="subs-stat-num">${num.toLocaleString()}</div>
+      <div class="subs-stat-label">${label}</div>
+    </div>`;
+  summary.innerHTML = `
+    <div class="subs-stats-row">
+      ${stat(SUBSCRIBERS.length, 'Total')}
+      ${stat(weekCount,  'This week')}
+      ${stat(monthCount, 'This month')}
+      ${stat(yearCount,  'This year')}
+    </div>`;
 
   if (!SUBSCRIBERS.length) {
     tbody.innerHTML = '';
