@@ -479,6 +479,15 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
 .ccard-stock.out .stock-label { color: var(--muted); }
 .stock-sep { color: rgba(26,0,5,0.25); }
 .stock-where { color: var(--muted); font-size: 0.72rem; }
+.stock-sale {
+  margin-left: auto;
+  font-size: 0.56rem; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--red); font-weight: 700;
+  padding: 3px 8px;
+  border: 1px solid rgba(200,16,46,0.35);
+  border-radius: 2px;
+  background: rgba(200,16,46,0.06);
+}
 
 .ccard-foot {
   display: flex; flex-direction: column; gap: 16px;
