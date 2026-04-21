@@ -32,7 +32,7 @@
   <link rel="dns-prefetch" href="https://basemaps.cartocdn.com" />
 
   <link rel="icon" type="image/jpeg" href="/images/logo.jpg" />
-  <link rel="stylesheet" href="css/styles.css?v=pickup1" />
+  <link rel="stylesheet" href="css/styles.css?v=quote2" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
 
@@ -659,8 +659,48 @@
         <input class="qf-input" type="email" id="field-email" required placeholder="you@roastery.com" />
       </div>
       <div class="qf-field">
-        <label class="qf-label">Shipping Address</label>
-        <input class="qf-input" id="field-address" placeholder="Street, City, Province, Postal Code" />
+        <label class="qf-label">Fulfillment <span class="req">*</span></label>
+        <div class="qf-method-row">
+          <label class="qf-method-opt">
+            <input type="radio" name="fulfillment" value="delivery" id="field-method-delivery" checked />
+            <span>Delivery to address</span>
+          </label>
+          <label class="qf-method-opt">
+            <input type="radio" name="fulfillment" value="pickup" id="field-method-pickup" />
+            <span>Warehouse pickup</span>
+          </label>
+        </div>
+      </div>
+      <div id="delivery-fields">
+        <div class="qf-field">
+          <label class="qf-label">Street Address <span class="req">*</span></label>
+          <input class="qf-input" id="field-address" placeholder="123 Main St, Unit 4" />
+        </div>
+        <div class="qf-row">
+          <div class="qf-field">
+            <label class="qf-label">City <span class="req">*</span></label>
+            <input class="qf-input" id="field-city" placeholder="Vancouver" />
+          </div>
+          <div class="qf-field">
+            <label class="qf-label">Province <span class="req">*</span></label>
+            <select class="qf-select" id="field-province">
+              <option value="">Select province</option>
+              <option value="AB">Alberta</option>
+              <option value="BC">British Columbia</option>
+              <option value="MB">Manitoba</option>
+              <option value="NB">New Brunswick</option>
+              <option value="NL">Newfoundland &amp; Labrador</option>
+              <option value="NS">Nova Scotia</option>
+              <option value="NT">Northwest Territories</option>
+              <option value="NU">Nunavut</option>
+              <option value="ON">Ontario</option>
+              <option value="PE">Prince Edward Island</option>
+              <option value="QC">Quebec</option>
+              <option value="SK">Saskatchewan</option>
+              <option value="YT">Yukon</option>
+            </select>
+          </div>
+        </div>
       </div>
       <div class="qf-row">
         <div class="qf-field">
@@ -679,16 +719,14 @@
           </select>
         </div>
       </div>
-      <div class="qf-checks">
-        <label class="qf-check-label">
-          <input class="qf-check" type="checkbox" id="field-pickup" />
-          I'd like to arrange a pickup
-        </label>
+      <div class="qf-checks" id="delivery-extras">
         <label class="qf-check-label">
           <input class="qf-check" type="checkbox" id="field-tailgate" />
           Power tailgate required
         </label>
       </div>
+      <!-- Hidden field keeps backwards-compat with the existing pickup payload flag -->
+      <input type="hidden" id="field-pickup" value="false" />
       <div class="qf-field" id="pickup-loc-wrap" style="display:none;margin-top:10px">
         <label class="qf-label" id="pickup-loc-label">Pickup Location</label>
         <div class="qf-readonly" id="pickup-loc-auto" style="display:none"></div>
@@ -731,7 +769,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="js/coffees.js"></script>
 <script src="js/submit.js"></script>
-<script src="js/app.js?v=pickup1"></script>
+<script src="js/app.js?v=quote2"></script>
 <script src="js/track.js" defer></script>
 <script>
   if (typeof emailjs !== 'undefined' && typeof SITE_SETTINGS !== 'undefined' && SITE_SETTINGS.emailjsPublicKey && SITE_SETTINGS.emailjsPublicKey !== 'YOUR_PUBLIC_KEY') {

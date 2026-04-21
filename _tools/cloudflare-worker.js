@@ -176,6 +176,9 @@ async function handleForm(request, env, cors, corsOrigin) {
   const payment     = cap(data.payment, 40);
   const pickup      = !!data.pickup;
   const pickupLocation = cap(data.pickup_location, 80);
+  const fulfillment = cap(data.fulfillment, 40);
+  const city        = cap(data.city, 80);
+  const province    = cap(data.province, 40);
   const tailgate    = !!data.tailgate;
   const items       = Array.isArray(data.items) ? data.items.slice(0, 200) : [];
 
@@ -190,9 +193,11 @@ async function handleForm(request, env, cors, corsOrigin) {
   if (residential) lines.push(`**Type:** ${md(residential)}`);
   if (payment)     lines.push(`**Payment:** ${md(payment)}`);
   if (formType === 'quote') {
-    lines.push(`**Pickup:** ${pickup ? 'Yes' : 'No'}`);
+    if (fulfillment) lines.push(`**Fulfillment:** ${md(fulfillment)}`);
+    if (city)     lines.push(`**City:** ${md(city)}`);
+    if (province) lines.push(`**Province:** ${md(province)}`);
     if (pickupLocation) lines.push(`**Warehouse:** ${md(pickupLocation)}`);
-    lines.push(`**Tailgate:** ${tailgate ? 'Yes' : 'No'}`);
+    if (!pickup) lines.push(`**Tailgate:** ${tailgate ? 'Yes' : 'No'}`);
   }
   lines.push(`**Submitted:** ${new Date().toISOString()}`);
   lines.push('');

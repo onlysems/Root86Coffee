@@ -577,7 +577,7 @@ function updatePickupLocationField(){
   const zones  = quoteCompatibleZones();
   const isQC   = zones.has('east') && !zones.has('west');
   const isBC   = zones.has('west') && !zones.has('east');
-  const pickup = $('#field-pickup') && $('#field-pickup').checked;
+  const pickup = $('#field-method-pickup') && $('#field-method-pickup').checked;
 
   // QC quote: always show warehouse (per spec, even without pickup)
   if (isQC) {
@@ -797,6 +797,17 @@ function closeModal() {
 async function handleSubmit(e) {
   e.preventDefault();
   if (state.quote.length === 0) { showToast('Add at least one coffee first', true); return; }
+
+  const isPickup = ($('#field-method-pickup') && $('#field-method-pickup').checked);
+  // Delivery requires full address — street, city, province
+  if (!isPickup) {
+    const addr = ($('#field-address').value || '').trim();
+    const city = ($('#field-city') ? $('#field-city').value : '').trim();
+    const prov = ($('#field-province') ? $('#field-province').value : '').trim();
+    if (!addr) { showToast('Street address is required for delivery', true); $('#field-address').focus(); return; }
+    if (!city) { showToast('City is required for delivery', true); $('#field-city').focus(); return; }
+    if (!prov) { showToast('Province is required for delivery', true); $('#field-province').focus(); return; }
+  }
   // If the pickup-location selector is visible and empty, the customer
   // still has to choose Vancouver or Parksville before we can submit.
   const locSel = $('#field-pickup-location');
@@ -817,16 +828,28 @@ async function handleSubmit(e) {
     process: c.process
   }));
 
+  const cityVal = $('#field-city') ? $('#field-city').value : '';
+  const provVal = $('#field-province') ? $('#field-province').value : '';
+  // Combine street + city + province into a single address string so the
+  // GitHub issue renders one clean "Address:" line without us touching the worker
+  const streetVal = $('#field-address').value || '';
+  const fullAddress = isPickup
+    ? ''
+    : [streetVal, cityVal, provVal].filter(v => v && v.trim()).join(', ');
+
   const payload = {
     form_type:   'quote',
     name:        $('#field-contact').value,
     company:     $('#field-company').value,
     email:       $('#field-email').value,
     phone:       $('#field-phone').value,
-    address:     $('#field-address').value,
+    address:     fullAddress,
+    city:        cityVal,
+    province:    provVal,
     residential: $('#field-residential').value,
     payment:     $('#field-payment').value,
-    pickup:      $('#field-pickup').checked,
+    pickup:      isPickup,
+    fulfillment: isPickup ? 'Warehouse pickup' : 'Delivery',
     pickup_location: $('#field-pickup-location') ? ($('#field-pickup-location').value || '') : '',
     tailgate:    $('#field-tailgate').checked,
     notes:       $('#field-notes').value,
@@ -1199,8 +1222,22 @@ function bindEvents() {
 
   // Form
   $('#quote-form')?.addEventListener('submit', handleSubmit);
-  // Show/hide pickup location when the pickup checkbox is toggled
-  $('#field-pickup')?.addEventListener('change', updatePickupLocationField);
+  // Method radio (Delivery vs Pickup) drives the hidden pickup flag,
+  // toggles the address block, and refreshes the pickup-location field.
+  const methodRadios = document.querySelectorAll('input[name="fulfillment"]');
+  methodRadios.forEach(r => r.addEventListener('change', onMethodChange));
+  function onMethodChange(){
+    const pickup = $('#field-method-pickup') && $('#field-method-pickup').checked;
+    const hidden = $('#field-pickup');
+    if (hidden) hidden.value = pickup ? 'true' : 'false';
+    const delivery = $('#delivery-fields');
+    const extras = $('#delivery-extras');
+    if (delivery) delivery.style.display = pickup ? 'none' : '';
+    if (extras)   extras.style.display   = pickup ? 'none' : '';
+    updatePickupLocationField();
+  }
+  // Initial render so the form reflects the default radio choice
+  onMethodChange();
 
   // Modal
   $('#modal-close')?.addEventListener('click', closeModal);

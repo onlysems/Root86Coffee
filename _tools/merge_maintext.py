@@ -8,7 +8,7 @@ import csv, re, sys, io, json, pathlib
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
-CSV_PATH = r"C:\Users\Vandu\Downloads\Wine List\QUME 380\R86Coffees.csv"
+CSV_PATH = r"C:\Users\Vandu\Downloads\extra\R86Coffees.csv"
 JS_PATH  = pathlib.Path(r"C:\Users\Vandu\root86coffee\js\coffees.js")
 
 def norm(s):

@@ -702,6 +702,26 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
   font-family: var(--font-serif);
 }
 
+/* Fulfillment method selector (radio) */
+.qf-method-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.qf-method-opt {
+  display: flex; align-items: center; gap: 8px;
+  padding: 11px 14px;
+  border: 1px solid rgba(26,0,5,0.15);
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.86rem;
+  color: var(--ink);
+  background: var(--white);
+  transition: border-color .15s, background .15s;
+}
+.qf-method-opt:hover { border-color: rgba(200,16,46,0.4); }
+.qf-method-opt input[type="radio"] { accent-color: var(--red); margin: 0; }
+.qf-method-opt:has(input[type="radio"]:checked) {
+  border-color: var(--red);
+  background: rgba(200,16,46,0.04);
+}
+
 /* Contact form */
 .qf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
 .qf-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }

@@ -20,6 +20,7 @@ const COFFEES = [
     altitude: "N/A",
     tastingNotes: "Clean cup, caramel and toasted almonds.",
     description: "A premium espresso blend of high density beans for a variety of espresso roast levels.  A rich blend of Central and South American, and Indonesian origins, making for a clean, sweet, balanced cup.",
+    mainText: "SWP Premium Espresso Blend Decaf\nA premium espresso blend of high density beans for a variety of espresso roast levels. A rich blend of Central and South American, and Indonesian origins, making for a clean, sweet, balanced cup.\n\nWe stock many Swiss Water Decaf coffees, please contact us if your looking for a specific decaf.  We also stock half bag lots (66 lbs) for your micro-roaster needs.",
     image: "https://static.wixstatic.com/media/59d94e_71338118305345e78b3f1e879559713b~mv2.jpeg"
   },
   {
@@ -37,6 +38,7 @@ const COFFEES = [
     altitude: "1400 - 1500M",
     tastingNotes: "Clean cup, caramel and toasted almonds.",
     description: "Elevation: 1400 - 1500M\n\nProcess: Swiss Water Decaf\n\nVarietal: Catuai, Typica & Bourbon",
+    mainText: "Elevation: 1400 - 1500M\nProcess: Swiss Water Decaf\nVarietal: Catuai, Typica & Bourbon                  \n                                    \nCupping notes:          \nClean cup, caramel and toasted almonds. \n                                               \nask about our other Swiss Water products available.\n\nWe stock many Swiss Water Decaf coffees, please contact us if your looking for a specific decaf.  We also stock half bag lots (66 lbs) for your micro-roaster needs.",
     image: "https://static.wixstatic.com/media/59d94e_71338118305345e78b3f1e879559713b~mv2.jpeg",
     soldOut: true,
     hidden: true
@@ -50,7 +52,8 @@ const COFFEES = [
     certifications: [],
     bagWeight: 132,
     warehouses: [],
-    available: true,
+    available: false,
+    soldOut: true,
     grade: "",
     variety: "SL 14 & 28",
     altitude: "1500-1800M",
@@ -73,6 +76,7 @@ const COFFEES = [
     altitude: "1200-1400M",
     tastingNotes: "Well balanced flavor, sweet brown sugar honey aroma, smooth medium body and clean fruity aftertaste with crisp bright acidity, citrus, lemon, grapefruit, orange, strawberry and dark chocolate notes.",
     description: "Elevation: 1200-1400M\n\nProcess: Fully washed and sun dried on patio and mechanical dryers\n\nVarietal: Anacafe 14, Bourbon, Catimor, Caturra",
+    mainText: "In the mountain forests of Guatemala’s Santa Rosa region, Finca Sabanetas has been home to coffee for more than a century. A multigenerational operation, operations at Finca Sabanetas are now in the hands of its founders’ great-grandchildren. It’s led by Marco Tulio Doando, who grew up among its coffee shrubs and carries a love for the plant in his own DNA.\n\nGrown in mineral-rich volcanic soil alongside shady fruit trees, coffee plants at Finca Sabanetas benefit from a cool, rainy climate.\n\nCoffee is washed and processed at the Transcafe mill in nearby Barbarena.\n\nVarietals: Common Arabica varietals include Anacafe 14, Bourbon, Catimor, Caturra\n\nTaste Profile:  Well balanced flavor, sweet brown sugar honey aroma, smooth medium body and clean fruity aftertaste with crisp bright acidity, citrus, lemon, grapefruit, orange, strawberry and dark chocolate notes.",
     image: "https://static.wixstatic.com/media/59d94e_c4b915f730274c3a8ae1a75c03579eb1~mv2.jpg",
     favourite: true,
     soldOut: true
@@ -86,12 +90,14 @@ const COFFEES = [
     certifications: [],
     bagWeight: 132,
     warehouses: [],
-    available: true,
+    available: false,
+    soldOut: true,
     grade: "",
     variety: "SL-28, SL-34, Ruiru 11",
     altitude: "1500-1800M",
     tastingNotes: "sparkling acidity, creamy, brown sugar, black tean and dark cherry.",
     description: "Elevation: 1500-1800M\n\nRegion: Murang'a County\n\nProcess: Double washed & sun dried on raised beds & hand sorted\n\nVarietal: SL-28, SL-34, Ruiru 11",
+    mainText: "Kenya Sondhi AB Plus\n1500-1800M\nVarietal:  SL-28, SL-34, Ruiru 11\nDouble washed & sun dried on raised beds & hand sorted\n \nThis coffee lot is the kind of Kenya we look for, with rare bright fruit notes and an excellent finish.  This year Kenyas have had very high market differentials making them very expensive, but we're happy to secure this lot that cups very high and is priced well.\n\nSondhi has invested in multiple colour sorters and gravity beds for some of the best sorted Kenya coffee on the market.\nCupping notes: sparkling acidity, creamy, brown sugar, black tean and dark cherry.",
     image: "https://static.wixstatic.com/media/59d94e_d0276efdd1d743d383fe391c7c73b100~mv2.png"
   },
   {
@@ -109,6 +115,7 @@ const COFFEES = [
     altitude: "1600-1800M",
     tastingNotes: "Clean cup, sweet, pleasing acidity, stone fruit, red berry notes, brown sugar, citrus finish.",
     description: "Elevation: 1600-1800M\n\nProcess: Washed with special sort\n\nVarietal:  Castillo, Colombia, Caturra",
+    mainText: "Colombia Huila - Organic, Southern region\nElevation: 1600-1800M\nProcess: Washed with special sort\nProcédé : Lavé avec un tri spécial\nVarietal: Caturra, Colombia, Castillo\n\nProcess: Washed & sun dried on patio and mechanical dryers \nProcédé : Lavé et séché au soleil sur terrasse et séchoirs mécaniques\n\nNotes: Clean cup, sweet, pleasing acidity, stone fruit, red berry notes, brown sugar, citrus finish.\nNotes : Vin limpide, doux, acidité agréable, fruits à noyau, notes de fruits rouges, cassonade, finale d'agrumes.",
     image: "https://static.wixstatic.com/media/59d94e_cfdbfefbce2c406687651ff9a385c1c7~mv2.png"
   },
   {
@@ -126,6 +133,7 @@ const COFFEES = [
     altitude: "1400-1700M",
     tastingNotes: "sweet, bright acidity, black tea, lemon, caramel, blackberry, dark fruit",
     description: "Elevation: 1400-1700M\n\nProcess: Washed   \nDried on raised beds and hand sorted.\n\nVarietal: Bourbon, Kent\n\nCup notes: sweet, bright acidity, black tea, lemon, caramel, blackberry, dark fruit",
+    mainText: "Elevation: 1400-1700M\n\nProcess: Washed   \n\nDried on raised beds and hand sorted.\n\nVarietal: Bourbon, Kent\n\nCup notes: sweet, bright acidity, black tea, lemon, caramel, blackberry, dark fruit",
     image: "https://static.wixstatic.com/media/59d94e_4890a363b84c4319867e0e9f91c4295e~mv2.png",
     onSale: true
   },
@@ -144,6 +152,7 @@ const COFFEES = [
     altitude: "1450M",
     tastingNotes: "Hazelnut, Sweet Chocolate, Dark Honey, Silky Body",
     description: "Elevation: 1450M\nProcess:  Washed\nDrying: Patio 18 days\nEl Salvador farmer traceable specialty lot",
+    mainText: "PRODUCERS: Rene Contreras\nSTATION: Monte Verde\nPROCESSING METHOD: Washed\nREGION: Santa Ana\nTOWN: Monte Verde\nELEVATION: 1450M\nVARIETY: Bourbon and Pacas\nDRYING TIME: 18 Days\nTASTING NOTES:  Hazelnut, Sweet Chocolate, Dark Honey, Silky Body",
     image: "https://static.wixstatic.com/media/61a162_b0c1166ee0c540e2b3e4a85cc70b1169~mv2.webp",
     soldOut: true,
     hidden: true
@@ -163,6 +172,7 @@ const COFFEES = [
     altitude: "1100 - 1400M",
     tastingNotes: "caramel - creamy body - pleasing citrus acidity - floral aroma",
     description: "Elevation: 1100 - 1400M\n\nProcess: Washed\n\nRegion: Jurutungo, Santa Clara, Chriqui Arabica\n\nVarietal: Catuai",
+    mainText: "Elevation: 1100 - 1400M\n\nProcess: Washed\n\nRegion: Jurutungo, Santa Clara, Chriqui Arabica\n\nVarietal: Catuai\n\nThe farm is based on a family tradition, which started when Jose’s father came to the region in the 60’s and started to plant coffee about 10 years ago. Jose and Aileene have taken over the farm management and separated it in 5 micro-areas, all located in a different microclimate. They process all the coffee on the farm with the final preparation done in a bigger mill.  \n\n Notes: caramel - creamy body - pleasing citrus acidity - floral aroma",
     image: "https://static.wixstatic.com/media/59d94e_9013b1b8ec7e4420813ba425022e5258~mv2.png",
     soldOut: true
   },
@@ -181,6 +191,7 @@ const COFFEES = [
     altitude: "2000-2300M",
     tastingNotes: "honey, stone fruit, black tea, big juicy body finishing with jasmine lemon notes.",
     description: "Elevation: 2000-2300M\n\nProcess: washed process, sun dried on raised beds & hand sorted\n\nVarietal: Heirloom Yirgacheffe type",
+    mainText: "Ethiopia Gedeo Zone, Yirgacheffe Konga\nGr 2 Washed extra sort\nElevation 2000-2300M\nVarietal: Heirloom Yirgacheffe type\nFully washed, sun dried on raised beds &  hand sorted\n \nThe Yirgacheffe region is known for unique flavor profiles with elevations as high as 2300M, allowing for concentrated sweetness and complex flavours.  \n\nThe Konga cooperative is one in a network of cooperatives in the Yirgacheffe region belonging to the Yirgacheffe Coffee Farmers Cooperative Union (YCFCU). Its 2,400 smallholder members distinguish themselves with their impeccable attention to detail in processing.\n\nIf you're a micro-roaster who wishes to be recognized for having a lot that is unique, rare and competition ready, book a few bags before its gone.\n\nGr 2 Washed:  a sophisticated cup with pleasing acidity, great sweetness, honey, stone fruit, black tea, big juicy body finishing with jasmine lemon notes.",
     image: "https://static.wixstatic.com/media/59d94e_515f78a388f044ca9a1a8c01fb2717eb~mv2.png",
     favourite: true
   },
@@ -199,6 +210,7 @@ const COFFEES = [
     altitude: "1100-1200M",
     tastingNotes: "delicate acidity, chocolate, tangerine citrus, toasted nuts in a sweet cup.",
     description: "Elevation: 1100-1200M\n\nProcess: Natural \n\nVarietal: Yellow Bourbon, Catuai",
+    mainText: "Brazil Vale de Grama, specialty prep\nMogiana - Sao Sebastião da Grama\nnatural -  1100-1200M\nVarietals:  Yellow Bourbon, Catuai\n​\nThe specialty coffee concept was one of the numerous innovations that the city of São Sebastião da Grama and its surrounding municipalities adopted long time ago. Among the producers, naturals and pulped naturals are the most common processing methods. African beds, greenhouses and mechanical driers are also used to produce consistent coffees.\n\nCupping results of a delicate acidity, chocolate, tangerine citrus, toasted nuts in a sweet cup.",
     image: "https://static.wixstatic.com/media/61a162_60e0821594b547cabdc7bf88bc0a0450~mv2.png"
   },
   {
@@ -216,6 +228,7 @@ const COFFEES = [
     altitude: "1850-2000M",
     tastingNotes: "Citrus, Tea, Melon, Stone Fruit, Floral Notes",
     description: "Elevation: 1850-2000M\n\nProcess: Washed process, sun dried on raised beds & hand sorted\n\nVarietal: Heirloom Sidama type",
+    mainText: "Ethiopia Sidama G2 Natural                                 \nElevation: 1850-2000M\nVarietal: 1974-1975 JARC Selections & Local Landraces\nNatural process, sun dried on raised beds & hand sorted. Smallholders in the Riripa area; Haji Betro wet mill\n\n \nThis coffee is comprised of deliveries from 742 smallholders in the Riripa area within the Oromia Region of Ethiopia. \n\nSidama washed lots are know for their clean cup with good clarity and depth of flavours.  \n\nCupping notes: Citrus, Tea, Melon, Stone Fruit, Floral Notes",
     image: "https://static.wixstatic.com/media/59d94e_515f78a388f044ca9a1a8c01fb2717eb~mv2.png",
     favourite: true,
     soldOut: true,
@@ -236,6 +249,7 @@ const COFFEES = [
     altitude: "1300 - 1700M",
     tastingNotes: "nice clean cup, citrus acidity, caramel notes, lemon tea and toasted nuts, well balanced.",
     description: "Elevation: 1300 - 1700M\n\nProcess: Fully Washed, sun dried on patios\n\nVarietal: IHCAFE 90, Caturra, Catuai, Parainema, Bourbon",
+    mainText: "Organic Copan SHG                              ORGANIC \n1300 - 1700M\nFully Washed, sun dried on patios\nVarietals:  IHCAFE 90, Caturra, Catuai, Parainema, Bourbon\n​\nWorking directly with the premier Honduras exporter, Molinos de Honduras,  was founded in 1960, is the oldest coffee exporter in Honduras.  Since 2013 they have shifted their purchase strategy, reducing middlemen and purchasing directly from individual coffee producers. This has allowed them to provide us with predictable high quality and traceable coffee while at the same time providing coffee producers with fairer prices in comparison to middlemen prices. Ninety percent of our coffee is bought directly from producers and producer organisations.\n\nStrategic alliances with NGOs like TechnoServe and Swiss Contact have been a key component in their work to improve coffee producers’ livelihoods through fairer prices. Technician staff are on the ground in all the strategic coffee regions providing producers with technical assistance, training on all sustainability objectives, coffee collection, finance recovery and certifications.\n\nCopan Region coffees predominate with a heavier and creamy body with fruity sweetness.\n\nCupping notes:  nice clean cup, citrus acidity, caramel notes, lemon tea and toasted nuts, well balanced.",
     image: "https://static.wixstatic.com/media/59d94e_0ff8bf522a9e4051ae30d1917c281497~mv2.png"
   },
   {
@@ -253,6 +267,7 @@ const COFFEES = [
     altitude: "1400-1500M",
     tastingNotes: "ery sweet, clean, sparkling acidity, brown sugar, honey, apple, long citrus finish.",
     description: "Elevation: 1400-1500M\n\nProcess:  fully washed and sun dried\nProcédé : entièrement lavé et séché au soleil\n\nVarietal:  Caturra, Catuai, Villa Sarchi",
+    mainText: "Blend of specifically selected lots from Naranjo and Alejuela in Costa Rica\nAssemblage de lots spécifiquement sélectionnés de Naranjo et d'Alejuela au Costa Rica\n\nCosta Rica: Alajuela, Naranjo, Grecia, Poas\nElevation: 1400-1500M\nProcess: Washed\nDried: sun dried \nVarietal:  Caturra, Catuai, Villa Sarchi\nSort: SHB EP Fancy\n\nNotes:  Very sweet, clean, sparkling acidity, brown sugar, honey, apple, long citrus finish.\nNotes : Très sucré, net, acidité pétillante, sucre brun, miel, pomme, longue finale d'agrumes.",
     image: "https://static.wixstatic.com/media/59d94e_65e9e2b4a512453c9ad0a4404485bba0~mv2.png",
     favourite: true,
     onSale: true
@@ -272,6 +287,7 @@ const COFFEES = [
     altitude: "1800-2100M",
     tastingNotes: "super sweet, floral, pear, a beautiful bright acidity, long finish, excellent flavour layers.",
     description: "Elevation: 1800-2100M\n\nProcess: Washed & sun dried on raised beds for 16 days\n\nVarietal: Caturra, Castillo, Colombia",
+    mainText: "Colombia Buesaco - Narino\nElevation: 1800-2200M\nVarietal: Caturra, Castillo, Colombia\nFermented: 40-70 hrs\nProcess: Washed & sun dried for 25-30 days\nBag size: 70kg (154 lbs)\n\nThe harvesting is done by hand and a little later as normal so that the coffee cherries can reach a greater degree of maturity. After the coffee cherries are left to soak, they go through the traditional pulping process.\nFermentation lasts 40 to 70 hours and is carried out in small batches in order to avoid an increase in temperature. Once washed, the cherries are dried in the sun for 25 to 30 days.\n\nOutstanding aroma, super sweet, floral, pear, a beautiful bright acidity, long finish, excellent flavour layers.\n\n​",
     image: "https://static.wixstatic.com/media/59d94e_cfdbfefbce2c406687651ff9a385c1c7~mv2.png",
     favourite: true
   },
@@ -290,6 +306,7 @@ const COFFEES = [
     altitude: "1400M+",
     tastingNotes: "bright acidity, good chocolate notes, pop of citrus with some red berry notes.",
     description: "Elevation: 1400M+\n\nProcess: Fully washed and sun dried on patio and mechanical dryers\n\nVarietal: Caturra, Bourbon",
+    mainText: "Huehuetenango coffee is grown in the highland regions of northern Guatemala, producing perhaps the most distinguished  and  popular Guatemalan coffee.  Famous for its bright acidity and big cup flavour.\n\nHuehuetenango is a city and a municipality in the highlands of northern Guatemala. It is also the capital of the department of Huehuetenango. The city is situated 269 kilometres from Guatemala City, and is the last departmental capital on the Pan-American Highway before the Mexican border at La Mesilla. \n\nElevation: 1400M+\nProcess: Fully washed and sun dried on patio and mechanical dryers\nVarietal: Caturra, Bourbon \n                                                   \nThis is a very good value coffee that can be presented on it's own or used as a good base for a blend. A nice clean sweet cup, bright acidity, good chocolate notes, pop of citrus with some red berry notes.",
     image: "https://static.wixstatic.com/media/59d94e_c4b915f730274c3a8ae1a75c03579eb1~mv2.jpg"
   },
   {
@@ -307,6 +324,7 @@ const COFFEES = [
     altitude: "1500 - 1800M",
     tastingNotes: "",
     description: "Elevation: 1500 - 1800M\n\nProcess: Swiss Water Decaf\n\nVarietal: Typica, Bourbon, Caturra, Catimor",
+    mainText: "Elevation: 1500 - 1800M\n\nProcess: Swiss Water Decaf\n\nVarietal: Typica, Bourbon, Caturra, Catimor",
     image: "https://static.wixstatic.com/media/59d94e_71338118305345e78b3f1e879559713b~mv2.jpeg"
   },
   {
@@ -324,6 +342,7 @@ const COFFEES = [
     altitude: "1200M",
     tastingNotes: "",
     description: "Chiapas region, elevation: 1200M , washed, clean cup, bold acidity, balance cup chocolate, dark stone fruit and citrus finish",
+    mainText: "This is a very good quality base for many blends give you an economical edge and flavour base the won't conflict with other blend elements.",
     image: "https://static.wixstatic.com/media/59d94e_e31afddb0d7a4cfcb0bc02335cb71c04~mv2.png",
     onSale: true,
     soldOut: true
@@ -343,6 +362,7 @@ const COFFEES = [
     altitude: "1400M",
     tastingNotes: "winey acidity, cocao, with a citrus finish, very clean cup.",
     description: "Elevation: 1400M\n\nProcess: Fully washed, sun dried on patio, mechanical dryer & electronic eye sorting\n\nVarietal: Caturra, Catuai, Catimor, Bourbon",
+    mainText: "Nicaragua Jinotega FT ORGANIC\nSHG 1400M\nVarietals: Caturra, Catuai, Catimor, Bourbon\nFully washed, sun dried on patio & electronic eye sorting\n \nIf you aren't familiar with Nicaraguan coffee, they offer a clean cup, softer acidity over Costas and Guats & makes a great addition to your espresso. Priced well making it a great value coffee.\n\nYou'll find in the cup, winey acidity, cocao, with a citrus finish, very clean cup. \n\nValue priced Organic, please inquire.",
     image: "https://static.wixstatic.com/media/59d94e_ff0f0d2e2d0d4f3aafe1b8fa1146fccf~mv2.png",
     soldOut: true
   },
@@ -361,6 +381,7 @@ const COFFEES = [
     altitude: "1500M",
     tastingNotes: "Very sweet, red wine like acidity, juicy body, intense red berry notes, tropical fruit, chocolate, long lingering finish",
     description: "Elevation: 1500M\n\nProcess:  Natural \n\nVarietal: H1",
+    mainText: "COSTA RICA West Valley V&G Estate \nCosta Rica, Alajuela, Naranjo, San Juanillo\nElevation: 1500M\nProcess: Natural  \nDried: sun dried on raised beds at Patalillo\nVarietals: H1 \nFarm Name: Finca V&G San Juanillo\n\nOwner: Tomas Gutierrez and Allan Vargas\n\nFarm Manager: Guillermo López\n\nBag size: 66 lb boxes\n\n\nFinca V&G (Vargas and Gutierrez) San Juanillo is the brainchild of an agronomist (Tomas Gutierrez) and an industrial engineer (Allan Vargas), who shared a vision for this 4 hectare farm in San Juanillo, Naranjo when they bought it in 2007. \n\nThe initial focus has been on experimentation with hybrid varieties that have been developed by CiCafe (coffee research institute of Costa Rica).  These hybrids look to take the best qualities from different varieties; improving cup quality, yield, and resistance to disease.  \n\nWe have two honey lots for the 2023 crop year: white and red honey and two naturals.  They are available in 66 lb boxes with vacuum sealed bags.\n\nNatural notes:  Very sweet, red wine like acidity, juicy body, intense red berry notes, tropical fruit, chocolate, long lingering finish\n\nWe are so happy to have these excellent examples of new hybrids and careful processing back from the team at Finca V&G, in beautiful San Juanillo.",
     image: "https://static.wixstatic.com/media/59d94e_65e9e2b4a512453c9ad0a4404485bba0~mv2.png",
     favourite: true,
     soldOut: true,
@@ -381,6 +402,7 @@ const COFFEES = [
     altitude: "1900 - 2100M",
     tastingNotes: "big berry cup with strawberry jam and lemon like candy. delightfully clean cup with a juicy body.",
     description: "Elevation: 1900 - 2100M\n\nProcess: Natural \n\nVarietal: Different Heirloom Types",
+    mainText: "Ethiopia Guji Shakiso - Kayon Mountain Estate\n1900 - 2100M\nProcess:  Natural & Washed\nVarietal:  Different Heirloom Types\nDry & wet processed on raised beds & special hand sorting\n \nThe Kayon Mountain Coffee Farm was established in 2012 with the aim of producing top quality coffee in a socially and environmentally responsible manner. The farm is situated in the southern part of Ethiopia in the Oromia region, Guji Zone which is about 320 miles from the capital city, Addis Ababa. The farm is privately owned by Ato Esmael and his family.\n\nNatural Gr3: It's big berry cup with strawberry jam and lemon like candy. delightfully clean cup with a juicy body.   86 points",
     image: "https://static.wixstatic.com/media/59d94e_515f78a388f044ca9a1a8c01fb2717eb~mv2.png",
     favourite: true,
     soldOut: true,
@@ -401,6 +423,7 @@ const COFFEES = [
     altitude: "1700-2000M",
     tastingNotes: "Very sweet, big chocolate notes, honey, mandarin orange and nougat.",
     description: "Elevation: 1700-2000M \n\nProcess: Fully washed, sun dried on patio \n\nVarietal: Bourbon, Caturra, Catuai \n\nSHB EP (mill error this season, not in GP)",
+    mainText: "Organic Guatemala                                 ORGANIC\nSan Antonio, Lake Atitlan\n1700-2000M\nFully washed, sun dried on patio \nVarietals: Bourbon, Caturra, Catuai\n\nSHB EP (mill error this season, not in GP)\n(Erreur de moulin cette saison, pas en GP)\n \nNumber of Producers: 67 \n\nOrganic coffee cultivation area: 164.89 hectares. \n\nType of coffee: Strictly Hard Bean.\n\nRegion: Central Highlands of Guatemala. Hard mountainous: Sierra Madre mountain range with the San Pedro and Toliman volcanoes.\nRégion : Hauts plateaux centraux du Guatemala. Relief montagneux escarpé : Cordillère de la Sierra Madre avec les volcans San Pedro et Tolimán.\n\nThe COOP has been able to invest in a school, medical and dental care for its members.\nLa coopérative a pu investir dans une école et des soins médicaux et dentaires pour ses membres.\n\nThe better sort  implemented provides an extra clean cup with more pronounced flavours and longer shelf life.\nLe tri amélioré mis en œuvre permet d'obtenir une tasse plus propre, aux saveurs plus prononcées et à la durée de conservation plus longue.\n\nCupping notes: Very sweet, big chocolate notes, honey, mandarin orange and nougat.\nNotes de dégustation : Très sucré, avec de fortes notes de chocolat, de miel, de mandarine et de nougat.",
     image: "https://static.wixstatic.com/media/59d94e_c4b915f730274c3a8ae1a75c03579eb1~mv2.jpg",
     favourite: true,
     onSale: true
@@ -420,6 +443,7 @@ const COFFEES = [
     altitude: "1500 - 1800M",
     tastingNotes: "big flavour layers, floral, sweet, winey, dark chocolate, stone fruit, dulce de letche finish and juicy body.",
     description: "Elevation: 1500 - 1800M\n\nProcess: Fully washed, sun dried on patio\n\nVarietal: Typica, Bourbon, Caturra, Catimor & Geisha",
+    mainText: "ROOT 86 Favourite!!\n\nThe El Gran Mirador COOP Women's producer coffee story - M'Coffee\n\nRegion: Distrito de Chirinos, Provincia San Ignacio, Cajamarca.\nProducers: small women holders.\nFarms size: 2-5 hectares\nProcess: fully washed \nGrade: grade 1 - special ROOT 86 sorting\nAltitude: 1,500- 1,800 masl\nVarieties: caturra, catuai, typica, bourbon & geisha\nHarvest: May- November\nCertifications: Organic, Rainforest Alliance,\nFairtrade (certification in process).\n\nM’Coffee emerged in 2020, with the idea of creating a brand of coffee that supports Women producers and creates a sustainable income for their families.\n\nThey fought against gender inequality that reduces their access to education, health, property, and to obtain the same opportunities as men to develop and enhance their physical, economic and decision-making autonomy.\nThe mission is to Empower women in the Coffee Community so that they achieve a meaningful and sustainable life.\nThe 56 women have 43 plots certified with organic seals and Rainforest producing an estimated volume of 1,950 quintals of coffee certified parchment. In this way they are achieving the dignity of their work in the field.\nWomen provide more inclusive, more community-based leadership that seeks to share knowledge and where there is an inclusive competition in which everyone can win.\nThe production process is carried out by women coffee growers from the areas of Chirinos, San Ignacio and San José de Lourdes with plots that are located one altitude of 1700 meters above sea level, they conduct all activities from planting until commercialization, allowing them to receive financial compensation for their work, in addition to participating in the development of the organization.\nThrough this initiative they have gained recognition, spaces in decision-making and a better quality of life for their families.\nM'Coffee is an aromatic mountain coffee, carefully cultivated under the shade of trees in the towns of Chirinos, San Ignacio and San José de Lourdes, thus guaranteeing to be free of chemical fertilizers throughout its crop. They are producing specialty grade coffee aimed at the most demanding palates. \n\nWith this lot's special sorting and care in preparation it has made the cup very clean and consistent with big flavour layers, floral, sweet, winey, dark chocolate, stone fruit, dulce de letche finish and juicy body.",
     image: "https://static.wixstatic.com/media/59d94e_9c9b87a2e4df4e0a948330db23cdc479~mv2.png",
     favourite: true,
     onSale: true
@@ -439,6 +463,7 @@ const COFFEES = [
     altitude: "900-1100M",
     tastingNotes: "Cocoa and Nut.",
     description: "Elevation: 900-1100M\n\nProcess: Swiss Water Process\n\nRegion: Mogiana Region\n\nVarietal: Red Catuai, Yellow Bourbon & Catucai, Obata",
+    mainText: "SWP Brazil Decaf                              \n                                       Elevation: 900-1100M\nProcess: Swiss Water Process\nRegion: Mogiana Region\nVarietal: Red Catuai, Yellow Bourbon & Catucai, Obata  \n                                                        Cupping notes: Cocoa and Nut.",
     image: "https://static.wixstatic.com/media/59d94e_71338118305345e78b3f1e879559713b~mv2.jpeg"
   },
   {
@@ -456,6 +481,7 @@ const COFFEES = [
     altitude: "1500M",
     tastingNotes: "Balanced, mega juicy body, malic acidity, sweet orange, strawberry, lemon, tropical fruit finish.",
     description: "Elevation: 1500M\n\nProcess: natural \n\nVarietal:  Catigua MG2 (new hybrid) a manual cross of Yellow Catuai IAC 86 and Timor Hybrid",
+    mainText: "COSTA RICA West Valley V&G Estate \nCosta Rica, Alajuela, Naranjo, San Juanillo\nElevation: 1500M\nProcess:  Natural\nDried: sun dried on raised beds at Patalillo\nVarietals: Catigua MG2 (new hybrid)\nFarm Name: Finca V&G San Juanillo\n\nOwner: Tomas Gutierrez and Allan Vargas\n\nFarm Manager: Guillermo López\n\nBag size: 66 lb boxes\n\nFinca V&G (Vargas and Gutierrez) San Juanillo is the brainchild of an agronomist (Tomas Gutierrez) and an industrial engineer (Allan Vargas), who shared a vision for this 4 hectare farm in San Juanillo, Naranjo when they bought it in 2007. \n\nThe initial focus has been on experimentation with hybrid varieties that have been developed by CiCafe (coffee research institute of Costa Rica).  These hybrids look to take the best qualities from different varieties; improving cup quality, yield, and resistance to disease.  \n\nThey are available in 66 lb boxes with vacuum sealed bags.\n\nNatural:  Balanced, mega juicy body, malic acidity, sweet orange, strawberry, lemon, tropical fruit finish.\n\nWe are so happy to have these excellent examples of new hybrids and careful processing back from the team at Finca V&G, in beautiful San Juanillo.",
     image: "https://static.wixstatic.com/media/59d94e_65e9e2b4a512453c9ad0a4404485bba0~mv2.png",
     favourite: true,
     soldOut: true,
@@ -476,6 +502,7 @@ const COFFEES = [
     altitude: "1600M",
     tastingNotes: "Exotic well balanced intense flavor with raspberry, strawberry, citrus/lemon  and nectarine notes",
     description: "Elevation: 1600M\n\nProcess: Fully Washed\n\nRegion: Simbu Province, Central Highlands.",
+    mainText: "Guinea Washed PSC Simbu micro-lot - small farmer                               \nRegion: Simbu Province, Central Highlands\nWashing Station: Kongo\nFarm: Small Holder 'garden' farms\nElevation: 1600masl\nCultivar: Typica\nProcess: Fully washed\n\nAroma: Sweet brown sugar, honey and maple syrup aroma with rose jasmine and dark chocolate notes\n\nTasting: Exotic well balanced intense flavor with raspberry, strawberry, citrus/lemon  and nectarine notes\n                                        \nCoffee was first introduced to Simbu in the early 1950's, it has been the most important crop to the local Simbuans. Each small holder farmer owns aprx. 1 - 2 hectares of coffee 'garden' which they grow small amounts of  coffee which they monitor carefully to create top grade coffee. PSC stands for Premium Smallholder Coffee, and this lot was graded as a A, or top lot.",
     image: "https://static.wixstatic.com/media/59d94e_366314a7ae4c4c349af64800e76b3ad9~mv2.png"
   },
   {
@@ -493,6 +520,7 @@ const COFFEES = [
     altitude: "1500M",
     tastingNotes: "Balanced, jammy body, cherry, lemon, juicy, light floral, chocolate, natural flavors, stone fruit.",
     description: "Elevation: 1500M\n\nProcess: natural \n\nVarietal:  Marsellesa (new hybrid)",
+    mainText: "COSTA RICA West Valley V&G Estate \nCosta Rica, Alajuela, Naranjo, San Juanillo\nElevation: 1500M\nProcess:  Natural (H17)\nDried: sun dried on raised beds at Patalillo\nVarietals: Marsellesa (new hybrid)\nFarm Name: Finca V&G San Juanillo\n\nOwner: Tomas Gutierrez and Allan Vargas\n\nFarm Manager: Guillermo López\n\nBag size: 66 lb boxes\n\nFinca V&G (Vargas and Gutierrez) San Juanillo is the brainchild of an agronomist (Tomas Gutierrez) and an industrial engineer (Allan Vargas), who shared a vision for this 4 hectare farm in San Juanillo, Naranjo when they bought it in 2007. \n\nThe initial focus has been on experimentation with hybrid varieties that have been developed by CiCafe (coffee research institute of Costa Rica).  These hybrids look to take the best qualities from different varieties; improving cup quality, yield, and resistance to disease.  \n\nThey are available in 66 lb boxes with vacuum sealed bags.\n\nNatural:  Balanced, jammy body, cherry, lemon, juicy, light floral, chocolate, natural flavors, stone fruit.\n\nWe are so happy to have these excellent examples of new hybrids and careful processing back from the team at Finca V&G, in beautiful San Juanillo.",
     image: "https://static.wixstatic.com/media/59d94e_65e9e2b4a512453c9ad0a4404485bba0~mv2.png",
     favourite: true,
     soldOut: true,
@@ -513,6 +541,7 @@ const COFFEES = [
     altitude: "1300-1700M",
     tastingNotes: "Honey, tangerine, pear, dark chocolate, almond and lemon finish.",
     description: "Elevation: 1300-1700M\n\nProcess: Fully washed & sun dried on patios                           \n\nVarietal: Bourbon & Typica",
+    mainText: "Organic Mexico Chiapas Angel Diaz SHG - small farmer lot\n\nAngel Diaz area in the Siltepec municipality of Chiapas, Mexico has cherry collections of smallholder coffee producers growing coffee in the rich upper reaches of the mountains. It is grown by a cooperative of smallholder farmers, such as the \"Tierra Libertad\" group, and is often associated with larger organizations like GRAPOS (Grupo de Agricultores Positivos S.P.R.).  The GRAPOS organization was initially comprised of 90 producers, growing to 300 the following year, and expanded to the 2,708 producers involved today, 772 of which are females. \nLocated near the El Triunfo Biosphere Reserve, a UNESCO-protected area that contributes to unique microclimates ideal for coffee growing.\n\nThis small farmer group harvest only ripe cherry, depulping on either the same day or the day following. Sun dried for approximately 20 hours on patios\n\n1300-1700M\nVarietal: Bourbon & Typica\nProcess:  Fully washed & sun dried on patios\n\nNotes: Honey, tangerine, pear, dark chocolate, almond and lemon finish.",
     image: "https://static.wixstatic.com/media/59d94e_e31afddb0d7a4cfcb0bc02335cb71c04~mv2.png",
     favourite: true
   },
@@ -531,6 +560,7 @@ const COFFEES = [
     altitude: "1300M",
     tastingNotes: "Sweet brown sugar aroma, smooth juicy medium body, clean sweet aftertaste, exotic well balanced flavor and bright vibrant acidity with citrus, grapefruit, lemon, raspberry, pomegranate and blacktea notes.",
     description: "Elevation: 1300M\n\nProcess: Washed   \nDried on covered patios and hand sorted.\n\nVarietal: Bourbon, Kent\n\nCup notes: Sweet brown sugar aroma, smooth juicy medium body, clean sweet aftertaste, exotic well balanced flavor and bright vibrant acidity with citrus, grapefruit, lemon, raspberry, pomegranate and blacktea notes.",
+    mainText: "Elevation: 1300M\n\nProcess: Washed   \n\nDried on covered patios and hand sorted.\n\nVarietal: Bourbon, Kent\n\nThis estate uses irrigation that keeps the plants optimal for production and limiting stress due to the dry seasons.  This is very rare in many growing regions around the world.\n\nCup notes: bright vibrant acidity with citrus, grapefruit, lemon, raspberry, pomegranate and blacktea notes.",
     image: "https://static.wixstatic.com/media/59d94e_4890a363b84c4319867e0e9f91c4295e~mv2.png"
   },
   {
@@ -548,6 +578,7 @@ const COFFEES = [
     altitude: "1100-1300M",
     tastingNotes: "chocolate, caramel, apple & citrus in a very clean, sweet cup.",
     description: "Elevation: 1100-1300M\n\nProcess: Natural\n\nVarietal: Yellow Bourbon, Catuai & Catucai",
+    mainText: "Brazil Pocos de Caldas, Sul de Minas Gerais\nMicro-region for specialty production\nnatural -  1100-1300M\nVarietals:  Yellow Bourbon, Catuai & Catucai\nScreen: 15+\n​\nThis is a higher elevation Brazil with excellent flavour notes.  These farms use a variety of equipment for processing from simple machinery to very modern methods of harvesting, sorting and pulping. The farms all implement African drying beds, green houses and mechanical dryers for consistency and proper drying.\n\nCupping results of  chocolate, caramel, apple & citrus in a very clean, sweet cup.",
     image: "https://static.wixstatic.com/media/61a162_60e0821594b547cabdc7bf88bc0a0450~mv2.png",
     favourite: true
   },
@@ -566,6 +597,7 @@ const COFFEES = [
     altitude: "1500M",
     tastingNotes: "Nice bright acidity, sweet, honey crisp apple, brown sugar, nice lingering aftertaste.",
     description: "Elevation: 1500M   \n\nProcess: Washed\n\nVarietal: Caturra & Catuai",
+    mainText: "Costa Rica Tarrazu SHB - 1500M       \nVarietals: Caturra & Catuai                       \nProcess: Washed\nDrying: Patio & Mechanical\n \nA classic Costa Rican Tarrazu. This coffee is known for it's super clean cup, due to the strict policy of only picking ripe cherries.  This attention to detail is what sets Costa Rica coffee apart from many Central America coffee growing countries and keeps quakers to a minimum.  This coffee is patio dried initially then finished in mechanical dryers for the perfect moisture content.\n\nThis lot is a collection from small farmers South of San Jose in the Tarrazu defined region.\n\nNice bright acidity, sweet, honey crisp apple, brown sugar, nice lingering aftertaste.",
     image: "https://static.wixstatic.com/media/59d94e_65e9e2b4a512453c9ad0a4404485bba0~mv2.png"
   },
   {
@@ -583,6 +615,7 @@ const COFFEES = [
     altitude: "1100-1400M",
     tastingNotes: "chocolate, light citrus, toasted almond notes.  Limited decaf aftertaste.",
     description: "An excellent decaf produced by Descamex in Mexico, which does a great job preserving the coffee flavour we know from regular caffeinated coffees.",
+    mainText: "Water Process Organic Mexico Decaf (MWP)\n\nRegion: Tapachula Mexico\nhttps://maps.app.goo.gl/7wrYALu44g2Vzyut9\n \nAn excellent decaf produced by Descamex in Mexico, which does a great job preserving the coffee flavour we know from regular caffeinated coffees.\nNotes: Rich clean profile, chocolate, light citrus, toasted almond notes.  Limited decaf aftertaste.",
     image: "https://static.wixstatic.com/media/59d94e_e31afddb0d7a4cfcb0bc02335cb71c04~mv2.png",
     favourite: true,
     onSale: true
@@ -602,6 +635,7 @@ const COFFEES = [
     altitude: "900-1100M",
     tastingNotes: "Well balanced sweet, clean cup, chocolate, toasted hazelnut.",
     description: "Elevation: 900-1100M\n\nProcess: Full natural and dried on patios and mechanical driers\n\nRegion: Mogiana Region\n\nVarietal: Red Catuai, Yellow Bourbon & Catucai, Obata",
+    mainText: "Brazil Alta Mogiana natural SSFC - 900-1100M\nMogiana Region\nFull natural and dried on patios and mechanical driers\nVarietals: Red Catuai, Yellow Bourbon & Catucai, Obata\n​\nA higher quality versatile Brazil for espresso and blend bases.  Consistent clean cup.\n\nWell balanced sweet, clean cup, chocolate, toasted hazelnut.",
     image: "https://static.wixstatic.com/media/61a162_60e0821594b547cabdc7bf88bc0a0450~mv2.png"
   },
   {
@@ -619,6 +653,7 @@ const COFFEES = [
     altitude: "1150-1500M",
     tastingNotes: "Cedar, apple, tropical fruits, herbal, fresh spices, brown sugar, bittersweet chocolate",
     description: "Elevation: 1150-1500M\n\nProcess: Wet hulled & hand sorted \n\nRegion: Gayo Highland, Sumatra Aceh\n\nVarietal: Catimor, Typica, Tim-Tim",
+    mainText: "Organic Indonesia Sumatra Women's COOP \n                                         \nStory:     Kopepi (meaning \"cooperative of coffee traders\") Ketiara is a women-led cooperative in Sumatra Aceh Gayo with over 25 years of experience in coffee. Their core value is to support women and younger generations of coffee farmers.\n\nKetiara's coffee is grown in the forested mountains surrounding Leuser National Park, using shade-grown practices to protect the local ecosystem.                    \n                                            \n They export an average of 22,680 bags of Sumatra Aceh Gayo Highland specialty coffee each year that is 100% traceable.                                    https://ketiara.com/     \n                                    \nCupping notes: \nCedar, apple, tropical fruits, herbal, fresh spices, brown sugar, bittersweet chocolate",
     image: "https://static.wixstatic.com/media/59d94e_1a1070fd3948453f9171d1c05f1ae522~mv2.png",
     soldOut: true
   },
@@ -637,6 +672,7 @@ const COFFEES = [
     altitude: "1400 - 1500M",
     tastingNotes: "sweet, clean, winey, blackberry, chocolate, buttery cookie.",
     description: "Elevation: 1400 - 1500M\n\nProcess: Fully Washed, sun dried patios and mechanical dryers\n\nVarietal: Catuai, Typica & Bourbon",
+    mainText: "Organic Honduras Lempira SHG\nTierra Lenca  Women's COOP                  ORGANIC \n1400 - 1500M\nFully Washed, sun dried on raised beds & patios\nVarietals:  Catuai, Typica & Bourbon\n\nThe Lenca are the largest indigenous group in Honduras, there are an estimated 100,000 Lenca in the country, with their activity primarily focused on the cultivation of agricultural crops.  ROOT 86 is working with the COOP to assist in milling procedures at their new processing mill to increase quality and shelf life of the green coffee.\n\nCupping notes:  sweet, clean, winey, blackberry, chocolate, buttery cookie.\n\nThink of using this as a base for your Organic espresso to provide an intense sweetness without the acidity and the higher price of other Centrals.",
     image: "https://static.wixstatic.com/media/59d94e_0ff8bf522a9e4051ae30d1917c281497~mv2.png",
     soldOut: true
   },
@@ -655,6 +691,7 @@ const COFFEES = [
     altitude: "1900-2100M",
     tastingNotes: "honey suckle aroma, super sweet, juicy jammy body, big red berry notes of raspberry/blueberry, bergamot tea, meyer lemon finish.",
     description: "Elevation: 1900-2100M\n\nProcess: Natural process, sun dried on raised beds &  hand sorted\n\nVarietal: Heirloom Yirgacheffe type",
+    mainText: "Ethiopia Gedeo Yirgacheffe  G2 - Natural \nWashing Station: Koke\nElevation: 1900-2100M\nVarietal: Heirloom Yirgacheffe type\nNatural process, sun dried on raised beds & hand sorted\n\nWe love Yirgacheffe naturals for their clean sweet cup, well defined dark berry notes and excellent tea like aftertaste, especially when it is traceable to our favourite washing station, Koke.\n\nThis season cupping notes: honey suckle aroma, super sweet, juicy jammy body, big red berry notes of raspberry/blueberry, bergamot tea, meyer lemon finish.",
     image: "https://static.wixstatic.com/media/59d94e_515f78a388f044ca9a1a8c01fb2717eb~mv2.png",
     favourite: true
   },
@@ -673,6 +710,7 @@ const COFFEES = [
     altitude: "1650-1850M",
     tastingNotes: "sweet bright acidity, creamy body, with stone fruit, caramel and vanilla, cupping at 86 points",
     description: "Elevation: 1650-1850M\n\nProcess: Washed & sun dried on raised beds for 16 days\n\nVarietal: Castillo, Caturra, and Colombia",
+    mainText: "Colombia Huila, Sur de Huila\n\nElevation: 1650-1850M\nVarietal: Castillo, Caturra, and Colombia\nProcess: washed & sun dried under solar covers\nBag size: 70kg (154 lbs)\n \nThis Colombia micro-lot comes from a small group of 40 women farmers that pride themselves on producing the highest quality coffee from the region.  This group pools their coffees and resources to process the coffees and find reliable international buyers that want to help them build on the dedicated work today through Terra Coffee SAS.\n\nThis lots cups with a sweet bright acidity, creamy body, with stone fruit, caramel and vanilla, cupping at 86 points",
     image: "https://static.wixstatic.com/media/59d94e_cfdbfefbce2c406687651ff9a385c1c7~mv2.png",
     favourite: true
   },
@@ -691,6 +729,7 @@ const COFFEES = [
     altitude: "1300-1500M",
     tastingNotes: "velvety body, cacao, clean, pipe tobacco, light ginger and long finish.",
     description: "Elevation: 1300-1500M\n\nProcess: Wet hulled & hand sorted \n\nRegion: Gayo of Western Aceh\n\nVarietal: Bourbon, Typica, Caturra, Catimor",
+    mainText: "Indonesia Sumatra Mandehling G1  \n1300-1500M\nRegion: Gayo of Western Aceh\nWet hulled & hand sorted \nVarietals: Bourbon, Typica, Caturra, Catimor\n​\nSumatra Mandheling is an Arabica from the Indonesian archipelago that lends itself to a robustly full body and concentrated flavor. It is intensely rich, with slight earthy and herbal undertones.\n\nCupping with a velvety body, cacao, clean, pipe tobacco, light ginger and long finish.",
     image: "https://static.wixstatic.com/media/59d94e_1a1070fd3948453f9171d1c05f1ae522~mv2.png"
   },
   {
@@ -708,6 +747,7 @@ const COFFEES = [
     altitude: "1500-1700M",
     tastingNotes: "big body, low acidity with milk chocolate, cherry, pipe tobacco finishing with a spicy and citrus.",
     description: "Elevation: 1500-1700M\n\nProcess: Wet hulled & hand sorted\n\nVarietal: Typica, Tim Tim, Linie S 795 (aka: Djember)",
+    mainText: "Organic RFA Indonesia Flores - Blue Dragon \nNgada Region - 1500-1700M\nWet hulled & hand sorted\nVarietals: Typica, Tim Tim, Linie S 795 (aka: Djember)\n \nFlores is located in the Eastern Sunda Island archipelago in the province of Nusa Tengarra,\nIndonesia.  On the west coast of the island is one of the few places where giant Komodo Dragons can still be found in the wild.\n\nOn the upland plateau of the Ngada regency, nestled against the Mt. Inerie volcano, our “Blue Dragon” coffee is harvested and processed in the town of Bajawa and plays a very important part in the local economy.\n\n​\n\nThe Flores coffee is a beautiful wet hulled coffee which is sorted and processed with great care.\n\nIt is a much cleaner coffee than many of the Sumatras with a large bean size.  \n\nA big body, low acidity with milk chocolate, cherry, pipe tobacco finishing with a spicy and citrus.",
     image: "https://static.wixstatic.com/media/59d94e_1a1070fd3948453f9171d1c05f1ae522~mv2.png",
     favourite: true,
     soldOut: true,
@@ -728,6 +768,7 @@ const COFFEES = [
     altitude: "1100-1400M",
     tastingNotes: "Green Apple, Dark Chocolate, Citrus, Almond - highly recommended coffee",
     description: "Elevation: 1100-1400M\n\nProcess: Fully washed & sun dried on patios and mechanical dryers.                           \n\nVarietal: Typica, Bourbon, Marsella, Costa Rica 95",
+    mainText: "Organic Mexico Oaxaca SHG - small farmer lot\n\nThis small farmer group harvest only ripe cherry, depulping on either the same day or the day following. Manual depulping is the most common method, with fermentation for 10-16 hours, dried for approximately 20 hours on patios.\nThe farmers in this region, working with our COOP group are consistently placing in the top groups in the Cup of Excellence competition for Mexico.\n\n1100-1400M\nVarietal: Typica, Costa Rica 95, Marsellsa, Bourbon\nProcess:  Fully washed & sun dried on patios and mechanical dryers\nNotes: Green Apple, Dark Chocolate, Citrus, Almond - highly recommended coffee",
     image: "https://static.wixstatic.com/media/59d94e_e31afddb0d7a4cfcb0bc02335cb71c04~mv2.png",
     favourite: true
   },
@@ -746,6 +787,7 @@ const COFFEES = [
     altitude: "1400-1600M",
     tastingNotes: "Sweet honey aroma, well balanced exotic flavor, clean sweet fruity lingering aftertaste and smooth juicy medium body with bright vibrant acidity, blackberry, nectarine, plum and chocolate notes.",
     description: "Elevation: 1400-1600M\n\nProcess: Washed & Sun dried on patio and mechanical dryers\n\nVarietal: Typica, Castillo & Caturra",
+    mainText: "Colombia  Excelso \nGenova Quindio\nElevation: 1400-1600M\nVarietal: Typica, Castillo & Caturra\nProcess: Washed & dried on patio and mechanical dryers\nBag Size: 70kg Bags\n​\nGénova is a municipality in the southern part of the department of Quindío, Colombia. It's located 52 km south of the departmental capital Armenia.\n\nLocated within the Colombian coffee growing axis, the municipality was made part of the \"Coffee Cultural Landscape\" UNESCO World Heritage Site in 2011.  \n\nA good delivery. Sweet honey aroma, well balanced exotic flavor, clean sweet fruity lingering aftertaste and smooth juicy medium body with bright vibrant acidity, blackberry, nectarine, plum and chocolate notes.",
     image: "https://static.wixstatic.com/media/59d94e_cfdbfefbce2c406687651ff9a385c1c7~mv2.png",
     soldOut: true
   },
@@ -764,6 +806,7 @@ const COFFEES = [
     altitude: "1400-1700M+",
     tastingNotes: "delicate floral notes, pronounced acidity, and a robust body, this lot is sweet, bright, dark chocolate, nectarine, big citrus finish, it's a big mug coffee.",
     description: "Elevation: 1400-1700M+\n\nProcess: Fully washed and sun dried on patio and mechanical dryers\n\nVarietal: Caturra, Bourbon, Typica, Geisha",
+    mainText: "Guatemala San Marcos Finca Nueva Grande coffee:\nNueva Granada is located in the department of San Marcos in northwestern Guatemala, on the Pacific Ocean along the western Guatemala-Mexico border. The climate is very variable within the department due to the dramatic differences in altitude. Nueva Granada is a 675 hectare coffee farm in San Marcos owned by Dieter Nottebohm, nestled by the two tallest volcanos in Guatemala - Tajumulco and Tacana. \n\nClimate: the region experiences a warm, humid climate influenced by the Pacific Ocean, with high annual rainfall and earlier seasonal rains, leading to early flowering.\nElevation: coffee plants are grown at elevations between 1,300 to 1,800 meters, contributing to the unique acidity.\n\nSoil: The rich volcanic soil provides nutrients and contributes to the coffee's flavor profile.\nProcessing: Due to the unpredictable rainfall during harvest, many farms utilize both sun-drying and mechanical drying techniques.\n\nVarietals: Common Arabica varietals include Bourbon, Caturra, and Typica. \n\nTaste Profile: San Marcos coffee often showcases delicate floral notes, pronounced acidity, and a robust body, this lot is sweet, bright, dark chocolate, nectarine, big citrus finish, it's a big mug coffee.",
     image: "https://static.wixstatic.com/media/59d94e_c4b915f730274c3a8ae1a75c03579eb1~mv2.jpg",
     soldOut: true,
     hidden: true
@@ -783,6 +826,7 @@ const COFFEES = [
     altitude: "1700-2200M",
     tastingNotes: "Sweet and clean classic Yirgacheffe flavours of jasmine, camomile, citrus, black tea-like, with notes of honey or preserve stone fruit.",
     description: "Elevation: 1700-2200M\n\nProcess: Washed, sun dried on raised beds &  hand sorted             \n                                      \nRegion: Gedeb, Gedeo\n\nVarietal: Heirloom Yirgacheffe type",
+    mainText: "Elevation: 1700-2200M\n\nProcess: washed process, sun dried on raised beds &  hand sorted             \n                                      \nRegion: Gedeb, Gedeo\n\nVarietal: Heirloom Yirgacheffe type        \n                                          \nEthiopia Gedeo Yirgacheffe Gershi \n                                             \nAfter sending this coffee through the washing station, this coffee is typically sun-dried on raised beds for 12-15 days, with strict sorting and, in some cases, covering during peak sun to ensure high-quality, clean, and consistent drying. \n                                         \nCupping Notes:  Sweet and clean classic Yirgacheffe flavours of jasmine, camomile, citrus, black tea-like, with notes of honey or preserve stone fruit.",
     image: "https://static.wixstatic.com/media/59d94e_515f78a388f044ca9a1a8c01fb2717eb~mv2.png"
   },
   {
@@ -800,6 +844,7 @@ const COFFEES = [
     altitude: "1100-1400M",
     tastingNotes: "big aroma, sweet, jammy, malic acidity, blackberry, yellow plum, Cabernet finish.",
     description: "Elevation: 1100-1400M\n\nProcess: Natural \n\nVarietal:  Marsellesa (Sarchimor)",
+    mainText: "This Costa Rica Natural is from Hacienda San Ignacio (farm) and Marsellesa is the varietal.\n\nOrigin: Palmichal, Acosta, Costa Rica\n\nAltitude: 1100 - 1400 masl\n\nVariety: Marsellesa - a cross between Timor Hybrid 832/2 and Villa Sarchi CIFC 971/10. Pedigree selection made by ECOM-CIRAD in Nicaragua specifically for its rust resistance traits.\n\nProcess: Natural\n\nHacienda San Ignacio was founded in 2009, in that time the farm had traditional varieties such as; caturra and catuai, facing challenges like many other farms of the region, the main objective was and has become achieve good production in a sustainable way that ensure have a coffee farm prepared for the future, using new varieties and hybrids and investment on research and technology. Hacienda San Ignacio strive towards guaranteeing the sustainability of coffee farms through time, having good production and a management system that allows all to be prepared for climate change and diseases that could strike our crops with new hybrids coffee as H1, H15 and H3.\n\nCup Notes: big aroma, sweet, jammy, malic acidity, blackberry, yellow plum, Cabernet finish.",
     image: "https://static.wixstatic.com/media/59d94e_65e9e2b4a512453c9ad0a4404485bba0~mv2.png",
     favourite: true
   },
@@ -818,6 +863,7 @@ const COFFEES = [
     altitude: "1500-1700M",
     tastingNotes: "Nice sweet clean up, notes of cherry, cinnamon, marzipan, melon, milk chocolate, roasted almond, stone fruit.",
     description: "Elevation: 1500-1700M\n\nProcess: Washed & Sun dried on patio and mechanical dryers\n\nVarietal: Typica, Castillo & Caturra",
+    mainText: "Colombia  Excelso \nCundinamarca \nElevation: 1500-1700M\nVarietal: Typica, Castillo & Caturra\nProcess: Washed & dried on patio and mechanical dryers\nBag Size: 70kg Bags\n​\nThis Colombia from the central mountain range around Bogota and is super clean and an excellent value price coffee that can fit many roaster needs.  The most important element to this coffee is it is fresh, clean and very versatile for different roast levels.\n\nNice sweet clean up, notes of cherry, cinnamon, marzipan, melon, milk chocolate, roasted almond, stone fruit.",
     image: "https://static.wixstatic.com/media/59d94e_cfdbfefbce2c406687651ff9a385c1c7~mv2.png",
     favourite: true,
     onSale: true
@@ -837,6 +883,7 @@ const COFFEES = [
     altitude: "1400-1600M",
     tastingNotes: "Sweet brown sugar honey aroma, well balanced flavor, clean sweet lingering rich aftertaste and smooth medium body with bright crisp acidity, citrus, grapefruit, orange, nectarine and dark chocolate notes",
     description: "Elevation: 1400-1600M\n\nProcess: Washed & Sun dried on patio and mechanical dryers\n\nVarietal: Typica, Castillo & Caturra",
+    mainText: "Colombia  Excelso \nAntioquia, Medillin\nElevation: 1400-1600M\nVarietal: Typica, Castillo & Caturra\nProcess: Washed & dried on patio and mechanical dryers\nBag Size: 70kg Bags\n​\nThis coffee is harvested NorthWest of Bogota in the Northern region of Colombia know for its very fertile soils and ideal growing conditions.\n\nSweet brown sugar honey aroma, well balanced flavor, clean sweet lingering rich aftertaste and smooth medium body with bright crisp acidity, citrus, grapefruit, orange, nectarine and dark chocolate notes",
     image: "https://static.wixstatic.com/media/59d94e_cfdbfefbce2c406687651ff9a385c1c7~mv2.png",
     soldOut: true,
     hidden: true
@@ -856,6 +903,7 @@ const COFFEES = [
     altitude: "1800-2000M",
     tastingNotes: "very fragrant, sweet, clean cup, juicy body, strawberry, black tea finish.",
     description: "Elevation: 1800-2000M\n\nProcess: Natural (Dry) Process & sun dried on raised beds & hand sorted\n\nVarietal: Sidama Heirloom, 74112, 74110 JARC varieties\n\nNotes:  very fragrant, sweet, clean cup, juicy body, strawberry, black tea finish.",
+    mainText: "Ethiopia Natural Process Community Coffee from Sidama Bombe\n\nhttps://maps.app.goo.gl/rybkbo7Er2kxq1mJ6\n\nElevation: 1800-2000M\n\nProcess: Natural (Dry) Process & sun dried on raised beds & hand sorted\n\nVarietal: Sidama Heirloom, 74112, 74110 JARC varieties\n\nNotes:  very fragrant, sweet, clean cup, juicy body, strawberry, black tea finish.",
     image: "https://static.wixstatic.com/media/59d94e_515f78a388f044ca9a1a8c01fb2717eb~mv2.png",
     favourite: true,
     soldOut: true
@@ -875,6 +923,7 @@ const COFFEES = [
     altitude: "1800 - 2000M",
     tastingNotes: "A very sweet cup, brown sugar aroma, big chocolate presence, black tea, fig and butter cookie.",
     description: "Elevation: 1800 - 2000M \n\nProcess: Fully Washed   \n\nVarietal: 100% Bourbon \n\n100% Women's COOP from Nyampinga",
+    mainText: "Rwanda 100% Women's COOP from Nyampinga Washing Station \nWOMEN PRODUCER COFFEE\n\n1800 - 2000M \nFully Washed                                           ORGANIC\nVarietals: 100% Bourbon\n   \nNyampinga farmers hand-pick ripe cherries on the volcanic slopes of Rwanda’s mountainous Gakenke district. The area’s distinct micro-climate, high elevation and rich volcanic soils contribute to producing coffee with balanced sweet, floral, and fruit-forward notes in the cup. \n\nIn the cup:  A very sweet cup, brown sugar aroma, big chocolate presence, black tea, fig and butter cookie.\n\nPerfect as a cold brew feature this Spring and Summer.",
     image: "https://static.wixstatic.com/media/59d94e_9953cfe2e6de4817879f7a5390deca04~mv2.jpg",
     favourite: true,
     soldOut: true
@@ -894,6 +943,7 @@ const COFFEES = [
     altitude: "1500-1800M",
     tastingNotes: "Nice floral aroma, toffee, buttery, stone fruit, winey acidity, juicy body, excellent sweetness.",
     description: "Elevation: 1500-1800M\n\nProcess: Washed, sun dried on raised beds & patios\nExtra sorting for improved cup quality and flavour clarity\n\nVarietal: Primarily Colombia, Typica & Caturra",
+    mainText: "Organic, Womens Co-op Colombia Tolima\nDedicated high-elevation lot 1500-1800M\nWashed, sun dried on raised beds & patios\nVarietals: Primarily Colombia Typica & Caturra\n​\nThis is an exciting Organic coffee from a Cooperative of small women producers in the mountains of a small municipality in the Tolima region of Colombia.  \n\nThis lot is a dedicated high elevation lot that only includes farms from 1500M or higher. Tolima is located in the SouthWest of Colombia bordering the famous Huila region.  \n\nThis lot cups at 86 points and showcases: Nice floral aroma, toffee, buttery, stone fruit, winey acidity, juicy body, excellent sweetness.",
     image: "https://static.wixstatic.com/media/59d94e_cfdbfefbce2c406687651ff9a385c1c7~mv2.png",
     favourite: true
   },
@@ -912,6 +962,7 @@ const COFFEES = [
     altitude: "1500M",
     tastingNotes: "Cherry, full body, juicy body, lemon tea finish, malt, milky caramel, stone fruit",
     description: "Elevation: 1500M\n\nProcess: White honey (H1) \n\nVarietal: H1 Centroamericano",
+    mainText: "COSTA RICA West Valley V&G Estate \nCosta Rica, Alajuela, Naranjo, San Juanillo\nElevation: 1500M\nProcess: White honey \nDried: sun dried on raised beds at Patalillo Mill\nVarietals: H1 Centroamericano\n\n\nFarm Name: Finca V&G San Juanillo\n\nOwner: Tomas Gutierrez and Allan Vargas\n\nFarm Manager: Guillermo López\n\nBag size: 66 lb boxes\n\n\nFinca V&G (Vargas and Gutierrez) San Juanillo is the brainchild of an agronomist (Tomas Gutierrez) and an industrial engineer (Allan Vargas), who shared a vision for this 4 hectare farm in San Juanillo, Naranjo when they bought it in 2007. \n\nThe initial focus has been on experimentation with hybrid varieties that have been developed by CiCafe (coffee research institute of Costa Rica).  These hybrids look to take the best qualities from different varieties; improving cup quality, yield, and resistance to disease.  \n\nWe love the honey lots from this special farm.  They are available in 66 lb boxes with vacuum sealed bags.\n\nWhite honey: Cherry, full body, juicy body, lemon tea finish, malt, milky caramel, stone fruit\n\n\nWe are so happy to have these excellent examples of new hybrids and careful processing back from the team at Finca V&G, in beautiful San Juanillo.",
     image: "https://static.wixstatic.com/media/59d94e_65e9e2b4a512453c9ad0a4404485bba0~mv2.png",
     favourite: true,
     soldOut: true,
