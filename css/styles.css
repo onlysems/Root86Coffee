@@ -140,6 +140,10 @@ nav.scrolled .nav-logo { color: var(--red); }
 .nav-link:hover { color: var(--white); }
 nav.scrolled .nav-link { color: rgba(26,0,5,0.55); }
 nav.scrolled .nav-link:hover { color: var(--red); }
+/* Mark the link for the page the user is currently on */
+.nav-link.current { color: var(--white); }
+.nav-link.current::after { width: 100%; background: var(--red); }
+nav.scrolled .nav-link.current { color: var(--red); }
 
 .nav-right { display: flex; align-items: center; gap: 12px; margin-left: auto; }
 .nav-cta {
