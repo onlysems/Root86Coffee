@@ -944,6 +944,13 @@
         <div class="topbar-brand">Subscribers</div>
         <div class="topbar-spacer"></div>
         <button class="topbar-btn" id="subs-refresh" title="Refresh subscriber list">&#8635; Refresh</button>
+        <select id="subs-email-scope" class="topbar-btn" title="Who to email" style="padding-right:24px">
+          <option value="all">Email: Everyone</option>
+          <option value="week">Email: This week</option>
+          <option value="month">Email: This month</option>
+          <option value="year">Email: This year</option>
+        </select>
+        <button class="topbar-btn primary" id="subs-email" title="Open your email client with subscribers in BCC" style="background:var(--red);color:#fff;border-color:var(--red)">&#9993; Compose Email</button>
         <button class="topbar-btn" id="subs-export" title="Download CSV">&#11015; Export CSV</button>
       </div>
       <div class="dash-wrap">
@@ -1246,6 +1253,8 @@ function bind(){
   if (subsRefresh) subsRefresh.addEventListener('click', loadSubscribers);
   const subsExport = document.getElementById('subs-export');
   if (subsExport) subsExport.addEventListener('click', exportSubscribersCsv);
+  const subsEmail = document.getElementById('subs-email');
+  if (subsEmail) subsEmail.addEventListener('click', emailSubscribers);
   const anSetkey = document.getElementById('an-setkey');
   if (anSetkey) anSetkey.addEventListener('click', () => {
     $('#an-content').style.display = 'none';
@@ -1859,6 +1868,48 @@ function renderSubscribers(){
     </tr>`;
   }).join('');
 }
+function emailSubscribers(){
+  if (!SUBSCRIBERS.length) { toast('No subscribers to email'); return; }
+  const scope = (document.getElementById('subs-email-scope') || {}).value || 'all';
+  const now = Date.now();
+  const weekAgo    = now - 7 * 86400000;
+  const d = new Date();
+  const monthStart = new Date(d.getFullYear(), d.getMonth(), 1).getTime();
+  const yearStart  = new Date(d.getFullYear(), 0, 1).getTime();
+  const cutoff = scope === 'week'  ? weekAgo
+              : scope === 'month' ? monthStart
+              : scope === 'year'  ? yearStart
+              : 0;
+  const recipients = SUBSCRIBERS
+    .filter(s => {
+      if (!s.email) return false;
+      if (!cutoff) return true;
+      const t = s.ts ? new Date(s.ts).getTime() : 0;
+      return t && !isNaN(t) && t >= cutoff;
+    })
+    .map(s => s.email);
+  if (!recipients.length) {
+    toast('No subscribers in that range', true);
+    return;
+  }
+  if (recipients.length > 80) {
+    if (!confirm(`You're about to BCC ${recipients.length} addresses. Most email clients (Gmail/Outlook) cap mailto: links around 80 addresses and will silently drop the rest. Recommended: Export CSV and import to Mailchimp instead. Continue anyway?`)) {
+      return;
+    }
+  }
+  const subject = encodeURIComponent('A note from Root 86 Coffee');
+  const body = encodeURIComponent(
+    'Hi there,\n\n' +
+    '[Write your message here]\n\n' +
+    '— Root 86 Coffee\n' +
+    'Reply to this email or call 1-855-908-0086\n\n' +
+    'You\'re receiving this because you signed up for our newsletter at root86coffee.com. Reply with "unsubscribe" to be removed from the list.'
+  );
+  const bcc = encodeURIComponent(recipients.join(','));
+  window.location.href = `mailto:?bcc=${bcc}&subject=${subject}&body=${body}`;
+  toast(`Opening email client with ${recipients.length} BCC recipients...`);
+}
+
 function exportSubscribersCsv(){
   if (!SUBSCRIBERS.length) { toast('No subscribers to export'); return; }
   const rows = [['email','name','source','signed_up_iso']];
