@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Root 86 Coffee | Canadian Green Coffee Importer</title>
+  <meta name="description" content="Meet the team behind Root 86 Coffee, a Canadian green coffee importer supporting micro-roasters across the country. Led by John and Kimber Nishiyama, with 28+ years of coffee experience from farm to cup." />
+  <link rel="canonical" href="https://root86coffee.com/about.html" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Root 86 Coffee" />
+  <meta property="og:title" content="About Root 86 Coffee | Canadian Green Coffee Importer" />
+  <meta property="og:description" content="Meet the team behind Root 86 Coffee, a Canadian green coffee importer supporting micro-roasters across the country." />
+  <meta property="og:url" content="https://root86coffee.com/about.html" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About Root 86 Coffee",
+    "url": "https://root86coffee.com/about.html",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "Root 86 Coffee",
+      "founder": [
+        { "@type": "Person", "name": "John Nishiyama", "jobTitle": "Chief Coffee Seeker" },
+        { "@type": "Person", "name": "Kimber Nishiyama", "jobTitle": "Chief Bean Counter" }
+      ],
+      "employee": [
+        { "@type": "Person", "name": "Sem van Duist", "jobTitle": "Coffee Apprentice" }
+      ]
+    }
+  }
+  </script>
+  <link rel="icon" type="image/jpeg" href="/images/logo.jpg" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    body { cursor: auto; overflow-x: hidden; }
+    button, a, input, select, textarea { cursor: auto; }
+
+    .ab-nav-spacer { height: 82px; }
+
+    /* Hero */
+    .ab-hero {
+      background: var(--red-deep);
+      padding: 80px 0 72px;
+      position: relative; overflow: hidden;
+    }
+    .ab-hero::after {
+      content: 'ABOUT';
+      position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
+      font-family: var(--font-serif); font-size: clamp(80px,12vw,180px);
+      font-weight: 300; color: rgba(200,16,46,0.06);
+      white-space: nowrap; pointer-events: none; user-select: none;
+    }
+    .ab-hero-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 52px; position: relative; z-index: 1;
+    }
+    .ab-hero-eyebrow {
+      font-size: 0.64rem; letter-spacing: 0.3em; text-transform: uppercase;
+      color: rgba(200,16,46,0.65); margin-bottom: 16px; display: block;
+    }
+    .ab-hero-heading {
+      font-family: var(--font-serif); font-size: clamp(36px,5vw,68px);
+      font-weight: 300; color: var(--white); line-height: 1.05; margin-bottom: 18px;
+    }
+    .ab-hero-heading em { font-style: italic; color: var(--red); }
+    .ab-hero-sub {
+      font-size: 0.88rem; color: rgba(255,255,255,0.45);
+      line-height: 1.9; max-width: 480px;
+    }
+
+    /* Story section */
+    .ab-story {
+      max-width: 1040px; margin: 0 auto; padding: 88px 52px 48px;
+    }
+    .ab-section-eyebrow {
+      font-size: 0.6rem; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--red); margin-bottom: 12px;
+    }
+    .ab-section-heading {
+      font-family: var(--font-serif); font-size: clamp(32px,3.4vw,48px);
+      font-weight: 300; color: var(--ink); line-height: 1.12; margin-bottom: 34px;
+    }
+    .ab-section-heading em { font-style: italic; color: var(--red); }
+
+    .ab-story-body p {
+      font-size: 1rem; line-height: 1.85;
+      color: rgba(26,0,5,0.82);
+      margin-bottom: 24px; max-width: 72ch;
+    }
+    .ab-story-body p:first-child::first-letter {
+      font-family: var(--font-serif); font-size: 3.2rem;
+      float: left; line-height: 0.9; padding: 6px 12px 0 0;
+      color: var(--red); font-weight: 400;
+    }
+
+    /* Team */
+    .ab-team {
+      background: var(--off-white);
+      padding: 88px 52px;
+      border-top: 1px solid rgba(26,0,5,0.06);
+      border-bottom: 1px solid rgba(26,0,5,0.06);
+    }
+    .ab-team-inner { max-width: 1040px; margin: 0 auto; }
+    .ab-team-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+      margin-top: 40px;
+    }
+    .ab-team-card {
+      background: var(--white);
+      border: 1px solid rgba(26,0,5,0.08);
+      border-radius: 2px;
+      padding: 36px 28px 30px;
+      display: flex; flex-direction: column; gap: 8px;
+      transition: border-color .3s, transform .3s, box-shadow .3s;
+      position: relative;
+    }
+    .ab-team-card:hover {
+      border-color: rgba(200,16,46,0.4);
+      transform: translateY(-3px);
+      box-shadow: 0 14px 38px rgba(26,0,5,0.07);
+    }
+    .ab-team-initial {
+      font-family: var(--font-serif); font-size: 2.8rem;
+      font-weight: 300; color: var(--red);
+      line-height: 1; margin-bottom: 12px;
+    }
+    .ab-team-name {
+      font-family: var(--font-serif); font-size: 1.3rem;
+      color: var(--ink); font-weight: 400; line-height: 1.2;
+    }
+    .ab-team-role {
+      font-size: 0.6rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--muted); margin-top: 4px;
+    }
+
+    /* Philosophy / services */
+    .ab-philosophy {
+      max-width: 1040px; margin: 0 auto; padding: 88px 52px;
+    }
+    .ab-phil-quote {
+      font-family: var(--font-serif); font-style: italic;
+      font-size: clamp(22px, 2.6vw, 32px);
+      line-height: 1.45; color: var(--ink);
+      padding-left: 24px;
+      border-left: 2px solid var(--red);
+      margin: 0 0 32px; max-width: 68ch;
+    }
+    .ab-phil-body p {
+      font-size: 0.98rem; line-height: 1.85;
+      color: rgba(26,0,5,0.82);
+      margin-bottom: 20px; max-width: 68ch;
+    }
+
+    .ab-services {
+      background: var(--red-deep);
+      color: var(--white);
+      padding: 88px 52px;
+      position: relative; overflow: hidden;
+    }
+    .ab-services::after {
+      content: 'ROOT 86';
+      position: absolute; right: -30px; bottom: -30px;
+      font-family: var(--font-serif); font-size: clamp(80px, 14vw, 200px);
+      font-weight: 300; color: rgba(200,16,46,0.05);
+      white-space: nowrap; pointer-events: none; user-select: none; line-height: 1;
+    }
+    .ab-services-inner { max-width: 1040px; margin: 0 auto; position: relative; z-index: 1; }
+    .ab-services .ab-section-eyebrow { color: rgba(200,16,46,0.8); }
+    .ab-services .ab-section-heading { color: var(--white); }
+    .ab-services-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .ab-service-item {
+      background: var(--red-deep);
+      padding: 32px 28px;
+      display: flex; flex-direction: column; gap: 12px;
+      transition: background .3s;
+    }
+    .ab-service-item:hover { background: rgba(255,255,255,0.03); }
+    .ab-service-num {
+      font-family: var(--font-serif); font-size: 0.72rem;
+      letter-spacing: 0.3em; color: rgba(200,16,46,0.6);
+    }
+    .ab-service-title {
+      font-family: var(--font-serif); font-size: 1.2rem;
+      color: var(--white); font-weight: 400; line-height: 1.3;
+    }
+
+    /* CTA strip */
+    .ab-cta {
+      padding: 72px 52px; text-align: center;
+      border-bottom: 1px solid rgba(26,0,5,0.08);
+    }
+    .ab-cta-heading {
+      font-family: var(--font-serif); font-size: clamp(28px, 3vw, 40px);
+      font-weight: 300; color: var(--ink); line-height: 1.15; margin-bottom: 14px;
+    }
+    .ab-cta-heading em { font-style: italic; color: var(--red); }
+    .ab-cta-sub {
+      font-size: 0.9rem; color: var(--muted); line-height: 1.75;
+      max-width: 520px; margin: 0 auto 28px;
+    }
+    .ab-cta-actions {
+      display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+    }
+    .ab-cta-btn {
+      font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+      padding: 12px 26px; font-weight: 600; font-family: var(--font-sans);
+      border-radius: 2px; border: 1px solid transparent; cursor: pointer;
+      transition: background .25s, border-color .25s;
+    }
+    .ab-cta-btn.primary { background: var(--red); color: var(--white); border-color: var(--red); }
+    .ab-cta-btn.primary:hover { background: var(--red-dark); border-color: var(--red-dark); }
+    .ab-cta-btn.ghost { background: transparent; color: var(--ink); border-color: rgba(26,0,5,0.18); }
+    .ab-cta-btn.ghost:hover { border-color: var(--ink); }
+
+    @media (max-width: 900px) {
+      .ab-team-grid { grid-template-columns: 1fr 1fr; }
+      .ab-services-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .ab-hero { padding: 60px 0 52px; }
+      .ab-hero-inner, .ab-story, .ab-team, .ab-philosophy, .ab-services, .ab-cta { padding-left: 24px; padding-right: 24px; }
+      .ab-story { padding-top: 56px; padding-bottom: 32px; }
+      .ab-team, .ab-philosophy, .ab-services { padding-top: 56px; padding-bottom: 56px; }
+      .ab-team-grid { grid-template-columns: 1fr; }
+      .ab-services-grid { grid-template-columns: 1fr; }
+      .ab-story-body p:first-child::first-letter { font-size: 2.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation (simplified, matches other inner pages) -->
+<nav id="main-nav" class="scrolled">
+  <a href="index.html" class="nav-logo" style="color:var(--red)">
+    <span class="nav-logo-main">Root 86 Coffee</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#finder" class="nav-link" style="color:rgba(26,0,5,0.55)">Find Coffee</a></li>
+    <li><a href="about.html" class="nav-link" style="color:var(--red)">About</a></li>
+    <li><a href="contact.html" class="nav-link" style="color:rgba(26,0,5,0.55)">Contact</a></li>
+    <li><a href="roasters.html" class="nav-link" style="color:rgba(26,0,5,0.55)">Find a Roaster</a></li>
+    <li><a href="tel:18559080086" class="nav-link" style="color:rgba(26,0,5,0.55)">1-855-908-0086</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="index.html#finder" class="nav-cta" style="background:var(--red);color:var(--white)">Explore Catalogue</a>
+  </div>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile Menu -->
+<div id="mobile-menu">
+  <a href="index.html#finder" class="nav-link">Find Coffee</a>
+  <a href="about.html" class="nav-link">About</a>
+  <a href="contact.html" class="nav-link">Contact</a>
+  <a href="roasters.html" class="nav-link">Find a Roaster</a>
+  <a href="tel:18559080086" class="nav-link">1-855-908-0086</a>
+</div>
+
+<!-- Spacer for fixed nav -->
+<div class="ab-nav-spacer"></div>
+
+<!-- Hero -->
+<div class="ab-hero">
+  <div class="ab-hero-inner">
+    <span class="ab-hero-eyebrow">Our Story</span>
+    <h1 class="ab-hero-heading">The people<br>behind the <em>beans.</em></h1>
+    <p class="ab-hero-sub">Root 86 Coffee is a small Canadian team sourcing the best green coffee in the world for the roasters who turn it into something special.</p>
+  </div>
+</div>
+
+<!-- Story -->
+<section class="ab-story">
+  <span class="ab-section-eyebrow">28+ Years in Coffee</span>
+  <h2 class="ab-section-heading">Started together with Kimber and <em>myself</em>, John Nishiyama.</h2>
+  <div class="ab-story-body">
+    <p>I am the son of a farmer and was born and raised on the West Coast of Canada. I've been in the coffee farming and green business for over 28 years.</p>
+    <p>I was in Costa Rica developing large scale agricultural projects, and one of the jewels of my work was a 65 hectare (160 acre) coffee farm in the now famous West Valley town of Llano Bonito. Today the farm is producing award-winning coffee that showcases in the Cup of Excellence.</p>
+    <p>I've cupped and roasted coffee internationally, connecting with farmers, co-ops, exporters and importing companies. I love the world of coffee and working with new roasters getting started in the business, and experienced ones allowing our partnerships to grow.</p>
+    <p>Kimber is the other half of Root 86, in charge of logistics, inventory control and administration. Kimber has one of the best noses in the business and is crucial in the grading and coffee selection process. She is the best at planning out future coffee purchases and managing the importation of this great commodity that we all love.</p>
+  </div>
+</section>
+
+<!-- Team -->
+<section class="ab-team">
+  <div class="ab-team-inner">
+    <span class="ab-section-eyebrow">Meet the Team</span>
+    <h2 class="ab-section-heading">Small team, <em>big love for coffee.</em></h2>
+    <div class="ab-team-grid">
+      <div class="ab-team-card">
+        <div class="ab-team-initial">J</div>
+        <div class="ab-team-name">John Nishiyama</div>
+        <div class="ab-team-role">Chief Coffee Seeker</div>
+      </div>
+      <div class="ab-team-card">
+        <div class="ab-team-initial">K</div>
+        <div class="ab-team-name">Kimber Nishiyama</div>
+        <div class="ab-team-role">Chief Bean Counter</div>
+      </div>
+      <div class="ab-team-card">
+        <div class="ab-team-initial">S</div>
+        <div class="ab-team-name">Sem van Duist</div>
+        <div class="ab-team-role">Coffee Apprentice</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Philosophy -->
+<section class="ab-philosophy">
+  <span class="ab-section-eyebrow">What We Stand For</span>
+  <h2 class="ab-section-heading">Direct trade, transparent lots, and <em>relationships that last.</em></h2>
+  <blockquote class="ab-phil-quote">Root 86 strongly supports the hard work of farmers through direct trade and by working through organizations that have quantifiable programs to assist farming communities and help create sustainable commerce.</blockquote>
+  <div class="ab-phil-body">
+    <p>Root 86 provides the best service and top grade coffee lots available in Canada, proudly supporting the micro-roaster community from coast to coast.</p>
+  </div>
+</section>
+
+<!-- Services -->
+<section class="ab-services">
+  <div class="ab-services-inner">
+    <span class="ab-section-eyebrow">Our Services</span>
+    <h2 class="ab-section-heading">What we do for <em>roasters.</em></h2>
+    <div class="ab-services-grid">
+      <div class="ab-service-item">
+        <span class="ab-service-num">01</span>
+        <div class="ab-service-title">Green Coffee Consulting</div>
+      </div>
+      <div class="ab-service-item">
+        <span class="ab-service-num">02</span>
+        <div class="ab-service-title">Solutions for Micro-roasters</div>
+      </div>
+      <div class="ab-service-item">
+        <span class="ab-service-num">03</span>
+        <div class="ab-service-title">Discovering Unique Coffees</div>
+      </div>
+      <div class="ab-service-item">
+        <span class="ab-service-num">04</span>
+        <div class="ab-service-title">Cupping for Quality Control</div>
+      </div>
+      <div class="ab-service-item">
+        <span class="ab-service-num">05</span>
+        <div class="ab-service-title">Education, Farm to Cup</div>
+      </div>
+      <div class="ab-service-item">
+        <span class="ab-service-num">06</span>
+        <div class="ab-service-title">Roasting Equipment Sourcing</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="ab-cta">
+  <h2 class="ab-cta-heading">Ready to <em>roast with us?</em></h2>
+  <p class="ab-cta-sub">Browse our catalogue, build a quote, or just get in touch with a question. We respond to every message within one business day.</p>
+  <div class="ab-cta-actions">
+    <a href="index.html#finder" class="ab-cta-btn primary">Explore the Catalogue</a>
+    <a href="contact.html" class="ab-cta-btn ghost">Contact Us</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand-name">ROOT 86</div>
+        <p class="footer-tagline">Canadian green coffee specialists, proudly supporting Canada's growing micro-roaster community with exceptional lots from around the world.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Navigate</div>
+        <div class="footer-links-list">
+          <a href="index.html#finder">Find Coffee</a>
+          <a href="about.html">About Us</a>
+          <a href="contact.html">Contact</a>
+          <a href="roasters.html">Find a Roaster</a>
+          <a href="admin.html" style="opacity:0.3;font-size:0.75rem">Admin</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Warehouses</div>
+        <div class="footer-links-list">
+          <span style="color:rgba(255,255,255,0.38);font-size:0.8rem">Vancouver, BC</span>
+          <span style="color:rgba(255,255,255,0.38);font-size:0.8rem">Levis, QC</span>
+          <span style="color:rgba(255,255,255,0.38);font-size:0.8rem">Parksville, BC</span>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Contact</div>
+        <div class="footer-contact-item"><a href="tel:18559080086">1-855-908-0086</a></div>
+        <div class="footer-contact-item"><a href="mailto:root86coffee@gmail.com">root86coffee@gmail.com</a></div>
+        <div class="footer-contact-item">PO Box 60008, Nanaimo, BC</div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">2025 Root 86 Coffee. All rights reserved. Proudly Canadian.</span>
+      <span class="footer-note">Vancouver &middot; Levis &middot; Parksville</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Hamburger script -->
+<script>
+  (function(){
+    var hb = document.getElementById('nav-hamburger');
+    var mm = document.getElementById('mobile-menu');
+    if (!hb || !mm) return;
+    hb.addEventListener('click', function(){
+      mm.classList.toggle('open');
+      hb.classList.toggle('active');
+    });
+    mm.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){ mm.classList.remove('open'); hb.classList.remove('active'); });
+    });
+  })();
+</script>
+
+</body>
+</html>
