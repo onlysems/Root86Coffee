@@ -2863,16 +2863,38 @@ const TODO_SEEDS = [
     title: 'Shipping calculator',
     desc: 'A quick internal tool just for you, not shown to clients. Enter a destination postal code and total weight, get back an estimated shipping cost using whatever rate card you normally check (Loomis, Day & Ross, whoever). So "V5K 0A1, 200lbs" returns something like "$185 ground, 3-5 days" instantly instead of you having to look it up every time you put together a quote.',
   },
+  {
+    id: 'seed-ask-john-subscribers',
+    title: 'Ask John about newsletter sending',
+    desc: 'Before I commit time to building out a real email service or moving us to a third-party tool, I want to ask John what he currently does to email his subscribers and what he\'d actually find easiest. He\'s at 181 subscribers now, so the mailto button has to send in 3 batches, which works but is clunky. Two possible directions: (1) build a real send button in admin powered by Resend, John writes one email and the Worker delivers to all 181, takes ~30 min of dev plus DNS setup; or (2) move list management to Mailchimp, free up to 500 contacts with real unsubscribes built in, but he\'d work in a separate tool. Don\'t build either until he weighs in.',
+  },
 ];
 
 let TODO_STATE = { items: [] };
 let TODO_EDITING = null;
 
 function loadTodoState(){
+  let stored = null;
   try {
     const raw = localStorage.getItem(TODO_KEY);
-    if (raw) { TODO_STATE = JSON.parse(raw); return; }
+    if (raw) stored = JSON.parse(raw);
   } catch(e) {}
+
+  if (stored && Array.isArray(stored.items)) {
+    TODO_STATE = stored;
+    // Non-destructive migration: add any new seed ideas that weren't in the
+    // user's stored list (matched by id). Keeps custom items + edits intact.
+    const haveIds = new Set(TODO_STATE.items.map(i => i.id));
+    let added = false;
+    TODO_SEEDS.forEach(seed => {
+      if (!haveIds.has(seed.id)) {
+        TODO_STATE.items.unshift({ ...seed, ts: Date.now() });
+        added = true;
+      }
+    });
+    if (added) saveTodoState();
+    return;
+  }
   // First run, seed it
   TODO_STATE = { items: TODO_SEEDS.map(s => ({ ...s, ts: Date.now() })) };
   saveTodoState();
