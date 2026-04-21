@@ -13,14 +13,14 @@ const COFFEES = [
     process: "Swiss Water Process (Decaf)",
     certifications: [],
     bagWeight: 66,
-    warehouses: ["Vancouver, BC","Parksville, BC","Lévis, QC"],
+    warehouses: ["Lévis, QC","Parksville, BC","Vancouver, BC"],
     available: true,
     grade: "",
     variety: "",
     altitude: "N/A",
     tastingNotes: "Clean cup, caramel and toasted almonds.",
     description: "A premium espresso blend of high density beans for a variety of espresso roast levels.  A rich blend of Central and South American, and Indonesian origins, making for a clean, sweet, balanced cup.",
-    mainText: "SWP Premium Espresso Blend Decaf\nA premium espresso blend of high density beans for a variety of espresso roast levels. A rich blend of Central and South American, and Indonesian origins, making for a clean, sweet, balanced cup.\n\nWe stock many Swiss Water Decaf coffees, please contact us if your looking for a specific decaf.  We also stock half bag lots (66 lbs) for your micro-roaster needs.",
+    mainText: "SWP Premium Espresso Blend Decaf\nA premium espresso blend of high density beans for a variety of espresso roast levels. A rich blend of Central and South American, and Indonesian origins, making for a clean, sweet, balanced cup.\n\nWe stock many Swiss Water Decaf coffees, please contact us if your looking for a specific decaf.  We also stock half bag lots (66 lbs) for your micro-roaster needs...",
     image: "https://static.wixstatic.com/media/59d94e_71338118305345e78b3f1e879559713b~mv2.jpeg"
   },
   {
@@ -53,13 +53,13 @@ const COFFEES = [
     bagWeight: 132,
     warehouses: [],
     available: false,
-    soldOut: true,
     grade: "",
     variety: "SL 14 & 28",
     altitude: "1500-1800M",
     tastingNotes: "well balanced clean cup, juicy body, nice milk chocolate, black tea, dark fruit and lemon.",
     description: "Elevation: 1500-1800M\n\nProcess: Extra washed & sun dried on raised beds & hand sorted\n\nVarietal: SL 14 & 28\n\nNotes:  well balanced clean cup, juicy body, nice milk chocolate, black tea, dark fruit and lemon.",
-    image: "https://static.wixstatic.com/media/61a162_119f1d06a492477498ce2ba4ea85c44b~mv2.png"
+    image: "https://static.wixstatic.com/media/61a162_119f1d06a492477498ce2ba4ea85c44b~mv2.png",
+    soldOut: true
   },
   {
     id: 4,
@@ -91,14 +91,14 @@ const COFFEES = [
     bagWeight: 132,
     warehouses: [],
     available: false,
-    soldOut: true,
     grade: "",
     variety: "SL-28, SL-34, Ruiru 11",
     altitude: "1500-1800M",
     tastingNotes: "sparkling acidity, creamy, brown sugar, black tean and dark cherry.",
     description: "Elevation: 1500-1800M\n\nRegion: Murang'a County\n\nProcess: Double washed & sun dried on raised beds & hand sorted\n\nVarietal: SL-28, SL-34, Ruiru 11",
     mainText: "Kenya Sondhi AB Plus\n1500-1800M\nVarietal:  SL-28, SL-34, Ruiru 11\nDouble washed & sun dried on raised beds & hand sorted\n \nThis coffee lot is the kind of Kenya we look for, with rare bright fruit notes and an excellent finish.  This year Kenyas have had very high market differentials making them very expensive, but we're happy to secure this lot that cups very high and is priced well.\n\nSondhi has invested in multiple colour sorters and gravity beds for some of the best sorted Kenya coffee on the market.\nCupping notes: sparkling acidity, creamy, brown sugar, black tean and dark cherry.",
-    image: "https://static.wixstatic.com/media/59d94e_d0276efdd1d743d383fe391c7c73b100~mv2.png"
+    image: "https://static.wixstatic.com/media/59d94e_d0276efdd1d743d383fe391c7c73b100~mv2.png",
+    soldOut: true
   },
   {
     id: 6,
