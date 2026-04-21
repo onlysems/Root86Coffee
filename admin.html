@@ -517,6 +517,20 @@
   .empty{padding:60px;text-align:center;color:var(--muted)}
   .icon{display:inline-block;width:14px;height:14px;vertical-align:-2px}
 
+  /* Reusable confirm modal */
+  .admin-confirm-overlay{position:fixed;inset:0;background:rgba(26,0,5,0.55);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;animation:acFadeIn .15s ease-out}
+  .admin-confirm-overlay.closing{animation:acFadeOut .12s ease-in forwards}
+  @keyframes acFadeIn{from{opacity:0}to{opacity:1}}
+  @keyframes acFadeOut{from{opacity:1}to{opacity:0}}
+  .admin-confirm-box{background:#fff;border-radius:6px;padding:26px 28px 22px;max-width:420px;width:100%;box-shadow:0 18px 48px rgba(26,0,5,0.22);animation:acPopIn .18s ease-out}
+  @keyframes acPopIn{from{transform:translateY(-6px) scale(.98);opacity:0}to{transform:none;opacity:1}}
+  .admin-confirm-title{font-size:1.05rem;font-weight:600;color:var(--ink);margin-bottom:8px}
+  .admin-confirm-msg{color:var(--muted);font-size:.88rem;line-height:1.55;margin-bottom:22px}
+  .admin-confirm-actions{display:flex;gap:8px;justify-content:flex-end}
+  .admin-confirm-btn{padding:9px 16px;font-size:.78rem;font-weight:600;letter-spacing:.04em;font-family:inherit;background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:4px;cursor:pointer;transition:background .15s,border-color .15s}
+  .admin-confirm-btn:hover{background:rgba(26,0,5,0.04)}
+  .admin-confirm-go:hover{filter:brightness(1.08)}
+
   /* To-do options */
   .todo-list{margin-top:16px;display:flex;flex-direction:column;gap:10px}
   .todo-card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px 20px;display:flex;flex-direction:column;gap:8px;transition:border-color .15s}
@@ -1320,8 +1334,14 @@ function bind(){
     $('#tok-status').textContent = 'cleared';
     toast('Token cleared');
   });
-  $('#btn-reset').addEventListener('click', () => {
-    if (!confirm('Discard all unpublished draft edits and revert to what is on the live site?')) return;
+  $('#btn-reset').addEventListener('click', async () => {
+    const ok = await adminConfirm({
+      title: 'Discard unpublished drafts?',
+      message: 'This will erase every local edit that hasn\'t been published yet and reload the admin from the live site.',
+      confirmLabel: 'Discard drafts',
+      confirmStyle: 'danger',
+    });
+    if (!ok) return;
     localStorage.removeItem(STORAGE_KEY);
     location.reload();
   });
@@ -2114,10 +2134,16 @@ function toggleFlag(id, key){
   toast(`Updated ${c.name.split(' ').slice(0,2).join(' ')}`);
 }
 
-function deleteRow(id){
+async function deleteRow(id){
   const c = DATA.find(x => x.id===id);
   if (!c) return;
-  if (!confirm(`Delete "${c.name}"? This cannot be undone (until you re-import).`)) return;
+  const ok = await adminConfirm({
+    title: `Delete "${c.name}"?`,
+    message: 'This removes the coffee from the admin. You\'ll need to re-import from the live site or Export backup to get it back.',
+    confirmLabel: 'Delete coffee',
+    confirmStyle: 'danger',
+  });
+  if (!ok) return;
   DATA = DATA.filter(x => x.id!==id);
   persist(); render(); toast('Deleted', true);
 }
@@ -2614,10 +2640,14 @@ function openIssue(num){
     btn.addEventListener('click', () => setStatus(num, btn.dataset.status));
   });
   const closeBtn = document.getElementById('inbox-close-btn');
-  if (closeBtn) closeBtn.addEventListener('click', () => {
-    if (confirm('Close this submission? You can reopen it later from the Closed tab.')) {
-      toggleIssueState(num, 'closed');
-    }
+  if (closeBtn) closeBtn.addEventListener('click', async () => {
+    const ok = await adminConfirm({
+      title: 'Close this submission?',
+      message: 'You can reopen it later from the Closed tab.',
+      confirmLabel: 'Close submission',
+      confirmStyle: 'primary',
+    });
+    if (ok) toggleIssueState(num, 'closed');
   });
   const reopenBtn = document.getElementById('inbox-reopen-btn');
   if (reopenBtn) reopenBtn.addEventListener('click', () => toggleIssueState(num, 'open'));
@@ -2963,10 +2993,16 @@ function renderTodo(){
     });
   });
   list.querySelectorAll('.todo-delete').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', async () => {
       const id = btn.closest('.todo-card').dataset.id;
       const item = TODO_STATE.items.find(i => i.id === id);
-      if (!confirm(`Delete "${item ? item.title : 'this idea'}"?`)) return;
+      const ok = await adminConfirm({
+        title: `Delete "${item ? item.title : 'this idea'}"?`,
+        message: 'This removes the idea from your To-do Options list.',
+        confirmLabel: 'Delete',
+        confirmStyle: 'danger',
+      });
+      if (!ok) return;
       TODO_STATE.items = TODO_STATE.items.filter(i => i.id !== id);
       saveTodoState();
       renderTodo();
@@ -3022,6 +3058,53 @@ document.addEventListener('DOMContentLoaded', () => {
     toast('Idea added');
   });
 });
+
+// ── Reusable confirm modal ─────────────────────────────
+// Drop-in replacement for window.confirm() with in-app UI.
+// Usage: const ok = await adminConfirm({ title, message, confirmLabel, cancelLabel, confirmStyle });
+function adminConfirm(opts){
+  opts = opts || {};
+  const title   = opts.title   || 'Are you sure?';
+  const message = opts.message || '';
+  const confirmLabel = opts.confirmLabel || 'Confirm';
+  const cancelLabel  = opts.cancelLabel  || 'Cancel';
+  // confirmStyle: 'primary' (red), 'danger' (red), 'default' (outline)
+  const style = opts.confirmStyle || 'primary';
+  return new Promise(resolve => {
+    const overlay = document.createElement('div');
+    overlay.className = 'admin-confirm-overlay';
+    const confirmBg = style === 'default' ? 'transparent' : 'var(--red)';
+    const confirmColor = style === 'default' ? 'var(--ink)' : '#fff';
+    const confirmBorder = style === 'default' ? 'var(--line)' : 'var(--red)';
+    overlay.innerHTML = `
+      <div class="admin-confirm-box" role="dialog" aria-modal="true" aria-labelledby="admin-confirm-title">
+        <div class="admin-confirm-title" id="admin-confirm-title">${escapeHtml(title)}</div>
+        ${message ? `<div class="admin-confirm-msg">${escapeHtml(message)}</div>` : ''}
+        <div class="admin-confirm-actions">
+          <button type="button" class="admin-confirm-btn admin-confirm-cancel">${escapeHtml(cancelLabel)}</button>
+          <button type="button" class="admin-confirm-btn admin-confirm-go"
+            style="background:${confirmBg};color:${confirmColor};border-color:${confirmBorder}">${escapeHtml(confirmLabel)}</button>
+        </div>
+      </div>`;
+    document.body.appendChild(overlay);
+    const done = (val) => {
+      document.removeEventListener('keydown', onKey);
+      overlay.classList.add('closing');
+      setTimeout(() => overlay.remove(), 120);
+      resolve(val);
+    };
+    function onKey(e){
+      if (e.key === 'Escape') done(false);
+      if (e.key === 'Enter')  done(true);
+    }
+    document.addEventListener('keydown', onKey);
+    overlay.querySelector('.admin-confirm-cancel').addEventListener('click', () => done(false));
+    overlay.querySelector('.admin-confirm-go').addEventListener('click', () => done(true));
+    overlay.addEventListener('click', e => { if (e.target === overlay) done(false); });
+    // Focus the confirm button for keyboard users
+    setTimeout(() => overlay.querySelector('.admin-confirm-go').focus(), 20);
+  });
+}
 
 // ── Toast ─────────────────────────────────
 function toast(msg, isErr=false){
