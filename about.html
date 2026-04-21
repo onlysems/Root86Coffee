@@ -111,8 +111,8 @@
       background: var(--white);
       border: 1px solid rgba(26,0,5,0.08);
       border-radius: 2px;
-      padding: 36px 28px 30px;
-      display: flex; flex-direction: column; gap: 8px;
+      overflow: hidden;
+      display: flex; flex-direction: column;
       transition: border-color .3s, transform .3s, box-shadow .3s;
       position: relative;
     }
@@ -121,10 +121,24 @@
       transform: translateY(-3px);
       box-shadow: 0 14px 38px rgba(26,0,5,0.07);
     }
-    .ab-team-initial {
-      font-family: var(--font-serif); font-size: 2.8rem;
-      font-weight: 300; color: var(--red);
-      line-height: 1; margin-bottom: 12px;
+    .ab-team-photo {
+      width: 100%; aspect-ratio: 4 / 5;
+      background: var(--off-white);
+      overflow: hidden;
+    }
+    .ab-team-photo img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+      transition: transform .6s ease;
+      filter: saturate(0.95);
+    }
+    .ab-team-card:hover .ab-team-photo img {
+      transform: scale(1.03);
+      filter: saturate(1.05);
+    }
+    .ab-team-text {
+      padding: 22px 24px 26px;
+      display: flex; flex-direction: column; gap: 4px;
     }
     .ab-team-name {
       font-family: var(--font-serif); font-size: 1.3rem;
@@ -295,19 +309,25 @@
     <h2 class="ab-section-heading">Small team, <em>big love for coffee.</em></h2>
     <div class="ab-team-grid">
       <div class="ab-team-card">
-        <div class="ab-team-initial">J</div>
-        <div class="ab-team-name">John Nishiyama</div>
-        <div class="ab-team-role">Chief Coffee Seeker</div>
+        <div class="ab-team-photo"><img src="wix%20images/John.avif" alt="John Nishiyama" loading="lazy" /></div>
+        <div class="ab-team-text">
+          <div class="ab-team-name">John Nishiyama</div>
+          <div class="ab-team-role">Chief Coffee Seeker</div>
+        </div>
       </div>
       <div class="ab-team-card">
-        <div class="ab-team-initial">K</div>
-        <div class="ab-team-name">Kimber Nishiyama</div>
-        <div class="ab-team-role">Chief Bean Counter</div>
+        <div class="ab-team-photo"><img src="wix%20images/Kimber_JPG.avif" alt="Kimber Nishiyama" loading="lazy" /></div>
+        <div class="ab-team-text">
+          <div class="ab-team-name">Kimber Nishiyama</div>
+          <div class="ab-team-role">Chief Bean Counter</div>
+        </div>
       </div>
       <div class="ab-team-card">
-        <div class="ab-team-initial">S</div>
-        <div class="ab-team-name">Sem van Duist</div>
-        <div class="ab-team-role">Coffee Apprentice</div>
+        <div class="ab-team-photo"><img src="wix%20images/Sem.avif" alt="Sem van Duist" loading="lazy" /></div>
+        <div class="ab-team-text">
+          <div class="ab-team-name">Sem van Duist</div>
+          <div class="ab-team-role">Coffee Apprentice</div>
+        </div>
       </div>
     </div>
   </div>
