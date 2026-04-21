@@ -368,7 +368,27 @@ nav.scrolled .nav-hamburger span { background: var(--ink); }
   box-shadow: 0 2px 6px rgba(0,0,0,0.12);
 }
 .ribbon-fav { background: linear-gradient(135deg, rgba(200,16,46,0.95), rgba(155,12,36,0.95)); color: #fff; }
-.ribbon-sale { background: #1a0005; color: #fff; }
+.ribbon-sale {
+  background: #fff;
+  color: var(--red);
+  border: 1.5px solid var(--red);
+  padding: 3px 9px 4px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.ribbon-sale::before {
+  content: '';
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--red);
+  display: inline-block;
+  animation: salePulse 1.6s ease-in-out infinite;
+}
+@keyframes salePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.7); }
+}
 
 /* Header: country eyebrow + big serif name */
 .ccard-head { display: flex; flex-direction: column; gap: 12px; }
