@@ -322,8 +322,10 @@
   .inbox-close-btn:hover{background:#000}
   .inbox-close-btn.danger{background:var(--red)}
   .inbox-reopen-btn{padding:8px 14px;font-size:.75rem;background:none;border:1px solid var(--line);border-radius:4px;cursor:pointer}
-  .inbox-reply-btn{padding:8px 14px;font-size:.75rem;background:none;color:var(--ink);border:1px solid var(--line);border-radius:4px;cursor:pointer;text-decoration:none}
+  .inbox-reply-btn{padding:8px 14px;font-size:.75rem;background:none;color:var(--ink);border:1px solid var(--line);border-radius:4px;cursor:pointer;text-decoration:none;font-family:inherit}
   .inbox-reply-btn:hover{background:var(--hover)}
+  .inbox-close-action{color:#2d7a2d;border-color:rgba(45,122,45,0.35)}
+  .inbox-close-action:hover{background:rgba(45,122,45,0.06);border-color:#2d7a2d}
 
   /* ── Subbar ── */
   .subbar{
@@ -2603,11 +2605,22 @@ function openIssue(num){
     ${renderParsedSubmission(parsed)}
     <div class="inbox-detail-actions">
       ${replyEmail ? `<a class="inbox-reply-btn" href="mailto:${replyEmail}?subject=${replySubj}">&#9993; Reply via email</a>` : ''}
+      ${issue.state === 'closed'
+        ? `<button class="inbox-reply-btn" id="inbox-reopen-btn" data-num="${num}">&#8635; Reopen</button>`
+        : `<button class="inbox-reply-btn inbox-close-action" id="inbox-close-btn" data-num="${num}">&#10003; Close submission</button>`}
     </div>
   `;
   document.querySelectorAll('#status-switcher .stsw-btn').forEach(btn => {
     btn.addEventListener('click', () => setStatus(num, btn.dataset.status));
   });
+  const closeBtn = document.getElementById('inbox-close-btn');
+  if (closeBtn) closeBtn.addEventListener('click', () => {
+    if (confirm('Close this submission? You can reopen it later from the Closed tab.')) {
+      toggleIssueState(num, 'closed');
+    }
+  });
+  const reopenBtn = document.getElementById('inbox-reopen-btn');
+  if (reopenBtn) reopenBtn.addEventListener('click', () => toggleIssueState(num, 'open'));
 }
 
 async function toggleIssueState(num, newState){
