@@ -1120,17 +1120,50 @@ footer { background: var(--red-deep); padding: 52px 0 32px; border-top: 3px soli
 .fb-cta:hover { color: var(--red); border-color: var(--red); gap: 16px; }
 .fb-feed {
   display: flex; justify-content: center;
-  min-height: 500px;
+  min-height: auto;
 }
-.fb-feed .fb-page,
-.fb-feed .fb-page span,
-.fb-feed iframe {
-  width: 100% !important;
-  max-width: 500px;
-  border-radius: 4px;
-  box-shadow: 0 8px 32px rgba(26,0,5,0.08);
+.fb-card {
+  display: flex; flex-direction: column; gap: 18px;
+  width: 100%; max-width: 440px;
+  padding: 32px 30px;
   background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 8px 32px rgba(26,0,5,0.08);
+  border: 1px solid rgba(26,0,5,0.06);
+  text-decoration: none; color: var(--ink);
+  transition: border-color .25s, transform .25s, box-shadow .25s;
 }
+.fb-card:hover {
+  border-color: rgba(200,16,46,0.35);
+  transform: translateY(-3px);
+  box-shadow: 0 18px 44px rgba(26,0,5,0.12);
+}
+.fb-card-top { display: flex; align-items: center; gap: 14px; }
+.fb-card-logo {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: linear-gradient(135deg, #1877f2, #0e5dcf);
+  color: #fff; font-family: var(--font-serif); font-weight: 700;
+  font-size: 1.5rem; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.fb-card-name {
+  font-family: var(--font-serif); font-size: 1.15rem; color: var(--ink); font-weight: 500;
+}
+.fb-card-handle {
+  font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted); margin-top: 2px;
+}
+.fb-card-body {
+  font-size: 0.92rem; line-height: 1.6; color: var(--ink);
+}
+.fb-card-cta {
+  font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--red); font-weight: 600;
+  padding-top: 10px; border-top: 1px solid rgba(26,0,5,0.08);
+}
+.fb-card-cta span { display: inline-block; transition: transform .2s; }
+.fb-card:hover .fb-card-cta span { transform: translateX(3px); }
 
 @media (max-width: 900px) {
   .fb-section { padding: 72px 0; }

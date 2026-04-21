@@ -27,12 +27,10 @@
   <link rel="preconnect" href="https://static.wixstatic.com" />
   <link rel="preconnect" href="https://unpkg.com" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
-  <link rel="dns-prefetch" href="https://www.facebook.com" />
-  <link rel="dns-prefetch" href="https://connect.facebook.net"/>
   <link rel="dns-prefetch" href="https://basemaps.cartocdn.com" />
 
   <link rel="icon" type="image/jpeg" href="/images/logo.jpg" />
-  <link rel="stylesheet" href="css/styles.css?v=btb2" />
+  <link rel="stylesheet" href="css/styles.css?v=fb3" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
 
@@ -453,19 +451,17 @@
       <a href="https://www.facebook.com/root86coffee/" target="_blank" rel="noopener" class="fb-cta">Visit our Facebook page <span aria-hidden="true">&rarr;</span></a>
     </div>
     <div class="fb-feed">
-      <div class="fb-page"
-           data-href="https://www.facebook.com/root86coffee/"
-           data-tabs="timeline"
-           data-width="500"
-           data-height="700"
-           data-small-header="true"
-           data-adapt-container-width="true"
-           data-hide-cover="false"
-           data-show-facepile="false">
-        <blockquote cite="https://www.facebook.com/root86coffee/" class="fb-xfbml-parse-ignore">
-          <a href="https://www.facebook.com/root86coffee/">Root 86 Coffee on Facebook</a>
-        </blockquote>
-      </div>
+      <a class="fb-card" href="https://www.facebook.com/root86coffee/" target="_blank" rel="noopener" aria-label="Open Root 86 Coffee on Facebook">
+        <div class="fb-card-top">
+          <div class="fb-card-logo" aria-hidden="true">f</div>
+          <div class="fb-card-head">
+            <div class="fb-card-name">Root 86 Coffee</div>
+            <div class="fb-card-handle">@root86coffee</div>
+          </div>
+        </div>
+        <div class="fb-card-body">Follow us on Facebook for harvest updates, fresh arrivals, and the everyday life of a Canadian green coffee importer.</div>
+        <div class="fb-card-cta">Visit our page <span aria-hidden="true">&rarr;</span></div>
+      </a>
     </div>
   </div>
 </section>
@@ -644,25 +640,25 @@
 
     <form id="quote-form">
       <div class="qf-field">
-        <label class="qf-label">Company Name <span class="req">*</span></label>
+        <label class="qf-label" for="field-company">Company Name <span class="req">*</span></label>
         <input class="qf-input" id="field-company" required placeholder="Your Roastery" />
       </div>
       <div class="qf-row">
         <div class="qf-field">
-          <label class="qf-label">Contact Name <span class="req">*</span></label>
+          <label class="qf-label" for="field-contact">Contact Name <span class="req">*</span></label>
           <input class="qf-input" id="field-contact" required placeholder="Full Name" />
         </div>
         <div class="qf-field">
-          <label class="qf-label">Phone <span class="req">*</span></label>
+          <label class="qf-label" for="field-phone">Phone <span class="req">*</span></label>
           <input class="qf-input" type="tel" id="field-phone" required placeholder="+1 (555) 000-0000" />
         </div>
       </div>
       <div class="qf-field">
-        <label class="qf-label">Email <span class="req">*</span></label>
+        <label class="qf-label" for="field-email">Email <span class="req">*</span></label>
         <input class="qf-input" type="email" id="field-email" required placeholder="you@roastery.com" />
       </div>
       <div class="qf-field">
-        <label class="qf-label">Fulfillment <span class="req">*</span></label>
+        <label class="qf-label" for="field-method-delivery">Fulfillment <span class="req">*</span></label>
         <div class="qf-method-row">
           <label class="qf-method-opt">
             <input type="radio" name="fulfillment" value="delivery" id="field-method-delivery" checked />
@@ -676,16 +672,16 @@
       </div>
       <div id="delivery-fields">
         <div class="qf-field">
-          <label class="qf-label">Street Address <span class="req">*</span></label>
+          <label class="qf-label" for="field-address">Street Address <span class="req">*</span></label>
           <input class="qf-input" id="field-address" placeholder="123 Main St, Unit 4" />
         </div>
         <div class="qf-row">
           <div class="qf-field">
-            <label class="qf-label">City <span class="req">*</span></label>
+            <label class="qf-label" for="field-city">City <span class="req">*</span></label>
             <input class="qf-input" id="field-city" placeholder="Vancouver" />
           </div>
           <div class="qf-field">
-            <label class="qf-label">Province <span class="req">*</span></label>
+            <label class="qf-label" for="field-province">Province <span class="req">*</span></label>
             <select class="qf-select" id="field-province">
               <option value="">Select province</option>
               <option value="AB">Alberta</option>
@@ -707,14 +703,14 @@
       </div>
       <div class="qf-row">
         <div class="qf-field">
-          <label class="qf-label">Address Type</label>
+          <label class="qf-label" for="field-residential">Address Type</label>
           <select class="qf-select" id="field-residential">
             <option value="Commercial">Commercial</option>
             <option value="Residential">Residential</option>
           </select>
         </div>
         <div class="qf-field">
-          <label class="qf-label">Payment Method</label>
+          <label class="qf-label" for="field-payment">Payment Method</label>
           <select class="qf-select" id="field-payment">
             <option value="EFT / e-Transfer">EFT / e-Transfer</option>
             <option value="Credit Card (+3%)">Credit Card (+3%)</option>
@@ -731,7 +727,7 @@
       <!-- Hidden field keeps backwards-compat with the existing pickup payload flag -->
       <input type="hidden" id="field-pickup" value="false" />
       <div class="qf-field" id="pickup-loc-wrap" style="display:none;margin-top:10px">
-        <label class="qf-label" id="pickup-loc-label">Pickup Location</label>
+        <label class="qf-label" id="pickup-loc-label" for="field-pickup-location">Pickup Location</label>
         <div class="qf-readonly" id="pickup-loc-auto" style="display:none"></div>
         <select class="qf-select" id="field-pickup-location" style="display:none">
           <option value="">Select a warehouse</option>
@@ -740,7 +736,7 @@
         </select>
       </div>
       <div class="qf-field" style="margin-top:10px">
-        <label class="qf-label">Additional Notes</label>
+        <label class="qf-label" for="field-notes">Additional Notes</label>
         <textarea class="qf-input" id="field-notes" placeholder="Special requests, sample requests..."></textarea>
       </div>
       <div style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
@@ -779,12 +775,6 @@
     emailjs.init(SITE_SETTINGS.emailjsPublicKey);
   }
 </script>
-
-<!-- Facebook Page Plugin SDK (loaded async, after page is interactive) -->
-<div id="fb-root"></div>
-<script async defer crossorigin="anonymous"
-        src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v18.0"
-        nonce="r86fb"></script>
 
 </body>
 </html>
