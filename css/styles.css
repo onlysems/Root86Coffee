@@ -107,36 +107,24 @@ nav.scrolled {
   box-shadow: 0 1px 0 rgba(200,16,46,0.12);
 }
 .nav-logo {
-  color: var(--white); transition: color var(--transition);
-  flex: 0 0 auto; line-height: 1;
-  display: inline-flex; align-items: center; gap: 10px;
+  flex: 0 0 auto; line-height: 0;
+  display: inline-flex; align-items: center;
   text-decoration: none;
 }
-.nav-logo-main {
-  font-family: var(--font-serif); font-size: 1.2rem; font-weight: 600;
-  letter-spacing: 0.16em; line-height: 1;
+.nav-logo-img {
+  height: 44px; width: auto; display: block;
+  transition: transform var(--transition), filter var(--transition);
+  /* Soft white halo so the red marks read on the dark transparent nav */
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.35));
 }
-.nav-logo-sep {
-  width: 1px; height: 18px; background: currentColor; opacity: 0.35;
-  display: inline-block;
-}
-.nav-logo-sub {
-  font-family: var(--font-serif); font-size: 1rem; font-weight: 300;
-  font-style: italic; letter-spacing: 0.02em; line-height: 1;
-  color: inherit; opacity: 0.85;
-}
-nav.scrolled .nav-logo { color: var(--red); }
-nav.scrolled .nav-logo-sub { color: var(--ink); opacity: 0.75; }
-nav.scrolled .nav-logo-sep { opacity: 0.3; }
+nav.scrolled .nav-logo-img { filter: none; }
+.nav-logo:hover .nav-logo-img { transform: scale(1.04); }
 
 @media (max-width: 768px) {
-  .nav-logo-main { font-size: 1.05rem; letter-spacing: 0.12em; }
-  .nav-logo-sub  { font-size: 0.85rem; }
-  .nav-logo-sep  { height: 15px; }
-  .nav-logo      { gap: 8px; }
+  .nav-logo-img { height: 36px; }
 }
 @media (max-width: 420px) {
-  .nav-logo-sep, .nav-logo-sub { display: none; }
+  .nav-logo-img { height: 32px; }
 }
 
 .nav-links {
