@@ -64,6 +64,9 @@ export default {
     if (path === '/subscribers' && request.method === 'GET') {
       return handleSubscribersList(request, env, cors);
     }
+    if (path === '/live' && request.method === 'GET') {
+      return handleLive(request, env, cors);
+    }
     // Default: form submission (root path)
     if (request.method === 'POST') {
       return handleForm(request, env, cors, corsOrigin);
@@ -303,6 +306,11 @@ async function handleTrack(request, env, cors, corsOrigin) {
     writes.push(bumpKey(env, 'pv:' + today + ':' + path));     // path/day
     const ref = cleanHost(data.referrer || '');
     if (ref) writes.push(bumpKey(env, 'ref:' + today + ':' + ref));
+    // Live feed: store last visit per visitor (TTL 5 min)
+    const sid = String(data.sid || '').slice(0, 24) || Math.random().toString(36).slice(2, 10);
+    const ref2 = cleanHost(data.referrer || '');
+    const liveRecord = JSON.stringify({ path, ref: ref2, ts: Date.now(), sid });
+    writes.push(env.STATS.put('live:' + sid, liveRecord, { expirationTtl: 300 }));
   } else if (type === 'coffee_view') {
     const id = String(parseInt(data.coffeeId) || 0);
     if (id !== '0') {
@@ -316,6 +324,27 @@ async function handleTrack(request, env, cors, corsOrigin) {
   }
   try { await Promise.all(writes); } catch(e) { console.error('KV write', e); }
   return new Response(null, { status: 204, headers: cors });
+}
+
+// ────────────────────────────────────────────────────────────
+// /live  — admin reader, returns active visitors (last 5 min)
+// ────────────────────────────────────────────────────────────
+async function handleLive(request, env, cors) {
+  const key = request.headers.get('X-Analytics-Key') || '';
+  if (!env.ANALYTICS_KEY || key !== env.ANALYTICS_KEY) {
+    return json({ error: 'Unauthorized' }, 401, cors);
+  }
+  if (!env.STATS) return json({ error: 'STATS not bound' }, 500, cors);
+
+  const visitors = [];
+  const list = await env.STATS.list({ prefix: 'live:' });
+  const vals = await Promise.all(list.keys.map(k => env.STATS.get(k.name)));
+  vals.forEach(v => {
+    if (!v) return;
+    try { visitors.push(JSON.parse(v)); } catch(e) {}
+  });
+  visitors.sort((a, b) => (b.ts || 0) - (a.ts || 0));
+  return json({ ok: true, count: visitors.length, visitors }, 200, cors);
 }
 
 // ────────────────────────────────────────────────────────────

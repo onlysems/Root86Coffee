@@ -9,7 +9,18 @@
   // Strip trailing slash for safe concat
   base = base.replace(/\/+$/, '');
 
+  // Per-tab session id, persisted in sessionStorage so the live feed dedupes visitors
+  var sid;
+  try {
+    sid = sessionStorage.getItem('r86_sid');
+    if (!sid) {
+      sid = (Date.now().toString(36) + Math.random().toString(36).slice(2, 8));
+      sessionStorage.setItem('r86_sid', sid);
+    }
+  } catch(e) { sid = Math.random().toString(36).slice(2, 10); }
+
   function send(payload){
+    payload.sid = sid;
     try {
       var blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
       // sendBeacon survives page unloads and doesn't block

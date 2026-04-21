@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Root 86 Coffee — Content Manager</title>
+<title>Root 86 Coffee, Content Manager</title>
 <link rel="icon" type="image/jpeg" href="/images/logo.jpg" />
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;600&display=swap');
@@ -163,9 +163,12 @@
   .inbox-shell{display:grid;grid-template-columns:340px 1fr;gap:16px;margin-top:16px;min-height:calc(100vh - 210px)}
   @media (max-width:960px){.inbox-shell{grid-template-columns:1fr}}
   .inbox-sidebar{background:var(--panel);border:1px solid var(--line);border-radius:6px;display:flex;flex-direction:column;overflow:hidden}
-  .inbox-search-wrap{padding:12px;border-bottom:1px solid var(--line)}
+  .inbox-search-wrap{padding:12px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
   .inbox-search{width:100%;padding:8px 12px;border:1px solid var(--line);border-radius:4px;font-size:.82rem;outline:none;background:#fff}
   .inbox-search:focus{border-color:var(--red)}
+  .inbox-filter-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .inbox-filter{padding:6px 8px;border:1px solid var(--line);border-radius:4px;font-size:.74rem;color:var(--ink);background:#fff;outline:none;cursor:pointer;font-family:inherit}
+  .inbox-filter:focus{border-color:var(--red)}
   .inbox-tabs{display:flex;gap:2px;padding:0 12px;border-bottom:1px solid var(--line);background:#fafafa}
   .inbox-tab{padding:10px 10px;font-size:.74rem;background:none;border:none;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:6px;font-weight:500;letter-spacing:.02em}
   .inbox-tab.active{color:var(--ink);border-bottom-color:var(--red)}
@@ -506,6 +509,42 @@
   .empty{padding:60px;text-align:center;color:var(--muted)}
   .icon{display:inline-block;width:14px;height:14px;vertical-align:-2px}
 
+  /* To-do options */
+  .todo-list{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+  .todo-card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px 20px;display:flex;flex-direction:column;gap:8px;transition:border-color .15s}
+  .todo-card:hover{border-color:rgba(200,16,46,0.4)}
+  .todo-card.editing{border-color:var(--red);box-shadow:0 0 0 3px rgba(200,16,46,0.08)}
+  .todo-card-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .todo-card-title{font-size:1rem;font-weight:600;color:var(--ink);margin:0;flex:1}
+  .todo-card-actions{display:flex;gap:6px;flex-shrink:0}
+  .todo-iconbtn{background:transparent;border:1px solid var(--line);color:var(--muted);font-size:.74rem;padding:5px 10px;border-radius:4px;cursor:pointer;font-family:inherit;transition:all .15s}
+  .todo-iconbtn:hover{border-color:var(--red);color:var(--red)}
+  .todo-iconbtn.danger:hover{background:#fdeaea;color:#8a0f20;border-color:#f5b5b5}
+  .todo-card-desc{color:var(--muted);font-size:.86rem;line-height:1.6;white-space:pre-wrap;margin:0}
+  .todo-card-meta{font-size:.7rem;color:var(--muted);opacity:.7}
+  .todo-add-card{background:var(--panel);border:2px dashed var(--red);border-radius:6px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;margin-top:16px}
+  .todo-input{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:4px;font-size:.9rem;font-family:inherit;outline:none;background:#fff;box-sizing:border-box}
+  .todo-input:focus{border-color:var(--red)}
+  .todo-textarea{min-height:90px;resize:vertical;line-height:1.55}
+  .todo-add-actions{display:flex;gap:8px;justify-content:flex-end}
+  .todo-empty{padding:60px 20px;text-align:center;color:var(--muted);font-size:.9rem;background:var(--panel);border:1px dashed var(--line);border-radius:6px;margin-top:16px}
+  .todo-edit-form{display:flex;flex-direction:column;gap:10px}
+
+  /* Live activity feed */
+  .live-pulse{display:inline-block;width:8px;height:8px;border-radius:50%;background:#3a3;margin-left:8px;vertical-align:1px;box-shadow:0 0 0 0 rgba(58,170,58,.7);animation:livePulse 2s infinite}
+  .live-pulse.idle{background:#bbb;animation:none;box-shadow:none}
+  @keyframes livePulse{0%{box-shadow:0 0 0 0 rgba(58,170,58,.55)}70%{box-shadow:0 0 0 8px rgba(58,170,58,0)}100%{box-shadow:0 0 0 0 rgba(58,170,58,0)}}
+  .live-count{font-size:.72rem;color:var(--muted);font-weight:400;margin-left:8px}
+  .live-feed{margin-top:12px;background:var(--panel);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+  .live-empty{padding:18px;text-align:center;color:var(--muted);font-size:.82rem}
+  .live-row{display:flex;align-items:center;gap:12px;padding:10px 16px;border-top:1px solid var(--line);font-size:.82rem}
+  .live-row:first-child{border-top:0}
+  .live-dot{width:8px;height:8px;border-radius:50%;background:#3a3;flex-shrink:0}
+  .live-dot.stale{background:#bbb}
+  .live-path{flex:1;color:var(--ink);font-family:monospace;font-size:.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .live-ref{color:var(--muted);font-size:.72rem;flex-shrink:0;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .live-ago{color:var(--muted);font-size:.72rem;flex-shrink:0;width:56px;text-align:right}
+
   @media(max-width:780px){
     .modal-body{grid-template-columns:1fr}
     .subbar{flex-wrap:wrap}
@@ -547,6 +586,8 @@
       <button class="sb-item" data-view="pipeline"><span class="sb-icon">&#9776;</span> Pipeline</button>
       <button class="sb-item" data-view="analytics"><span class="sb-icon">&#9636;</span> Analytics</button>
       <button class="sb-item" data-view="subscribers"><span class="sb-icon">&#9993;</span> Subscribers</button>
+      <div class="sb-section">Roadmap</div>
+      <button class="sb-item" data-view="todo"><span class="sb-icon">&#9745;</span> To-do Options</button>
     </div>
     <div class="sb-foot">
       <button class="sb-signout" id="btn-logout">Sign Out</button>
@@ -570,32 +611,32 @@
         <div class="dash-grid">
           <div class="dash-card accent">
             <div class="k">Coffees Live</div>
-            <div class="v" id="dash-coffees">—</div>
+            <div class="v" id="dash-coffees">-</div>
             <div class="sub" id="dash-coffees-sub">Visible on the public catalogue</div>
           </div>
           <div class="dash-card">
             <div class="k">In Stock</div>
-            <div class="v" id="dash-instock">—</div>
+            <div class="v" id="dash-instock">-</div>
             <div class="sub" id="dash-instock-sub">Available to ship</div>
           </div>
           <div class="dash-card">
             <div class="k">Sold Out</div>
-            <div class="v" id="dash-soldout">—</div>
+            <div class="v" id="dash-soldout">-</div>
             <div class="sub">Marked as sold out or out of stock</div>
           </div>
           <div class="dash-card">
             <div class="k">Hidden Drafts</div>
-            <div class="v" id="dash-hidden">—</div>
+            <div class="v" id="dash-hidden">-</div>
             <div class="sub">Not shown publicly yet</div>
           </div>
           <button class="dash-card accent" id="dash-card-inbox" style="cursor:pointer;text-align:left;font-family:inherit" type="button">
             <div class="k">Open Submissions</div>
-            <div class="v" id="dash-inbox-open">—</div>
+            <div class="v" id="dash-inbox-open">-</div>
             <div class="sub" id="dash-inbox-sub">Click to open Inbox</div>
           </button>
           <button class="dash-card" id="dash-card-drafts" style="cursor:pointer;text-align:left;font-family:inherit" type="button">
             <div class="k">Unsaved Drafts</div>
-            <div class="v" id="dash-drafts">—</div>
+            <div class="v" id="dash-drafts">-</div>
             <div class="sub" id="dash-drafts-sub">Edits that haven't been published</div>
           </button>
         </div>
@@ -623,6 +664,15 @@
             </div>
             <span class="dash-link-arrow">&#8599;</span>
           </a>
+        </div>
+
+        <div class="dash-section-title">
+          Live on Site
+          <span class="live-pulse" id="live-pulse" aria-hidden="true"></span>
+          <span class="live-count" id="live-count">0 active</span>
+        </div>
+        <div class="live-feed" id="live-feed">
+          <div class="live-empty">Connect analytics to see live visitors.</div>
         </div>
       </div>
     </div>
@@ -721,7 +771,7 @@
           <div class="an-hero-left">
             <div class="an-hero-label">Pageviews</div>
             <div class="an-hero-value">
-              <span id="an-pv">—</span>
+              <span id="an-pv">-</span>
               <span class="an-trend" id="an-pv-trend"></span>
             </div>
             <div class="an-hero-sub" id="an-pv-sub">&nbsp;</div>
@@ -735,7 +785,7 @@
             <div class="an-stat-icon">&#128196;</div>
             <div class="an-stat-body">
               <div class="an-stat-k">Quote submits</div>
-              <div class="an-stat-v" id="an-quote">—</div>
+              <div class="an-stat-v" id="an-quote">-</div>
               <div class="an-stat-sub">form completions</div>
             </div>
           </div>
@@ -743,7 +793,7 @@
             <div class="an-stat-icon">&#9993;</div>
             <div class="an-stat-body">
               <div class="an-stat-k">Contact submits</div>
-              <div class="an-stat-v" id="an-contact">—</div>
+              <div class="an-stat-v" id="an-contact">-</div>
               <div class="an-stat-sub">contact messages</div>
             </div>
           </div>
@@ -751,7 +801,7 @@
             <div class="an-stat-icon">&#9749;</div>
             <div class="an-stat-body">
               <div class="an-stat-k">Coffee views</div>
-              <div class="an-stat-v" id="an-coffee-total">—</div>
+              <div class="an-stat-v" id="an-coffee-total">-</div>
               <div class="an-stat-sub">modal opens (all time)</div>
             </div>
           </div>
@@ -759,7 +809,7 @@
             <div class="an-stat-icon">&#128200;</div>
             <div class="an-stat-body">
               <div class="an-stat-k">Conversion rate</div>
-              <div class="an-stat-v" id="an-conv">—</div>
+              <div class="an-stat-v" id="an-conv">-</div>
               <div class="an-stat-sub">pageviews → quote</div>
             </div>
           </div>
@@ -826,6 +876,21 @@
         <aside class="inbox-sidebar">
           <div class="inbox-search-wrap">
             <input type="text" id="inbox-search" class="inbox-search" placeholder="Search submissions..." aria-label="Search submissions" />
+            <div class="inbox-filter-row">
+              <select id="inbox-filter-kind" class="inbox-filter" aria-label="Filter by type">
+                <option value="">All types</option>
+                <option value="quote">Quote</option>
+                <option value="contact">Contact</option>
+                <option value="newsletter">Newsletter</option>
+              </select>
+              <select id="inbox-filter-date" class="inbox-filter" aria-label="Filter by date">
+                <option value="">All time</option>
+                <option value="1">Today</option>
+                <option value="7">Last 7 days</option>
+                <option value="30">Last 30 days</option>
+                <option value="90">Last 90 days</option>
+              </select>
+            </div>
           </div>
           <div class="inbox-tabs">
             <button class="inbox-tab active" data-tab="open">Open <span class="inbox-tab-count" id="tab-open-count">0</span></button>
@@ -916,6 +981,35 @@
       </div>
     </div>
 
+    <!-- ── TO-DO OPTIONS VIEW ── -->
+    <div class="view" id="view-todo">
+      <div class="topbar">
+        <div class="topbar-brand">To-do Options</div>
+        <div class="topbar-spacer"></div>
+        <button class="topbar-btn primary" id="todo-add-btn" style="background:var(--red);color:#fff;border-color:var(--red)">+ New idea</button>
+      </div>
+      <div class="dash-wrap">
+        <div class="dash-header">
+          <div>
+            <h1 class="dash-greeting">To-do Options</h1>
+            <div class="dash-subtitle">Future features and improvements we could build for the site. Edit, add, or remove ideas as we go.</div>
+          </div>
+        </div>
+
+        <div class="todo-add-card" id="todo-add-card" style="display:none">
+          <input type="text" id="todo-new-title" class="todo-input" placeholder="Idea title (e.g. SMS alerts for new quotes)" />
+          <textarea id="todo-new-desc" class="todo-input todo-textarea" placeholder="What it does and why it'd help (give an example so it's clear later)..."></textarea>
+          <div class="todo-add-actions">
+            <button class="topbar-btn" id="todo-cancel-btn">Cancel</button>
+            <button class="topbar-btn primary" id="todo-save-btn" style="background:var(--red);color:#fff;border-color:var(--red)">Save idea</button>
+          </div>
+        </div>
+
+        <div class="todo-list" id="todo-list"></div>
+        <div id="todo-empty" class="todo-empty" style="display:none">No ideas yet. Click <strong>+ New idea</strong> to add one.</div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -946,10 +1040,10 @@
       <div class="field full"><label for="m-notes">Tasting Notes</label>
         <input id="m-notes" type="text" placeholder="Caramel, Apple, Chocolate" />
       </div>
-      <div class="field full"><label for="m-desc">Description <span style="color:var(--muted);font-weight:400;font-size:.75rem">(short summary — card preview)</span></label>
+      <div class="field full"><label for="m-desc">Description <span style="color:var(--muted);font-weight:400;font-size:.75rem">(short summary, card preview)</span></label>
         <textarea id="m-desc"></textarea>
       </div>
-      <div class="field full"><label for="m-maintext">Main Text <span style="color:var(--muted);font-weight:400;font-size:.75rem">(full details shown on the "more info" screen — origin story, producer notes, cupping, etc.)</span></label>
+      <div class="field full"><label for="m-maintext">Main Text <span style="color:var(--muted);font-weight:400;font-size:.75rem">(full details shown on the "more info" screen, origin story, producer notes, cupping, etc.)</span></label>
         <textarea id="m-maintext" rows="8"></textarea>
       </div>
       <div class="field full"><label for="m-image">Flag / Image URL</label>
@@ -1046,7 +1140,7 @@ const GH_REPO   = 'Root86Coffee';
 const GH_BRANCH = 'main';
 const GH_PATH   = 'js/coffees.js';
 const GH_TOKEN_KEY = 'r86_gh_token';
-const INBOX_STATE = { issues: [], filter: 'open', activeNumber: null, search: '' };
+const INBOX_STATE = { issues: [], filter: 'open', activeNumber: null, search: '', kind: '', dateDays: '' };
 const AN_KEY_STORAGE = 'r86_analytics_key';
 const WORKER_BASE = (typeof SITE_SETTINGS !== 'undefined' && SITE_SETTINGS.formEndpoint) ? SITE_SETTINGS.formEndpoint.replace(/\/+$/,'') : '';
 const AN_STATE = { data: null, days: 30 };
@@ -1184,6 +1278,16 @@ function bind(){
     INBOX_STATE.search = e.target.value || '';
     renderInboxList();
   });
+  const inboxKind = document.getElementById('inbox-filter-kind');
+  if (inboxKind) inboxKind.addEventListener('change', e => {
+    INBOX_STATE.kind = e.target.value || '';
+    renderInboxList();
+  });
+  const inboxDate = document.getElementById('inbox-filter-date');
+  if (inboxDate) inboxDate.addEventListener('change', e => {
+    INBOX_STATE.dateDays = e.target.value || '';
+    renderInboxList();
+  });
   document.querySelectorAll('.inbox-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.inbox-tab').forEach(t => t.classList.remove('active'));
@@ -1197,7 +1301,7 @@ function bind(){
   $('#gh-forget').addEventListener('click', () => {
     localStorage.removeItem('r86_gh_token');
     $('#gh-token').value = '';
-    $('#tok-status').textContent = '— cleared';
+    $('#tok-status').textContent = 'cleared';
     toast('Token cleared');
   });
   $('#btn-reset').addEventListener('click', () => {
@@ -1316,6 +1420,7 @@ function switchView(view){
   if (view === 'inbox')       openInbox();
   if (view === 'pipeline')    openPipeline();
   if (view === 'subscribers') openSubscribers();
+  if (view === 'todo')        openTodo();
 }
 
 // ── Lead pipeline ─────────────────────────────
@@ -1415,7 +1520,7 @@ function renderPipeline(){
                 <div class="kcard-title">${escapeHtml(cleanTitle)}</div>
                 <div class="kcard-when">${when}</div>
               </div>
-              <div class="kcard-snippet">${escapeHtml(snippet || '—')}</div>
+              <div class="kcard-snippet">${escapeHtml(snippet || '-')}</div>
               <div class="kcard-foot"><span class="inbox-tag ${kind}">${kind}</span></div>
             </div>`;
         }).join('')
@@ -1479,7 +1584,7 @@ async function loadAnalytics(){
       localStorage.removeItem(AN_KEY_STORAGE);
       $('#an-loading').style.display = 'none';
       $('#an-setup').style.display = 'block';
-      toast('Key rejected — paste it again', true);
+      toast('Key rejected, paste it again', true);
       return;
     }
     if (!res.ok){
@@ -1501,7 +1606,7 @@ function renderAnalytics(){
   if (!d) return;
   $('#an-loading').style.display = 'none';
   $('#an-content').style.display = 'block';
-  $('#an-subtitle').textContent = `Traffic & engagement — last ${d.range_days} days`;
+  $('#an-subtitle').textContent = `Traffic & engagement, last ${d.range_days} days`;
 
   // Trend: compare second half of range to first half
   const daily = d.daily || [];
@@ -1532,7 +1637,7 @@ function renderAnalytics(){
   $('#an-coffee-total').textContent = fmt(coffeeTotal);
   // Conversion rate (pageviews → quote submit). Only meaningful if pv > 0.
   const convPct = d.total_pageviews ? ((d.events.quote_submit / d.total_pageviews) * 100) : 0;
-  $('#an-conv').textContent = d.total_pageviews ? convPct.toFixed(convPct < 1 ? 2 : 1) + '%' : '—';
+  $('#an-conv').textContent = d.total_pageviews ? convPct.toFixed(convPct < 1 ? 2 : 1) + '%' : '-';
 
   // Sparkline in hero
   $('#an-spark').innerHTML = renderSparkline(daily);
@@ -1657,7 +1762,7 @@ function renderLineChart(daily){
     </svg>`;
 }
 
-function fmt(n){ return (n == null) ? '—' : String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+function fmt(n){ return (n == null) ? '-' : String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
 
 // ── Subscribers ─────────────────────────────
 let SUBSCRIBERS = [];
@@ -1716,10 +1821,10 @@ function renderSubscribers(){
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
   tbody.innerHTML = SUBSCRIBERS.map(s => {
     const when = s.ts ? new Date(s.ts) : null;
-    const whenStr = when && !isNaN(when) ? when.toLocaleDateString() + ' ' + when.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' }) : '—';
+    const whenStr = when && !isNaN(when) ? when.toLocaleDateString() + ' ' + when.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' }) : '-';
     return `<tr>
       <td><a href="mailto:${esc(s.email)}" style="color:var(--red);text-decoration:none">${esc(s.email)}</a></td>
-      <td>${esc(s.name) || '<span style="color:var(--muted)">—</span>'}</td>
+      <td>${esc(s.name) || '<span style="color:var(--muted)">-</span>'}</td>
       <td><span style="font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)">${esc(s.source || 'homepage')}</span></td>
       <td style="white-space:nowrap;color:var(--muted);font-size:.82rem">${whenStr}</td>
     </tr>`;
@@ -1779,7 +1884,7 @@ function renderDashboard(){
     if (draftCount > 0) {
       subtitle.textContent = `You have ${draftCount} unpublished change${draftCount === 1 ? '' : 's'}. Head to Coffees to publish.`;
     } else if (last) {
-      subtitle.textContent = `Site is up to date — last published ${humanTimeSince(last)}.`;
+      subtitle.textContent = `Site is up to date, last published ${humanTimeSince(last)}.`;
     } else {
       subtitle.textContent = `Here's what's happening with Root 86 Coffee today.`;
     }
@@ -1822,10 +1927,10 @@ function render(){
       `<span class="status-chip ${on ? 'on ' + activeClass : 'off'}" data-toggle="${key}" data-id="${c.id}" title="${tip}">${label}</span>`;
 
     const statusCell = `
-      ${statusChip('favourite', 'fav',    '&#9733; Favourite', !!c.favourite, 'R86 Favourite — pinned to top of the catalogue')}
+      ${statusChip('favourite', 'fav',    '&#9733; Favourite', !!c.favourite, 'R86 Favourite, pinned to top of the catalogue')}
       ${statusChip('onSale',    'sale',   'On Sale',           !!c.onSale,    'Shows a Sale badge on the public card')}
-      ${statusChip('soldOut',   'sold',   'Sold Out',          !!(c.soldOut || !c.available), 'Marks as unavailable — card shows Out of Stock')}
-      ${statusChip('hidden',    'hidden', 'Hidden',            !!c.hidden,    'Draft mode — not visible on the public site')}
+      ${statusChip('soldOut',   'sold',   'Sold Out',          !!(c.soldOut || !c.available), 'Marks as unavailable, card shows Out of Stock')}
+      ${statusChip('hidden',    'hidden', 'Hidden',            !!c.hidden,    'Draft mode, not visible on the public site')}
     `;
 
     return `
@@ -2089,7 +2194,7 @@ function downloadExport(){
 function openPublish(){
   const saved = localStorage.getItem(GH_TOKEN_KEY) || '';
   $('#gh-token').value = saved;
-  $('#tok-status').textContent = saved ? '— saved in this browser' : '— not set';
+  $('#tok-status').textContent = saved ? 'saved in this browser' : 'not set';
   $('#gh-commit-msg').value = `Update coffee catalog (${DATA.length} items)`;
   $('#publish-log').textContent = '';
   $('#publish-modal').classList.add('open');
@@ -2164,7 +2269,7 @@ async function publishToGitHub(){
     toast('Published! All drafts cleared.');
   } catch (e) {
     logPublish(`✗ ${e.message}`);
-    toast('Publish failed — see log', true);
+    toast('Publish failed, see log', true);
   } finally {
     btn.disabled = false;
     if (dot) dot.classList.remove('publishing');
@@ -2273,9 +2378,18 @@ function humanRelativeTime(iso){
 function renderInboxList(){
   const f = INBOX_STATE.filter;
   const q = (INBOX_STATE.search || '').toLowerCase();
+  const kindFilter = INBOX_STATE.kind || '';
+  const days = parseInt(INBOX_STATE.dateDays) || 0;
   let list = INBOX_STATE.issues.slice();
   if (f === 'open')   list = list.filter(i => i.state === 'open');
   if (f === 'closed') list = list.filter(i => i.state === 'closed');
+  if (kindFilter) {
+    list = list.filter(i => (i.labels || []).some(l => l.name === kindFilter));
+  }
+  if (days) {
+    const cutoff = Date.now() - days * 86400000;
+    list = list.filter(i => new Date(i.created_at).getTime() >= cutoff);
+  }
   if (q) {
     list = list.filter(i =>
       (i.title || '').toLowerCase().includes(q) ||
@@ -2309,7 +2423,7 @@ function renderInboxList(){
           </div>
           <div class="inbox-item-meta">${when}</div>
         </div>
-        <div class="inbox-item-snippet">${escapeHtml(snippet || '—')}</div>
+        <div class="inbox-item-snippet">${escapeHtml(snippet || '-')}</div>
         <div style="margin-top:6px"><span class="stpill ${status}">${stMeta.label}</span></div>
       </div>`;
   }).join('');
@@ -2505,10 +2619,10 @@ function renderQuoteItems(items){
     const it = parseQuoteItemLine(raw);
     return `
       <div class="qi-row">
-        <div class="qi-name">${escapeHtml(it.name || '—')}${it.origin ? `<span class="qi-origin">${escapeHtml(it.origin)}</span>` : ''}</div>
-        <div class="qi-num" data-k="Bags">${escapeHtml(it.qty || '—')}</div>
-        <div class="qi-num muted" data-k="Bag size">${escapeHtml(it.bagSize || '—')}</div>
-        <div class="qi-num qi-total" data-k="Total">${escapeHtml(it.lineTotal || '—')}</div>
+        <div class="qi-name">${escapeHtml(it.name || '-')}${it.origin ? `<span class="qi-origin">${escapeHtml(it.origin)}</span>` : ''}</div>
+        <div class="qi-num" data-k="Bags">${escapeHtml(it.qty || '-')}</div>
+        <div class="qi-num muted" data-k="Bag size">${escapeHtml(it.bagSize || '-')}</div>
+        <div class="qi-num qi-total" data-k="Total">${escapeHtml(it.lineTotal || '-')}</div>
       </div>`;
   }).join('');
   return `
@@ -2527,6 +2641,216 @@ function renderQuoteItems(items){
 if (localStorage.getItem(GH_TOKEN_KEY)){
   setTimeout(() => { loadInbox().catch(()=>{}); }, 500);
 }
+
+// ── Live activity feed ─────────────────────────────────
+let LIVE_TIMER = null;
+function liveAgo(ts){
+  const s = Math.max(0, Math.floor((Date.now() - ts) / 1000));
+  if (s < 60) return s + 's';
+  const m = Math.floor(s / 60);
+  if (m < 60) return m + 'm';
+  return Math.floor(m / 60) + 'h';
+}
+function prettyPath(p){
+  if (!p || p === '/') return 'Home';
+  return p.replace(/^\/+/, '').replace(/\.html$/, '').replace(/\/$/, '') || 'Home';
+}
+async function loadLiveFeed(){
+  const feed = document.getElementById('live-feed');
+  const countEl = document.getElementById('live-count');
+  const pulse = document.getElementById('live-pulse');
+  if (!feed) return;
+  const key = localStorage.getItem(AN_KEY_STORAGE);
+  if (!key || !WORKER_BASE) {
+    feed.innerHTML = '<div class="live-empty">Connect analytics to see live visitors. Open the Analytics tab and paste your key.</div>';
+    if (countEl) countEl.textContent = '0 active';
+    if (pulse) pulse.classList.add('idle');
+    return;
+  }
+  try {
+    const res = await fetch(`${WORKER_BASE}/live`, { headers: { 'X-Analytics-Key': key }, cache: 'no-store' });
+    if (!res.ok) throw new Error(res.status);
+    const data = await res.json();
+    const visitors = (data.visitors || []).filter(v => Date.now() - v.ts < 300000);
+    if (countEl) countEl.textContent = visitors.length + ' active';
+    if (pulse) pulse.classList.toggle('idle', visitors.length === 0);
+    if (!visitors.length) {
+      feed.innerHTML = '<div class="live-empty">No active visitors right now. Refreshes every 10 seconds.</div>';
+      return;
+    }
+    feed.innerHTML = visitors.slice(0, 12).map(v => {
+      const stale = (Date.now() - v.ts) > 60000 ? ' stale' : '';
+      const ref = v.ref ? 'via ' + v.ref : 'direct';
+      return `<div class="live-row">
+        <span class="live-dot${stale}"></span>
+        <span class="live-path">${escapeHtml(prettyPath(v.path))}</span>
+        <span class="live-ref">${escapeHtml(ref)}</span>
+        <span class="live-ago">${liveAgo(v.ts)} ago</span>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    feed.innerHTML = `<div class="live-empty">Couldn't load live feed (${escapeHtml(String(e.message || e))}).</div>`;
+    if (pulse) pulse.classList.add('idle');
+  }
+}
+function startLiveFeed(){
+  loadLiveFeed();
+  if (LIVE_TIMER) clearInterval(LIVE_TIMER);
+  LIVE_TIMER = setInterval(loadLiveFeed, 10000);
+}
+function stopLiveFeed(){
+  if (LIVE_TIMER) { clearInterval(LIVE_TIMER); LIVE_TIMER = null; }
+}
+// Start on load and only run when dashboard is the active view
+setTimeout(startLiveFeed, 600);
+
+// ── To-do Options ─────────────────────────────────
+const TODO_KEY = 'r86_todo_options_v1';
+const TODO_SEEDS = [
+  {
+    id: 'seed-digest',
+    title: 'Daily email digest',
+    desc: 'Cloudflare Worker cron that emails the owner once a day (e.g. 7am) with a summary of the previous day\'s activity. Example: "Yesterday: 3 new quote requests, 5 contact submissions, 2 newsletter signups, 142 unique visitors. Top coffee viewed: Ethiopia Sidama Natural." Submission contents inline so he doesn\'t have to log into admin to read them, he can reply right from his email.',
+  },
+  {
+    id: 'seed-canned',
+    title: 'Quote templates / canned responses',
+    desc: 'Pre-written email templates for the most common asks (price list, shipping to BC vs ON, MOQ info, sample requests). Click a template, it opens his default email client with the body pre-filled and the client\'s email already in the To field. Saves rewriting the same answer 20 times a week. Example: "Standard pricing inquiry, Vancouver" template populates with current price-per-lb table and his standard turnaround time.',
+  },
+  {
+    id: 'seed-coffee-inquiries',
+    title: 'Per-coffee inquiry tracker',
+    desc: 'When a contact form mentions a specific coffee (e.g. "Ethiopia Sidama"), automatically tag the submission against that coffee. Then on the Coffees tab he sees a small badge: "Ethiopia Sidama, 12 inquiries this month" so he knows what to push or restock. Example use: he sees Colombia Huila is suddenly hot, he can prioritise reordering it before it sells out.',
+  },
+  {
+    id: 'seed-shipping-calc',
+    title: 'Shipping calculator',
+    desc: 'Internal admin-only tool: enter destination postal code + total weight, get a rough shipping cost using whatever rate card he uses (Loomis, Day & Ross, etc). Removes the 5-minute lookup he does for every quote. Example: "V5K 0A1, 200lbs" returns "$185 ground, 3-5 days" instantly. Lives only in admin, never shown to clients.',
+  },
+];
+
+let TODO_STATE = { items: [] };
+let TODO_EDITING = null;
+
+function loadTodoState(){
+  try {
+    const raw = localStorage.getItem(TODO_KEY);
+    if (raw) { TODO_STATE = JSON.parse(raw); return; }
+  } catch(e) {}
+  // First run, seed it
+  TODO_STATE = { items: TODO_SEEDS.map(s => ({ ...s, ts: Date.now() })) };
+  saveTodoState();
+}
+function saveTodoState(){
+  try { localStorage.setItem(TODO_KEY, JSON.stringify(TODO_STATE)); } catch(e) {}
+}
+function openTodo(){
+  loadTodoState();
+  renderTodo();
+}
+function renderTodo(){
+  const list = document.getElementById('todo-list');
+  const empty = document.getElementById('todo-empty');
+  if (!list) return;
+  if (!TODO_STATE.items.length) {
+    list.innerHTML = '';
+    empty.style.display = '';
+    return;
+  }
+  empty.style.display = 'none';
+  list.innerHTML = TODO_STATE.items.map(item => {
+    if (TODO_EDITING === item.id) {
+      return `
+        <div class="todo-card editing" data-id="${escapeHtml(item.id)}">
+          <div class="todo-edit-form">
+            <input type="text" class="todo-input todo-edit-title" value="${escapeHtml(item.title)}" />
+            <textarea class="todo-input todo-textarea todo-edit-desc">${escapeHtml(item.desc)}</textarea>
+            <div class="todo-add-actions">
+              <button class="topbar-btn todo-edit-cancel">Cancel</button>
+              <button class="topbar-btn primary todo-edit-save" style="background:var(--red);color:#fff;border-color:var(--red)">Save</button>
+            </div>
+          </div>
+        </div>`;
+    }
+    return `
+      <div class="todo-card" data-id="${escapeHtml(item.id)}">
+        <div class="todo-card-head">
+          <h3 class="todo-card-title">${escapeHtml(item.title)}</h3>
+          <div class="todo-card-actions">
+            <button class="todo-iconbtn todo-edit">Edit</button>
+            <button class="todo-iconbtn danger todo-delete">Delete</button>
+          </div>
+        </div>
+        <p class="todo-card-desc">${escapeHtml(item.desc)}</p>
+      </div>`;
+  }).join('');
+  // Wire actions
+  list.querySelectorAll('.todo-edit').forEach(btn => {
+    btn.addEventListener('click', () => {
+      TODO_EDITING = btn.closest('.todo-card').dataset.id;
+      renderTodo();
+    });
+  });
+  list.querySelectorAll('.todo-delete').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.closest('.todo-card').dataset.id;
+      const item = TODO_STATE.items.find(i => i.id === id);
+      if (!confirm(`Delete "${item ? item.title : 'this idea'}"?`)) return;
+      TODO_STATE.items = TODO_STATE.items.filter(i => i.id !== id);
+      saveTodoState();
+      renderTodo();
+    });
+  });
+  list.querySelectorAll('.todo-edit-cancel').forEach(btn => {
+    btn.addEventListener('click', () => { TODO_EDITING = null; renderTodo(); });
+  });
+  list.querySelectorAll('.todo-edit-save').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const card = btn.closest('.todo-card');
+      const id = card.dataset.id;
+      const newTitle = card.querySelector('.todo-edit-title').value.trim();
+      const newDesc  = card.querySelector('.todo-edit-desc').value.trim();
+      if (!newTitle) { toast('Title is required', true); return; }
+      const item = TODO_STATE.items.find(i => i.id === id);
+      if (item) { item.title = newTitle; item.desc = newDesc; item.ts = Date.now(); }
+      TODO_EDITING = null;
+      saveTodoState();
+      renderTodo();
+      toast('Idea saved');
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const addBtn = document.getElementById('todo-add-btn');
+  const addCard = document.getElementById('todo-add-card');
+  const cancelBtn = document.getElementById('todo-cancel-btn');
+  const saveBtn = document.getElementById('todo-save-btn');
+  const titleInput = document.getElementById('todo-new-title');
+  const descInput = document.getElementById('todo-new-desc');
+  if (addBtn) addBtn.addEventListener('click', () => {
+    addCard.style.display = '';
+    titleInput.value = ''; descInput.value = '';
+    titleInput.focus();
+  });
+  if (cancelBtn) cancelBtn.addEventListener('click', () => {
+    addCard.style.display = 'none';
+  });
+  if (saveBtn) saveBtn.addEventListener('click', () => {
+    const title = (titleInput.value || '').trim();
+    const desc  = (descInput.value || '').trim();
+    if (!title) { toast('Title is required', true); titleInput.focus(); return; }
+    loadTodoState();
+    TODO_STATE.items.unshift({
+      id: 'todo-' + Date.now().toString(36),
+      title, desc, ts: Date.now(),
+    });
+    saveTodoState();
+    addCard.style.display = 'none';
+    renderTodo();
+    toast('Idea added');
+  });
+});
 
 // ── Toast ─────────────────────────────────
 function toast(msg, isErr=false){

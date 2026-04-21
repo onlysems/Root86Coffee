@@ -105,12 +105,12 @@ function initNewsletter(){
       if (!r.ok || !data.ok) throw new Error(data.error || 'Something went wrong');
 
       status.textContent = data.duplicate
-        ? 'You\'re already on the list — thanks!'
+        ? 'You\'re already on the list, thanks!'
         : 'You\'re in. Watch your inbox for the next arrival drop.';
       status.className = 'newsletter-status ok';
       form.reset();
     } catch(err) {
-      status.textContent = 'Couldn\'t subscribe — try again in a moment.';
+      status.textContent = 'Couldn\'t subscribe, try again in a moment.';
       status.className = 'newsletter-status err';
     } finally {
       btn.disabled = false;
@@ -459,8 +459,8 @@ function cardHTML(c) {
       </header>
       <blockquote class="ccard-notes" data-notes="${(c.tastingNotes||'').replace(/"/g,'&quot;')}">${c.tastingNotes && c.tastingNotes.trim() ? c.tastingNotes : 'Tasting notes coming soon.'}</blockquote>
       <dl class="ccard-specs">
+        <div class="spec spec-region"><dt>Region</dt><dd>${fallback(c.region)}</dd></div>
         <div class="spec"><dt>Process</dt><dd>${fallback(c.process)}</dd></div>
-        <div class="spec"><dt>Region</dt><dd>${fallback(c.region)}</dd></div>
         <div class="spec"><dt>Bag</dt><dd>${c.bagWeight ? c.bagWeight + ' lbs' : na}</dd></div>
       </dl>
       ${certFlags ? `<div class="ccard-certs">${certFlags}</div>` : ''}
@@ -555,7 +555,7 @@ function toggleQuote(id) {
     if (state.quote.length && inter.size === 0) {
       const currentLabel = [...currentZones].map(zoneLabel).join(' or ');
       const newLabel = [...newZones].map(zoneLabel).join(' or ') || 'no shared warehouse';
-      showToast(`Can't mix warehouses — your quote ships from ${currentLabel}, but this coffee is only at ${newLabel}.`, true);
+      showToast(`Can't mix warehouses, your quote ships from ${currentLabel}, but this coffee is only at ${newLabel}.`, true);
       return;
     }
     state.quote.push({ ...coffee, qty: 1 });
