@@ -1868,6 +1868,8 @@ function renderSubscribers(){
     </tr>`;
   }).join('');
 }
+const EMAIL_BATCH_SIZE = 70; // Stays safely under Gmail/Outlook mailto: ceiling
+
 function emailSubscribers(){
   if (!SUBSCRIBERS.length) { toast('No subscribers to email'); return; }
   const scope = (document.getElementById('subs-email-scope') || {}).value || 'all';
@@ -1892,22 +1894,71 @@ function emailSubscribers(){
     toast('No subscribers in that range', true);
     return;
   }
-  if (recipients.length > 80) {
-    if (!confirm(`You're about to BCC ${recipients.length} addresses. Most email clients (Gmail/Outlook) cap mailto: links around 80 addresses and will silently drop the rest. Recommended: Export CSV and import to Mailchimp instead. Continue anyway?`)) {
-      return;
-    }
+
+  // Chunk into safe-sized batches for mailto:
+  const batches = [];
+  for (let i = 0; i < recipients.length; i += EMAIL_BATCH_SIZE) {
+    batches.push(recipients.slice(i, i + EMAIL_BATCH_SIZE));
   }
+
+  if (batches.length === 1) {
+    openMailtoBatch(batches[0]);
+    toast(`Opening email client with ${recipients.length} BCC recipients...`);
+    return;
+  }
+  showEmailBatchModal(batches, recipients.length);
+}
+
+function openMailtoBatch(emails){
   const subject = encodeURIComponent('A note from Root 86 Coffee');
   const body = encodeURIComponent(
     'Hi there,\n\n' +
     '[Write your message here]\n\n' +
-    '— Root 86 Coffee\n' +
+    'Root 86 Coffee\n' +
     'Reply to this email or call 1-855-908-0086\n\n' +
     'You\'re receiving this because you signed up for our newsletter at root86coffee.com. Reply with "unsubscribe" to be removed from the list.'
   );
-  const bcc = encodeURIComponent(recipients.join(','));
+  const bcc = encodeURIComponent(emails.join(','));
   window.location.href = `mailto:?bcc=${bcc}&subject=${subject}&body=${body}`;
-  toast(`Opening email client with ${recipients.length} BCC recipients...`);
+}
+
+function showEmailBatchModal(batches, total){
+  // Reuse one modal element so repeat opens don't stack DOM nodes
+  let overlay = document.getElementById('email-batch-overlay');
+  if (overlay) overlay.remove();
+  overlay = document.createElement('div');
+  overlay.id = 'email-batch-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px';
+  const html = `
+    <div style="background:#fff;border-radius:8px;padding:28px 32px;max-width:520px;width:100%;font-family:inherit">
+      <div style="font-size:1.15rem;font-weight:600;color:var(--ink);margin-bottom:6px">Send in ${batches.length} batches</div>
+      <div style="color:var(--muted);font-size:.86rem;line-height:1.55;margin-bottom:18px">
+        You have <strong>${total} recipients</strong>, more than mailto: can carry in one go (most email clients cap around 80). Click each button to open a draft for that batch. Write your message in the first one, then copy it into the others, or paste the same body into each.
+      </div>
+      <div id="email-batch-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px"></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+        <div style="font-size:.74rem;color:var(--muted);line-height:1.5">For lists this size, consider <a href="https://mailchimp.com/" target="_blank" rel="noopener" style="color:var(--red)">Mailchimp</a> (free up to 500 contacts) and Export CSV.</div>
+        <button id="email-batch-close" class="topbar-btn" style="flex-shrink:0">Close</button>
+      </div>
+    </div>`;
+  overlay.innerHTML = html;
+  document.body.appendChild(overlay);
+  const list = overlay.querySelector('#email-batch-list');
+  batches.forEach((batch, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'topbar-btn';
+    btn.style.cssText = 'text-align:left;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px';
+    btn.innerHTML = `<span>Send batch ${i+1} of ${batches.length}</span><span style="color:var(--muted);font-size:.78rem">${batch.length} recipients</span>`;
+    btn.addEventListener('click', () => {
+      openMailtoBatch(batch);
+      btn.innerHTML = `<span>&#10003; Sent batch ${i+1}</span><span style="color:var(--muted);font-size:.78rem">${batch.length} recipients</span>`;
+      btn.style.opacity = '0.55';
+      btn.disabled = true;
+    });
+    list.appendChild(btn);
+  });
+  overlay.querySelector('#email-batch-close').addEventListener('click', () => overlay.remove());
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
 }
 
 function exportSubscribersCsv(){
