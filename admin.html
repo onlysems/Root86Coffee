@@ -2705,27 +2705,27 @@ function stopLiveFeed(){
 setTimeout(startLiveFeed, 600);
 
 // ── To-do Options ─────────────────────────────────
-const TODO_KEY = 'r86_todo_options_v1';
+const TODO_KEY = 'r86_todo_options_v2';
 const TODO_SEEDS = [
   {
     id: 'seed-digest',
     title: 'Daily email digest',
-    desc: 'Cloudflare Worker cron that emails the owner once a day (e.g. 7am) with a summary of the previous day\'s activity. Example: "Yesterday: 3 new quote requests, 5 contact submissions, 2 newsletter signups, 142 unique visitors. Top coffee viewed: Ethiopia Sidama Natural." Submission contents inline so he doesn\'t have to log into admin to read them, he can reply right from his email.',
+    desc: 'I want to set up a daily email that lands in your inbox around 7am with everything that happened on the site the day before. Something like: "Yesterday: 3 quote requests, 5 contact form messages, 2 newsletter signups, 142 visitors. Most-viewed coffee: Ethiopia Sidama Natural." The actual messages would be in the email too so you can reply straight from your phone or laptop without logging in.',
   },
   {
     id: 'seed-canned',
-    title: 'Quote templates / canned responses',
-    desc: 'Pre-written email templates for the most common asks (price list, shipping to BC vs ON, MOQ info, sample requests). Click a template, it opens his default email client with the body pre-filled and the client\'s email already in the To field. Saves rewriting the same answer 20 times a week. Example: "Standard pricing inquiry, Vancouver" template populates with current price-per-lb table and his standard turnaround time.',
+    title: 'Quote templates / canned replies',
+    desc: 'Since you\'re writing the same kind of reply over and over (pricing, shipping costs, MOQ, sample requests), I want to build a small library of pre-written email templates. You\'d click one, it opens your email with the body already filled in and the client\'s address in the To field. So a "BC pricing inquiry" template would auto-fill the current price-per-lb table and your usual turnaround time. Just edit anything that needs to change and hit send.',
   },
   {
     id: 'seed-coffee-inquiries',
-    title: 'Per-coffee inquiry tracker',
-    desc: 'When a contact form mentions a specific coffee (e.g. "Ethiopia Sidama"), automatically tag the submission against that coffee. Then on the Coffees tab he sees a small badge: "Ethiopia Sidama, 12 inquiries this month" so he knows what to push or restock. Example use: he sees Colombia Huila is suddenly hot, he can prioritise reordering it before it sells out.',
+    title: 'Per-coffee inquiry counter',
+    desc: 'When someone fills out the contact form mentioning a specific coffee like "Ethiopia Sidama", we tag it against that coffee in the system. Then on the Coffees tab you\'d see a small badge next to each one, "Ethiopia Sidama, 12 inquiries this month". Easy way to spot which coffees are getting hot so you can push them or reorder before they sell out. If Colombia Huila suddenly spikes, you\'d know.',
   },
   {
     id: 'seed-shipping-calc',
     title: 'Shipping calculator',
-    desc: 'Internal admin-only tool: enter destination postal code + total weight, get a rough shipping cost using whatever rate card he uses (Loomis, Day & Ross, etc). Removes the 5-minute lookup he does for every quote. Example: "V5K 0A1, 200lbs" returns "$185 ground, 3-5 days" instantly. Lives only in admin, never shown to clients.',
+    desc: 'A quick internal tool just for you, not shown to clients. Enter a destination postal code and total weight, get back an estimated shipping cost using whatever rate card you normally check (Loomis, Day & Ross, whoever). So "V5K 0A1, 200lbs" returns something like "$185 ground, 3-5 days" instantly instead of you having to look it up every time you put together a quote.',
   },
 ];
 
