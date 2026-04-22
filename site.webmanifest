@@ -1,0 +1,32 @@
+{
+  "name": "Root 86 Coffee",
+  "short_name": "Root 86",
+  "description": "Canadian green coffee importer — 50+ origins stocked in Vancouver, Parksville, and Lévis.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "orientation": "portrait-primary",
+  "background_color": "#FAF8F6",
+  "theme_color": "#3D0008",
+  "lang": "en-CA",
+  "icons": [
+    {
+      "src": "/images/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/images/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

@@ -9,6 +9,9 @@
   <meta name="author" content="Root 86 Coffee" />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <link rel="canonical" href="https://root86coffee.com/" />
+  <link rel="alternate" hreflang="en-CA" href="https://root86coffee.com/" />
+  <link rel="alternate" hreflang="x-default" href="https://root86coffee.com/" />
+  <!-- <link rel="alternate" hreflang="fr-CA" href="https://root86coffee.com/fr/" /> -->
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
@@ -23,15 +26,28 @@
   <meta name="twitter:title" content="Green Coffee Vancouver &amp; Canada | Root 86 Coffee" />
   <meta name="twitter:description" content="Canadian green coffee importer supplying micro-roasters across Canada. 50+ origins in stock." />
 
-  <!-- Performance: preconnect to third-party domains -->
-  <link rel="preconnect" href="https://static.wixstatic.com" />
+  <!-- Performance: preconnect to third-party domains still in use -->
   <link rel="preconnect" href="https://unpkg.com" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <link rel="dns-prefetch" href="https://basemaps.cartocdn.com" />
 
-  <link rel="icon" type="image/jpeg" href="/images/logo.jpg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/images/icon-192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="/images/icon-512.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#3D0008" />
+  <meta property="og:image" content="https://root86coffee.com/images/og-home.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Root 86 Coffee — Canadian green coffee importer" />
+  <meta name="twitter:image" content="https://root86coffee.com/images/og-home.png" />
   <link rel="stylesheet" href="css/styles.css?v=nav3" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Leaflet CSS loaded async so it doesn't block first paint (map is below-the-fold). -->
+  <link rel="preload" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" /></noscript>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
 
   <!-- LocalBusiness schema: helps Google understand we're a real business with locations -->

@@ -1,0 +1,36 @@
+# Root 86 Coffee — Cloudflare Pages response headers
+# Docs: https://developers.cloudflare.com/pages/configuration/headers/
+
+# ─── Staging: keep the *.pages.dev preview out of Google's index ────────────
+# Remove this block on domain-transfer day, once root86coffee.com is live.
+https://root86coffee.pages.dev/*
+  X-Robots-Tag: noindex, nofollow
+
+https://*.root86coffee.pages.dev/*
+  X-Robots-Tag: noindex, nofollow
+
+# ─── Global security + privacy headers ──────────────────────────────────────
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  X-Frame-Options: SAMEORIGIN
+  Cross-Origin-Opener-Policy: same-origin
+
+# ─── Long-lived static assets (immutable by convention) ─────────────────────
+/css/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/js/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/images/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# ─── HTML: short TTL so content updates propagate quickly ──────────────────
+/*.html
+  Cache-Control: public, max-age=300, must-revalidate
+
+/
+  Cache-Control: public, max-age=300, must-revalidate
