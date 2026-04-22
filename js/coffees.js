@@ -1,7 +1,7 @@
 // ============================================================
 //  ROOT 86 COFFEE - Coffee Data File
 //  Edit via admin.html or directly here.
-//  Generated: 2026-04-21
+//  Generated: 2026-04-22
 // ============================================================
 
 const COFFEES = [
